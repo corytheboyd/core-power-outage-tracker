@@ -1,8 +1,20 @@
 # Core Electric Cooperative Outage Checker
 
-A simple CLI tool to check power outage status for Core Electric Cooperative without opening a browser.
+A CLI tool and web application to check power outage status for Core Electric Cooperative.
 
-## Quick Start
+## Web Version
+
+Open `index.html` in your browser or host it anywhere (GitHub Pages, Netlify, Vercel, etc.)
+
+**Features:**
+- 🔍 Search by full address (e.g., "123 Main St, Conifer, CO 80433")
+- 📊 View system-wide outage status
+- 🔴 See all affected areas sorted by severity
+- 🔄 Auto-refresh every 60 seconds (optional)
+- 📱 Mobile-friendly responsive design
+- 🗺️ Geocoding powered by OpenStreetMap (no API key required)
+
+## CLI Version
 
 ```bash
 # Check system-wide outage status
@@ -60,6 +72,36 @@ Status: Power is ON in your area
 - **Coverage**: Supports all Core Electric service areas in Colorado
 - **Data**: Shows outages by County, Zip Code, District, and Service Area
 
-## Web Alternative
+## Deployment
 
-Visit https://oms.core.coop/ to view the interactive map
+The web version (`index.html`) is a single static HTML file with no dependencies. Deploy it anywhere:
+
+### GitHub Pages
+1. Push to GitHub
+2. Go to Settings → Pages
+3. Select the branch and root folder
+4. Your site will be live at `https://username.github.io/repo-name/`
+
+### Netlify
+```bash
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Deploy
+netlify deploy --prod --dir=.
+```
+
+### Simple HTTP Server (Local Testing)
+```bash
+# Python 3
+python -m http.server 8000
+
+# Node.js
+npx http-server
+```
+
+Then visit `http://localhost:8000`
+
+## Official Map
+
+Visit https://oms.core.coop/ to view Core Electric's official outage map
