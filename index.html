@@ -15,53 +15,45 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
-      color: #333;
     }
 
     .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    header {
-      text-align: center;
-      color: white;
-      margin-bottom: 30px;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    }
-
-    .subtitle {
-      font-size: 1.1rem;
-      opacity: 0.9;
+      width: 100%;
+      max-width: 600px;
     }
 
     .card {
       background: white;
-      border-radius: 12px;
-      padding: 25px;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 2rem;
     }
 
     .search-section {
       display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 30px;
     }
 
     input[type="text"] {
-      flex: 1;
-      padding: 15px;
-      font-size: 1rem;
+      padding: 18px;
+      font-size: 1.1rem;
       border: 2px solid #e0e0e0;
-      border-radius: 8px;
+      border-radius: 12px;
       transition: border-color 0.3s;
+      width: 100%;
     }
 
     input[type="text"]:focus {
@@ -70,12 +62,12 @@
     }
 
     button {
-      padding: 15px 30px;
-      font-size: 1rem;
+      padding: 18px 40px;
+      font-size: 1.1rem;
       background: #667eea;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       cursor: pointer;
       transition: background 0.3s;
       font-weight: 600;
@@ -90,116 +82,14 @@
       cursor: not-allowed;
     }
 
-    .status-badge {
-      display: inline-block;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-right: 10px;
-    }
-
-    .status-on {
-      background: #d4edda;
-      color: #155724;
-    }
-
-    .status-out {
-      background: #f8d7da;
-      color: #721c24;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .stat-box {
-      background: #f8f9fa;
-      padding: 20px;
-      border-radius: 8px;
-      text-align: center;
-    }
-
-    .stat-label {
-      font-size: 0.85rem;
-      color: #6c757d;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-
-    .stat-value {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #333;
-    }
-
-    .outage-list {
-      margin-top: 20px;
-    }
-
-    .outage-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px;
-      border-bottom: 1px solid #e0e0e0;
-      transition: background 0.2s;
-    }
-
-    .outage-item:hover {
-      background: #f8f9fa;
-    }
-
-    .outage-item:last-child {
-      border-bottom: none;
-    }
-
-    .severity-indicator {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      margin-right: 12px;
-      display: inline-block;
-    }
-
-    .severity-critical { background: #dc3545; }
-    .severity-high { background: #fd7e14; }
-    .severity-medium { background: #ffc107; }
-    .severity-low { background: #28a745; }
-
-    .zip-code {
-      font-weight: 600;
-      font-size: 1.1rem;
-    }
-
-    .affected-count {
-      color: #6c757d;
-      font-size: 0.9rem;
-    }
-
-    .loading {
+    .result {
       text-align: center;
       padding: 40px;
-      color: #6c757d;
+      border-radius: 12px;
+      animation: fadeIn 0.3s ease-out;
     }
 
-    .error {
-      background: #f8d7da;
-      color: #721c24;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-
-    .result-card {
-      animation: slideIn 0.3s ease-out;
-    }
-
-    @keyframes slideIn {
+    @keyframes fadeIn {
       from {
         opacity: 0;
         transform: translateY(-10px);
@@ -210,119 +100,259 @@
       }
     }
 
-    .last-updated {
-      text-align: center;
-      color: white;
-      margin-top: 20px;
-      opacity: 0.8;
-      font-size: 0.9rem;
+    .result-on {
+      background: #d4edda;
+      border: 3px solid #28a745;
     }
 
-    .auto-refresh {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .result-off {
+      background: #f8d7da;
+      border: 3px solid #dc3545;
+    }
+
+    .result-loading {
+      background: #e7f3ff;
+      border: 3px solid #667eea;
+    }
+
+    .result-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .result-status {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .result-on .result-status {
+      color: #155724;
+    }
+
+    .result-off .result-status {
+      color: #721c24;
+    }
+
+    .result-address {
+      color: #6c757d;
+      font-size: 0.95rem;
       margin-top: 10px;
     }
 
-    .auto-refresh label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .result-details {
+      color: #6c757d;
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+
+    .error {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      padding: 20px;
+      border-radius: 12px;
+      color: #856404;
+      text-align: center;
+    }
+
+    .autocomplete-container {
+      position: relative;
+    }
+
+    .autocomplete-dropdown {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      max-height: 300px;
+      overflow-y: auto;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .autocomplete-item {
+      padding: 12px 18px;
       cursor: pointer;
+      border-bottom: 1px solid #f0f0f0;
+      transition: background 0.2s;
+    }
+
+    .autocomplete-item:hover {
+      background: #f8f9fa;
+    }
+
+    .autocomplete-item:last-child {
+      border-bottom: none;
+    }
+
+    .autocomplete-loading {
+      padding: 12px 18px;
+      color: #6c757d;
+      text-align: center;
     }
 
     @media (max-width: 768px) {
       h1 {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
       }
 
-      .search-section {
-        flex-direction: column;
+      .card {
+        padding: 30px 20px;
       }
 
-      .summary-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .result-status {
+        font-size: 1.5rem;
+      }
+
+      .result-icon {
+        font-size: 3rem;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>⚡ Core Electric Outage Checker</h1>
-      <p class="subtitle">Check power outage status in real-time</p>
-    </header>
-
     <div class="card">
+      <h1>⚡ Core Electric Outage Checker</h1>
+
       <div class="search-section">
-        <input
-          type="text"
-          id="addressInput"
-          placeholder="Enter your address (e.g., 123 Main St, Conifer, CO 80433)"
-        >
-        <button id="searchBtn" onclick="searchAddress()">Check Status</button>
-        <button onclick="loadData()">Refresh</button>
+        <div class="autocomplete-container">
+          <input
+            type="text"
+            id="addressInput"
+            placeholder="Enter your address"
+            autocomplete="off"
+          >
+          <div id="autocompleteDropdown" style="display: none;"></div>
+        </div>
+        <button id="searchBtn" onclick="searchAddress()">Check Power Status</button>
       </div>
-      <div class="auto-refresh">
-        <label>
-          <input type="checkbox" id="autoRefresh" onchange="toggleAutoRefresh()">
-          Auto-refresh every 60 seconds
-        </label>
-      </div>
+
+      <div id="result"></div>
     </div>
-
-    <div id="result"></div>
-    <div id="summary"></div>
-    <div id="affectedAreas"></div>
-
-    <div class="last-updated" id="lastUpdated"></div>
   </div>
 
   <script>
     const API_URL = 'https://cache.sienatech.com/apex/siena_ords/webmaps/data/CORE/CUSTOMER';
-    const POLYGON_API_URL = 'https://cache.sienatech.com/apex/siena_ords/webmaps/outagePolygons?client=CORE&type=zip';
     let outageData = null;
-    let polygonData = null;
-    let autoRefreshInterval = null;
+    let autocompleteTimeout = null;
+    let selectedAddress = null;
 
-    // Load data on page load
+    // Load outage data on page load
     window.addEventListener('DOMContentLoaded', () => {
       loadData();
 
+      const addressInput = document.getElementById('addressInput');
+
       // Allow Enter key to search
-      document.getElementById('addressInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') searchAddress();
+      addressInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          searchAddress();
+        }
+      });
+
+      // Address autocomplete
+      addressInput.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+
+        // Clear selected address when user types
+        selectedAddress = null;
+
+        if (query.length < 3) {
+          hideAutocomplete();
+          return;
+        }
+
+        // Debounce the autocomplete requests
+        clearTimeout(autocompleteTimeout);
+        autocompleteTimeout = setTimeout(() => {
+          fetchAddressSuggestions(query);
+        }, 300);
+      });
+
+      // Close autocomplete when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.autocomplete-container')) {
+          hideAutocomplete();
+        }
       });
     });
 
     async function loadData() {
       try {
-        document.getElementById('searchBtn').disabled = true;
-
         const response = await fetch(API_URL);
         if (!response.ok) throw new Error('Failed to fetch data');
-
         outageData = await response.json();
-        displaySummary(outageData);
-        displayAffectedAreas(outageData);
-        updateLastUpdated();
+      } catch (error) {
+        console.error('Failed to load outage data:', error);
+      }
+    }
 
-        // Load polygon data for address checking
-        try {
-          const polyResponse = await fetch(POLYGON_API_URL);
-          if (polyResponse.ok) {
-            polygonData = await polyResponse.json();
+    async function fetchAddressSuggestions(query) {
+      const dropdown = document.getElementById('autocompleteDropdown');
+
+      dropdown.innerHTML = '<div class="autocomplete-loading">Searching...</div>';
+      dropdown.style.display = 'block';
+
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=20&addressdetails=1&countrycodes=us`;
+        const response = await fetch(url, {
+          headers: {
+            'User-Agent': 'CoreElectricOutageChecker/1.0'
           }
-        } catch (e) {
-          console.warn('Could not load polygon data:', e);
+        });
+
+        if (!response.ok) throw new Error('Search failed');
+
+        const allResults = await response.json();
+
+        // Filter to only Colorado addresses
+        const results = allResults.filter(result => {
+          const state = result.address?.state;
+          return state === 'Colorado';
+        }).slice(0, 5);
+
+        if (results.length === 0) {
+          dropdown.innerHTML = '<div class="autocomplete-loading">No Colorado addresses found</div>';
+          return;
         }
 
-        document.getElementById('searchBtn').disabled = false;
+        dropdown.innerHTML = results.map(result => `
+          <div class="autocomplete-item" onclick="selectAddress('${escapeHtml(result.display_name)}', ${result.lat}, ${result.lon})">
+            ${escapeHtml(result.display_name)}
+          </div>
+        `).join('');
+
       } catch (error) {
-        showError('Failed to load outage data. Please try again.');
-        console.error(error);
+        console.error('Autocomplete error:', error);
+        hideAutocomplete();
       }
+    }
+
+    function selectAddress(displayName, lat, lng) {
+      selectedAddress = {
+        displayName: displayName,
+        lat: parseFloat(lat),
+        lng: parseFloat(lng)
+      };
+
+      document.getElementById('addressInput').value = displayName;
+      hideAutocomplete();
+    }
+
+    function hideAutocomplete() {
+      document.getElementById('autocompleteDropdown').style.display = 'none';
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
     }
 
     async function searchAddress() {
@@ -339,69 +369,89 @@
         return;
       }
 
+      hideAutocomplete();
+
       // Show loading state
       document.getElementById('result').innerHTML = `
-        <div class="card">
-          <div class="loading">🔍 Searching for address...</div>
+        <div class="result result-loading">
+          <div class="result-icon">🔍</div>
+          <div class="result-status">Searching...</div>
         </div>
       `;
 
+      document.getElementById('searchBtn').disabled = true;
+
       try {
-        // Geocode the address using Nominatim (OpenStreetMap)
-        const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ', Colorado')}&limit=1`;
-        const geocodeResponse = await fetch(geocodeUrl, {
-          headers: {
-            'User-Agent': 'CoreElectricOutageChecker/1.0'
+        let location;
+
+        // If user selected an address from autocomplete, use that
+        if (selectedAddress && selectedAddress.displayName === address) {
+          location = selectedAddress;
+        } else {
+          // Otherwise geocode the address
+          const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ', Colorado')}&limit=1`;
+          const geocodeResponse = await fetch(geocodeUrl, {
+            headers: {
+              'User-Agent': 'CoreElectricOutageChecker/1.0'
+            }
+          });
+
+          if (!geocodeResponse.ok) throw new Error('Geocoding failed');
+
+          const geocodeData = await geocodeResponse.json();
+
+          if (!geocodeData || geocodeData.length === 0) {
+            showError('Address not found. Please try a different address.');
+            document.getElementById('searchBtn').disabled = false;
+            return;
           }
-        });
 
-        if (!geocodeResponse.ok) throw new Error('Geocoding failed');
-
-        const geocodeData = await geocodeResponse.json();
-
-        if (!geocodeData || geocodeData.length === 0) {
-          showError('Address not found. Please try a different address or include city/zip code.');
-          return;
+          location = {
+            lat: parseFloat(geocodeData[0].lat),
+            lng: parseFloat(geocodeData[0].lon),
+            displayName: geocodeData[0].display_name
+          };
         }
 
-        const location = {
-          lat: parseFloat(geocodeData[0].lat),
-          lng: parseFloat(geocodeData[0].lon),
-          displayName: geocodeData[0].display_name
-        };
-
-        // Check which zip code this address is in
+        // Get zip code for this location
         const zipCode = await findZipCodeForLocation(location);
 
         if (!zipCode) {
-          showError('Address not found in Core Electric service area.');
+          showError('Could not determine zip code for this address.');
+          document.getElementById('searchBtn').disabled = false;
           return;
         }
 
-        // Get outage data for this zip code
+        // Check outage status
         const zipReport = outageData.reportData.reports.find(r => r.id === 'Zip');
         if (!zipReport) {
-          showError('Unable to find zip code data');
+          showError('Unable to check outage status.');
+          document.getElementById('searchBtn').disabled = false;
           return;
         }
 
         const area = zipReport.polygons.find(p => p.name === zipCode);
 
         if (!area) {
-          showError(`Address is in zip code ${zipCode}, which is not in Core Electric service area.`);
+          showError(`This address (${zipCode}) is not in Core Electric service area.`);
+          document.getElementById('searchBtn').disabled = false;
           return;
         }
 
-        displayResult(area, location.displayName);
+        // Display result
+        const isOut = area.affected > 0;
+        displayResult(isOut, location.displayName, area);
+
+        document.getElementById('searchBtn').disabled = false;
 
       } catch (error) {
-        showError('Failed to search address. Please try again.');
+        showError('Failed to check address. Please try again.');
         console.error(error);
+        document.getElementById('searchBtn').disabled = false;
       }
     }
 
     async function findZipCodeForLocation(location) {
-      // Try to get zip code from reverse geocoding
       try {
         const reverseUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${location.lat}&lon=${location.lng}`;
         const response = await fetch(reverseUrl, {
@@ -413,185 +463,37 @@
         if (response.ok) {
           const data = await response.json();
           if (data.address && data.address.postcode) {
-            return data.address.postcode.split('-')[0]; // Handle ZIP+4 format
+            return data.address.postcode.split('-')[0];
           }
         }
       } catch (e) {
         console.warn('Reverse geocoding failed:', e);
       }
-
       return null;
     }
 
-    function displayResult(area, addressName = null) {
-      const isOut = area.affected > 0;
-      const statusClass = isOut ? 'status-out' : 'status-on';
-      const statusText = isOut ? '🔴 OUTAGE DETECTED' : '✅ POWER ON';
+    function displayResult(isOut, addressName, area) {
+      const resultClass = isOut ? 'result-off' : 'result-on';
+      const icon = isOut ? '🔴' : '✅';
+      const status = isOut ? 'POWER OFF' : 'POWER ON';
+      const detailsText = isOut
+        ? `${area.affected.toLocaleString()} customers affected in ${area.name}`
+        : `No outages in ${area.name}`;
 
-      let html = `
-        <div class="card result-card">
-          <div class="status-badge ${statusClass}">${statusText}</div>
-          ${addressName ? `<p style="margin: 15px 0 5px 0; color: #6c757d; font-size: 0.9rem;">📍 ${addressName}</p>` : ''}
-          <h2 style="margin: 20px 0 10px 0;">Zip Code ${area.name}</h2>
-          <div class="summary-grid">
-            <div class="stat-box">
-              <div class="stat-label">Total Accounts</div>
-              <div class="stat-value">${area.accounts.toLocaleString()}</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">Affected</div>
-              <div class="stat-value" style="color: ${isOut ? '#dc3545' : '#28a745'}">
-                ${area.affected.toLocaleString()}
-              </div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">Percent Affected</div>
-              <div class="stat-value">${area.percentAffected}%</div>
-            </div>
-            ${area.crewCount ? `
-            <div class="stat-box">
-              <div class="stat-label">Crews Working</div>
-              <div class="stat-value">${area.crewCount}</div>
-            </div>
-            ` : ''}
-          </div>
-          <p style="margin-top: 20px; font-size: 1.1rem;">
-            <strong>Status:</strong> ${isOut ?
-              `Power is currently OUT for ${area.affected.toLocaleString()} customers` :
-              'Power is ON in your area'}
-          </p>
+      document.getElementById('result').innerHTML = `
+        <div class="result ${resultClass}">
+          <div class="result-icon">${icon}</div>
+          <div class="result-status">${status}</div>
+          <div class="result-details">${detailsText}</div>
+          <div class="result-address">📍 ${addressName}</div>
         </div>
       `;
-
-      document.getElementById('result').innerHTML = html;
-    }
-
-    function displaySummary(data) {
-      const summary = data.reportData.summary;
-      const outageStart = new Date(summary.outageStart);
-
-      const html = `
-        <div class="card">
-          <h2 style="margin-bottom: 20px;">📊 System Status</h2>
-          <div class="summary-grid">
-            <div class="stat-box">
-              <div class="stat-label">Total Accounts</div>
-              <div class="stat-value">${summary.accounts.toLocaleString()}</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">Affected</div>
-              <div class="stat-value" style="color: #dc3545">
-                ${summary.affected.toLocaleString()}
-              </div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">Percent Affected</div>
-              <div class="stat-value">${summary.percentAffected.toFixed(2)}%</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">Active Outages</div>
-              <div class="stat-value">${summary.outages}</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">Crews Deployed</div>
-              <div class="stat-value">${summary.crewCount}</div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-label">Oldest Outage</div>
-              <div class="stat-value" style="font-size: 0.9rem;">
-                ${outageStart.toLocaleDateString()}<br>
-                ${outageStart.toLocaleTimeString()}
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-
-      document.getElementById('summary').innerHTML = html;
-    }
-
-    function displayAffectedAreas(data) {
-      const zipReport = data.reportData.reports.find(r => r.id === 'Zip');
-      if (!zipReport) return;
-
-      const affected = zipReport.polygons
-        .filter(p => p.affected > 0)
-        .sort((a, b) => b.percentAffected - a.percentAffected);
-
-      if (affected.length === 0) {
-        document.getElementById('affectedAreas').innerHTML = `
-          <div class="card">
-            <h2>✅ No Outages Reported</h2>
-            <p style="margin-top: 10px; color: #6c757d;">All areas are currently powered.</p>
-          </div>
-        `;
-        return;
-      }
-
-      const getSeverity = (percent) => {
-        if (percent === 100) return 'severity-critical';
-        if (percent > 50) return 'severity-high';
-        if (percent > 10) return 'severity-medium';
-        return 'severity-low';
-      };
-
-      const listHtml = affected.map(area => `
-        <div class="outage-item">
-          <div style="display: flex; align-items: center; flex: 1;">
-            <span class="severity-indicator ${getSeverity(area.percentAffected)}"></span>
-            <div>
-              <div class="zip-code">${area.name}</div>
-              <div class="affected-count">
-                ${area.affected.toLocaleString()} out of ${area.accounts.toLocaleString()} accounts
-              </div>
-            </div>
-          </div>
-          <div style="text-align: right;">
-            <div style="font-size: 1.3rem; font-weight: 700; color: #dc3545;">
-              ${area.percentAffected.toFixed(1)}%
-            </div>
-            ${area.crewCount ? `<div class="affected-count">${area.crewCount} crews</div>` : ''}
-          </div>
-        </div>
-      `).join('');
-
-      const html = `
-        <div class="card">
-          <h2 style="margin-bottom: 15px;">🔴 Affected Zip Codes (${affected.length})</h2>
-          <div class="outage-list">
-            ${listHtml}
-          </div>
-        </div>
-      `;
-
-      document.getElementById('affectedAreas').innerHTML = html;
     }
 
     function showError(message) {
       document.getElementById('result').innerHTML = `
-        <div class="error">${message}</div>
+        <div class="error">⚠️ ${message}</div>
       `;
-    }
-
-    function updateLastUpdated() {
-      const now = new Date();
-      document.getElementById('lastUpdated').textContent =
-        `Last updated: ${now.toLocaleString()}`;
-    }
-
-    function toggleAutoRefresh() {
-      const checkbox = document.getElementById('autoRefresh');
-
-      if (checkbox.checked) {
-        autoRefreshInterval = setInterval(() => {
-          loadData();
-        }, 60000); // 60 seconds
-      } else {
-        if (autoRefreshInterval) {
-          clearInterval(autoRefreshInterval);
-          autoRefreshInterval = null;
-        }
-      }
     }
   </script>
 </body>
