@@ -1,11 +1,8 @@
 {
-  description = "Core Electric Cooperative Outage Checker";
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
-
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let
@@ -14,15 +11,8 @@
       {
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
-            nodejs_22
-            nodePackages.npm
+            nodejs_24
           ];
-
-          shellHook = ''
-            echo "Node.js development environment loaded"
-            echo "Node version: $(node --version)"
-            echo "npm version: $(npm --version)"
-          '';
         };
       }
     );
