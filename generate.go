@@ -71,26 +71,23 @@ func main() {
 	}
 
 	_, err = database.ExecContext(ctx, `
-		DROP TABLE IF EXISTS addresses;
-		DROP TABLE IF EXISTS outages;
-		
-		CREATE TABLE addresses (
+		CREATE OR REPLACE TABLE addresses (
 			id INTEGER PRIMARY KEY,
 			street TEXT NOT NULL,
 			city TEXT NOT NULL,
 			zip TEXT NOT NULL,
 			location GEOMETRY NOT NULL
 		);
-		CREATE INDEX idx_addresses_location ON addresses USING RTREE (location);
+		CREATE INDEX IF NOT EXISTS idx_addresses_location ON addresses USING RTREE (location);
 		
-		CREATE TABLE outages (
+		CREATE OR REPLACE TABLE outages (
 			id INTEGER PRIMARY KEY,
 			location GEOMETRY NOT NULL,
 			cause TEXT NOT NULL,
 			start DATETIME NOT NULL,
 			affected INTEGER NOT NULL
 		);
-		CREATE INDEX idx_outages_location ON outages USING RTREE (location);
+		CREATE INDEX IF NOT EXISTS idx_outages_location ON outages USING RTREE (location);
 	`)
 	if err != nil {
 		zap.L().Fatal("Failed to setup database",
@@ -99,8 +96,8 @@ func main() {
 
 	// Must create FTS index after CREATE TABLE statements are committed
 	_, err = database.ExecContext(ctx, `
-		PRAGMA create_fts_index('addresses', 'id', 'street', 'city', 'zip');
-		PRAGMA create_fts_index('outages', 'id', 'cause');
+		PRAGMA create_fts_index('addresses', 'id', 'street', 'city', 'zip', overwrite = 1);
+		PRAGMA create_fts_index('outages', 'id', 'cause', overwrite = 1);
 	`)
 	if err != nil {
 		zap.L().Fatal("Failed to create FTS indexes",
@@ -117,16 +114,14 @@ func main() {
 			COALESCE("PlaceName", '') as city,
 			COALESCE("Zipcode", '') as zip,
 			ST_Point(
-				TRY_CAST("Longitude" AS DOUBLE), 
+				TRY_CAST("Longitude" AS DOUBLE),
 				TRY_CAST("Latitude" AS DOUBLE)
 			) as location
 		FROM read_csv(?, 
-			all_varchar=true, 
+			all_varchar=true,
 			header=true, 
 			ignore_errors=true,
 			strict_mode=false)
-		WHERE TRY_CAST("Latitude" AS DOUBLE) IS NOT NULL 
-		  AND TRY_CAST("Longitude" AS DOUBLE) IS NOT NULL
 	`, ColoradoPublicAddressFilePath)
 	if err != nil {
 		zap.L().Fatal("Failed to import addresses",
@@ -135,6 +130,7 @@ func main() {
 
 	_, err = database.ExecContext(ctx, `
 		COPY addresses TO 'data/addresses.parquet' (FORMAT PARQUET, COMPRESSION SNAPPY);
+		COPY outages TO 'data/outages.parquet' (FORMAT PARQUET, COMPRESSION SNAPPY);
 	`)
 	if err != nil {
 		zap.L().Fatal("Failed to export addresses parquet",
