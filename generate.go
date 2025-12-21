@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"database/sql"
-	"database/sql/driver"
 	"os"
 	"os/signal"
 	"syscall"
@@ -14,11 +13,12 @@ import (
 
 const (
 	ColoradoPublicAddressFilePath = "data/Colorado_Public_Address_Composite.csv"
-	DatabaseFilePath              = "data/database"
 )
 
 func main() {
-	logger, _ := zap.NewDevelopment()
+	config := zap.NewDevelopmentConfig()
+	config.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
+	logger, _ := config.Build()
 	defer func(logger *zap.Logger) {
 		err := logger.Sync()
 		if err != nil {
@@ -30,11 +30,10 @@ func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
 
-	connector, err := duckdb.NewConnector(DatabaseFilePath, nil)
+	connector, err := duckdb.NewConnector("", nil)
 	if err != nil {
-		zap.L().Fatal("Failed to connect to database",
-			zap.Error(err),
-			zap.String("database", DatabaseFilePath))
+		zap.L().Fatal("Failed to create in-memory database connector",
+			zap.Error(err))
 	}
 	defer func(c *duckdb.Connector) {
 		err := c.Close()
@@ -42,14 +41,6 @@ func main() {
 			zap.L().Error("Failed to close connector")
 		}
 	}(connector)
-
-	connection, err := connector.Connect(ctx)
-	defer func(connection driver.Conn) {
-		err := connection.Close()
-		if err != nil {
-			zap.L().Error("Failed to close connection")
-		}
-	}(connection)
 
 	database := sql.OpenDB(connector)
 	defer func(database *sql.DB) {
@@ -62,11 +53,9 @@ func main() {
 	_, err = database.ExecContext(ctx, `
 		-- https://duckdb.org/docs/stable/core_extensions/spatial/overview
 		INSTALL spatial; LOAD spatial;
-		-- https://duckdb.org/docs/stable/core_extensions/full_text_search
-		INSTALL fts; LOAD fts;
 	`)
 	if err != nil {
-		zap.L().Fatal("Failed to install extensions",
+		zap.L().Fatal("Failed to install spatial extension",
 			zap.Error(err))
 	}
 
@@ -78,8 +67,6 @@ func main() {
 			zip TEXT NOT NULL,
 			location GEOMETRY NOT NULL
 		);
-		CREATE INDEX IF NOT EXISTS idx_addresses_location ON addresses USING RTREE (location);
-		
 		CREATE OR REPLACE TABLE outages (
 			id INTEGER PRIMARY KEY,
 			location GEOMETRY NOT NULL,
@@ -87,20 +74,9 @@ func main() {
 			start DATETIME NOT NULL,
 			affected INTEGER NOT NULL
 		);
-		CREATE INDEX IF NOT EXISTS idx_outages_location ON outages USING RTREE (location);
 	`)
 	if err != nil {
 		zap.L().Fatal("Failed to setup database",
-			zap.Error(err))
-	}
-
-	// Must create FTS index after CREATE TABLE statements are committed
-	_, err = database.ExecContext(ctx, `
-		PRAGMA create_fts_index('addresses', 'id', 'street', 'city', 'zip', overwrite = 1);
-		PRAGMA create_fts_index('outages', 'id', 'cause', overwrite = 1);
-	`)
-	if err != nil {
-		zap.L().Fatal("Failed to create FTS indexes",
 			zap.Error(err))
 	}
 
@@ -122,6 +98,10 @@ func main() {
 			header=true, 
 			ignore_errors=true,
 			strict_mode=false)
+		WHERE 
+		    "Longitude" IS NOT NULL 
+		  AND
+		    "Latitude" IS NOT NULL
 	`, ColoradoPublicAddressFilePath)
 	if err != nil {
 		zap.L().Fatal("Failed to import addresses",
@@ -136,6 +116,4 @@ func main() {
 		zap.L().Fatal("Failed to export addresses parquet",
 			zap.Error(err))
 	}
-
-	zap.L().Info("Successfully imported addresses")
 }

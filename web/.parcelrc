@@ -1,7 +1,7 @@
 {
   "extends": "@parcel/config-default",
   "transformers": {
-    "*.{wasm,worker.js}": ["@parcel/transformer-raw"],
-    "database": ["@parcel/transformer-raw"]
-  }
+    "*.{wasm,worker.js}": ["@parcel/transformer-raw"]
+  },
+  "reporters": ["...", "parcel-reporter-static-files-copy"]
 }
