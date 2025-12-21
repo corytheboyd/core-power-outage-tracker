@@ -133,5 +133,13 @@ func main() {
 			zap.Error(err))
 	}
 
+	_, err = database.ExecContext(ctx, `
+		COPY addresses TO 'data/addresses.parquet' (FORMAT PARQUET, COMPRESSION SNAPPY);
+	`)
+	if err != nil {
+		zap.L().Fatal("Failed to export addresses parquet",
+			zap.Error(err))
+	}
+
 	zap.L().Info("Successfully imported addresses")
 }
