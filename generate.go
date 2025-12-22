@@ -67,17 +67,6 @@ func main() {
 			zip TEXT NOT NULL,
 			location GEOMETRY NOT NULL
 		);
-		CREATE OR REPLACE TABLE outages (
-			id BIGINT PRIMARY KEY,
-			latitude DOUBLE NOT NULL,
-			longitude DOUBLE NOT NULL,
-			location GEOMETRY NOT NULL,
-			customers_affected INTEGER NOT NULL,
-			outage_cause TEXT NOT NULL,
-			outage_start TIMESTAMP NOT NULL,
-			county TEXT NOT NULL,
-			zip TEXT NOT NULL
-		);
 	`)
 	if err != nil {
 		zap.L().Fatal("Failed to setup database",
@@ -112,46 +101,8 @@ func main() {
 			zap.Error(err))
 	}
 
-	// Fetch outage data from CORE API
-	outageClient := NewOutageClient()
-	customerData, err := outageClient.FetchCustomerData(ctx)
-	if err != nil {
-		zap.L().Fatal("Failed to fetch customer data",
-			zap.Error(err))
-	}
-
-	// Insert individual outage points
-	insertedCount := 0
-	for _, outage := range customerData.OutageData.Outages {
-		zap.L().Debug("Processing outage",
-			zap.Int64("id", outage.ID),
-			zap.String("county", outage.County),
-			zap.Int("customers_affected", outage.CustomersAffected),
-			zap.Float64("lat", outage.Latitude),
-			zap.Float64("lng", outage.Longitude))
-
-		_, err = database.ExecContext(ctx, `
-			INSERT INTO outages (id, latitude, longitude, location, customers_affected, outage_cause, outage_start, county, zip)
-			VALUES (?, ?, ?, ST_Point(?, ?), ?, ?, ?, ?, ?)
-		`, outage.ID, outage.Latitude, outage.Longitude, outage.Longitude, outage.Latitude,
-			outage.CustomersAffected, outage.OutageCause, outage.OutageStart, outage.County, outage.Zip)
-
-		if err != nil {
-			zap.L().Error("Failed to insert outage",
-				zap.Int64("id", outage.ID),
-				zap.Error(err))
-		} else {
-			insertedCount++
-		}
-	}
-
-	zap.L().Info("Successfully imported outage data",
-		zap.Int("total_outages", len(customerData.OutageData.Outages)),
-		zap.Int("inserted_outages", insertedCount))
-
 	_, err = database.ExecContext(ctx, `
 		COPY addresses TO 'data/addresses.parquet' (FORMAT PARQUET, COMPRESSION SNAPPY);
-		COPY outages TO 'data/outages.parquet' (FORMAT PARQUET, COMPRESSION SNAPPY);
 	`)
 	if err != nil {
 		zap.L().Fatal("Failed to export addresses parquet",
