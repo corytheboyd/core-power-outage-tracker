@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import { useEffect } from "react";
+import * as zip from "@zip.js/zip.js";
+import * as shapefile from "shapefile";
 
 function App() {
-  const [count, setCount] = useState(0)
+  useEffect(() => {
+    const filePath = "/data/Colorado_Public_Address_Composite.zip";
+    fetch(filePath).then((r) =>
+      r.blob().then((b) => {
+        const blobReader = new zip.BlobReader(b);
+        const zipReader = new zip.ZipReader(blobReader);
+
+        zipReader
+          .getEntries()
+          .then((entries) => {
+            const entry = entries
+              .filter((e) => !e.directory)
+              .find((e) => e.filename.endsWith(".shp"));
+            if (!entry) {
+              throw new Error("File not found");
+            }
+            return entry;
+          })
+          .then((entry) => {
+            return entry.getData(new zip.Uint8ArrayWriter());
+          })
+          .then((buffer) => {
+            shapefile.open(buffer).then((source) => {
+              source.read().then(
+                // @ts-ignore
+                function log(result) {
+                  if (result.done) return;
+                  // console.log(result.value);
+                  return source.read().then(log);
+                },
+              );
+            });
+          });
+      }),
+    );
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h1>Core Power Outage Tracker</h1>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
