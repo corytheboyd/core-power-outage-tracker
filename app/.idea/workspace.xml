@@ -5,40 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../generator/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.direnv/bin/nix-direnv-reload" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.direnv/flake-inputs/24b29jfv23y9mh5ib7a5yljcgm0n65kw-source" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.direnv/flake-profile-a5d5b61aa8a61b7d9d765e1daf971a9a578f1cfa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.direnv/flake-profile-a5d5b61aa8a61b7d9d765e1daf971a9a578f1cfa.rc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.envrc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/core-power-outage-map.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/go.imports.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/jsLibraryMappings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/prettier.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.prettierrc" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../bin/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../data/Colorado_Public_Address_Composite.zip" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../data/addresses.parquet" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../eslint.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/.idea/generator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/.idea/generator.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/convert.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/build_addresses_table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/uv.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/workers/shapefile.worker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../src/workers/shapefile.worker.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tsconfig.app.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tsconfig.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tsconfig.node.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../vite.config.ts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,35 +24,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;NIXITCH_NIXPKGS_CONFIG&quot;: &quot;&quot;,
-    &quot;NIXITCH_NIX_CONF_DIR&quot;: &quot;&quot;,
-    &quot;NIXITCH_NIX_OTHER_STORES&quot;: &quot;&quot;,
-    &quot;NIXITCH_NIX_PATH&quot;: &quot;&quot;,
-    &quot;NIXITCH_NIX_PROFILES&quot;: &quot;&quot;,
-    &quot;NIXITCH_NIX_REMOTE&quot;: &quot;&quot;,
-    &quot;NIXITCH_NIX_USER_PROFILE_DIR&quot;: &quot;&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/corytheboyd/code/core-power-outage-map/bin/shim/node&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;/Users/corytheboyd/code/core-power-outage-map/bin/shim/node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;npm.npm dev.executor&quot;: &quot;Debug&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.runtime&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/corytheboyd/code/core-power-outage-map/app/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JavaScript Debug.localhost:5173.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "NIXITCH_NIXPKGS_CONFIG": "",
+    "NIXITCH_NIX_CONF_DIR": "",
+    "NIXITCH_NIX_OTHER_STORES": "",
+    "NIXITCH_NIX_PATH": "",
+    "NIXITCH_NIX_PROFILES": "",
+    "NIXITCH_NIX_REMOTE": "",
+    "NIXITCH_NIX_USER_PROFILE_DIR": "",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "main",
+    "javascript.preferred.runtime.type.id": "node",
+    "last_opened_file_path": "/Users/corytheboyd/code/core-power-outage-map/bin/shim/node",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "npm.npm dev.executor": "Run",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.web.browsers",
+    "ts.external.directory.path": "/Users/corytheboyd/code/core-power-outage-map/app/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager">
+}]]></component>
+  <component name="RunManager" selected="JavaScript Debug.localhost:5173">
     <configuration name="npm dev" type="js.build_tools.npm">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -96,6 +64,15 @@
       <envs />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="JavaScript Debug.localhost:5173" />
+      <item itemvalue="npm.npm dev" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JavaScript Debug.localhost:5173" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -113,6 +90,7 @@
       <updated>1766434171417</updated>
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
+      <workItem from="1766769924065" duration="2637000" />
     </task>
     <servers />
   </component>
