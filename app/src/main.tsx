@@ -6,14 +6,20 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
-
 import * as duckdb from "@duckdb/duckdb-wasm";
 import { DuckDBDataProtocol, LogLevel } from "@duckdb/duckdb-wasm";
 import duckdb_wasm from "@duckdb/duckdb-wasm/dist/duckdb-mvp.wasm?url";
 import mvp_worker from "@duckdb/duckdb-wasm/dist/duckdb-browser-mvp.worker.js?url";
 import duckdb_wasm_eh from "@duckdb/duckdb-wasm/dist/duckdb-eh.wasm?url";
 import eh_worker from "@duckdb/duckdb-wasm/dist/duckdb-browser-eh.worker.js?url";
+import { resultToList } from "./lib/duckdb/resultToList.ts";
 import { Address } from "./lib/models/Address.ts";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);
 
 const MANUAL_BUNDLES: duckdb.DuckDBBundles = {
   mvp: {
@@ -43,31 +49,38 @@ await db.registerFileURL(
 
 const conn = await db.connect();
 
+console.log("Load extensions...");
 await conn.query(`
   INSTALL fts; LOAD fts;
   INSTALL spatial; LOAD spatial;
-
-  CREATE OR REPLACE TABLE addresses AS FROM "addresses.parquet";
-  
-  -- PRAGMA create_fts_index("addresses", "id");
 `);
+console.log("Import addresses...");
+await conn.query(
+  `CREATE OR REPLACE TABLE addresses AS FROM "addresses.parquet";`,
+);
+console.log("Create search index...");
+await conn.query(
+  `PRAGMA create_fts_index("addresses", "id", "address", "city", "zipcode");`,
+);
+console.log("Ready");
 
 {
+  console.log("Search query...");
   const result = await conn.query(
-    `SELECT address, city, zip FROM addresses
-         WHERE 
-            address ILIKE '%632 asp%'
-         OR
-            city ILIKE '%632 asp%'
-         OR
-            zip ILIKE '%632 asp%'`,
+    `
+      SELECT *
+      FROM (
+        SELECT 
+          id, address, city, zipcode,
+          fts_main_addresses.match_bm25(
+            id, '632 aspen bailey'
+          ) AS score
+        FROM addresses
+      )
+      WHERE score IS NOT NULL
+      ORDER BY score DESC
+    `,
   );
-  const data = result.toArray().map((row) => Address.parse(row.toJSON()));
+  const data = resultToList(result).map((o) => Address.parse(o));
   console.log(data);
 }
-
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-);
