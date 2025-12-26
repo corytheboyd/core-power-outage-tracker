@@ -5,22 +5,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/bin/shim/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../generator/bin/shim/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../generator/data/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../generator/flake.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../generator/flake.nix" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.direnv/flake-inputs/j4azsbdhbc6969l6vx1y0bjwp2y6jrgg-source" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.direnv/flake-profile-a5d5b61aa8a61b7d9d765e1daf971a9a578f1cfa" beforeDir="false" afterPath="$PROJECT_DIR$/../.direnv/flake-profile-a5d5b61aa8a61b7d9d765e1daf971a9a578f1cfa" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.direnv/flake-profile-a5d5b61aa8a61b7d9d765e1daf971a9a578f1cfa.rc" beforeDir="false" afterPath="$PROJECT_DIR$/../.direnv/flake-profile-a5d5b61aa8a61b7d9d765e1daf971a9a578f1cfa.rc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flake.lock" beforeDir="false" afterPath="$PROJECT_DIR$/flake.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../flake.nix" beforeDir="false" afterPath="$PROJECT_DIR$/flake.nix" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/../src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../vite.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../generator/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.direnv/bin/nix-direnv-reload" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.direnv/flake-inputs/24b29jfv23y9mh5ib7a5yljcgm0n65kw-source" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.direnv/flake-profile-a5d5b61aa8a61b7d9d765e1daf971a9a578f1cfa" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.direnv/flake-profile-a5d5b61aa8a61b7d9d765e1daf971a9a578f1cfa.rc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.envrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/core-power-outage-map.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/go.imports.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/jsLibraryMappings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/prettier.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.prettierrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../data/Colorado_Public_Address_Composite.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../data/addresses.parquet" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../eslint.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/.idea/generator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/.idea/generator.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/convert.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/build_addresses_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/uv.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/workers/shapefile.worker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../src/workers/shapefile.worker.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsconfig.app.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tsconfig.node.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../vite.config.ts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +60,13 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;NIXITCH_NIXPKGS_CONFIG&quot;: &quot;&quot;,
+    &quot;NIXITCH_NIX_CONF_DIR&quot;: &quot;&quot;,
+    &quot;NIXITCH_NIX_OTHER_STORES&quot;: &quot;&quot;,
+    &quot;NIXITCH_NIX_PATH&quot;: &quot;&quot;,
+    &quot;NIXITCH_NIX_PROFILES&quot;: &quot;&quot;,
+    &quot;NIXITCH_NIX_REMOTE&quot;: &quot;&quot;,
+    &quot;NIXITCH_NIX_USER_PROFILE_DIR&quot;: &quot;&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
@@ -55,6 +80,7 @@
     &quot;nodejs_interpreter_path&quot;: &quot;/Users/corytheboyd/code/core-power-outage-map/bin/shim/node&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;npm.npm dev.executor&quot;: &quot;Debug&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.runtime&quot;,
     &quot;ts.external.directory.path&quot;: &quot;/Users/corytheboyd/code/core-power-outage-map/app/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -85,7 +111,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1766434171417</updated>
-      <workItem from="1766434172418" duration="689000" />
+      <workItem from="1766434172418" duration="694000" />
+      <workItem from="1766445388194" duration="1921000" />
     </task>
     <servers />
   </component>
