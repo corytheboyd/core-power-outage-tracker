@@ -1,5 +1,5 @@
 {
-  "name": "vite-project",
+  "name": "core-power-outage-tracker",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,6 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@fontsource/roboto": "^5.2.9",
+    "@mui/icons-material": "^7.3.6",
+    "@mui/material": "^7.3.6",
+    "@types/autosuggest-highlight": "^3.2.3",
+    "autosuggest-highlight": "^3.3.4",
+    "create-vite": "^8.2.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
