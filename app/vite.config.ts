@@ -1,62 +1,39 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import { VitePWA } from 'vite-plugin-pwa'
+import { VitePWA } from "vite-plugin-pwa";
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react"; // https://vitejs.dev/config/
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    react({
-      babel: {
-        plugins: [['babel-plugin-react-compiler']],
+    react(),
+    VitePWA({
+      registerType: "autoUpdate",
+      injectRegister: "auto",
+
+      pwaAssets: {
+        disabled: false,
+        config: true,
+      },
+
+      manifest: {
+        name: "vite-project",
+        short_name: "vite-project",
+        description: "vite-project",
+        theme_color: "#ffffff",
+      },
+
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+      },
+
+      devOptions: {
+        enabled: true,
+        navigateFallback: "index.html",
+        suppressWarnings: true,
+        type: "module",
       },
     }),
-    VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['icons/*.png', 'data/*.zip'],
-      manifest: {
-        name: 'Core Power Outage Map',
-        short_name: 'Outage Map',
-        description: 'Colorado power outage tracking map',
-        theme_color: '#1976d2',
-        background_color: '#ffffff',
-        display: 'standalone',
-        orientation: 'portrait-primary',
-        scope: '/',
-        start_url: '/',
-        icons: [
-          {
-            src: '/icons/icon-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any maskable'
-          },
-          {
-            src: '/icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ]
-      },
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg,woff2}'],
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/.*\.tile\.openstreetmap\.org\/.*/,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'osm-tiles',
-              expiration: {
-                maxEntries: 200,
-                maxAgeSeconds: 14 * 24 * 60 * 60
-              }
-            }
-          }
-        ]
-      }
-    })
   ],
-  worker: {
-    format: 'es'
-  }
-})
+});

@@ -1,36 +1,36 @@
+import { useState } from "react";
+import reactLogo from "./assets/react.svg";
+import appLogo from "/favicon.svg";
+import PWABadge from "./PWABadge.tsx";
 import "./App.css";
-import { useShapefileWorker } from "./hooks/useShapefileWorker";
-import { Search } from "./components/Search";
 
 function App() {
-  const { status, progress, error, totalFeatures, search, searchResults } =
-    useShapefileWorker("/data/Colorado_Public_Address_Composite.zip");
-
-  if (error) {
-    return (
-      <div style={{ padding: "2rem" }}>
-        <h1>Error</h1>
-        <p>{error}</p>
-      </div>
-    );
-  }
-
-  if (status === "loading") {
-    return (
-      <div style={{ padding: "2rem" }}>
-        <h1>Core Power Outage Tracker</h1>
-        <p>{progress.stage}...</p>
-        <progress value={progress.loaded} max={progress.total} />
-      </div>
-    );
-  }
+  const [count, setCount] = useState(0);
 
   return (
-    <Search
-      totalFeatures={totalFeatures}
-      searchResults={searchResults}
-      onSearch={search}
-    />
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={appLogo} className="logo" alt="vite-project logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>vite-project</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+      <PWABadge />
+    </>
   );
 }
 

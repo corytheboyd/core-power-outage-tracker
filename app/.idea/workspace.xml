@@ -5,15 +5,55 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/jsLinters/eslint.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/run.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.vite/deps/_metadata.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.vite/deps/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OLD_src/App.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OLD_src/App.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OLD_src/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OLD_src/main.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/favicon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pwa-assets.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/PWABadge.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/PWABadge.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/react.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/vite-env.d.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../generator/test_distance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/prettier.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/prettier.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/eslint.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Map.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/OLD_src/components/Map.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Search.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/OLD_src/components/Search.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useShapefileWorker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/OLD_src/hooks/useShapefileWorker.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/cache.ts" beforeDir="false" afterPath="$PROJECT_DIR$/OLD_src/lib/cache.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/duckdb.ts" beforeDir="false" afterPath="$PROJECT_DIR$/OLD_src/lib/duckdb.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/workers/shapefile.worker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/OLD_src/workers/shapefile.worker.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/workers/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/OLD_src/workers/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="OptimizeOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 8
@@ -38,22 +78,31 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "code.cleanup.on.save": "true",
     "git-widget-placeholder": "main",
     "javascript.preferred.runtime.type.id": "node",
     "last_opened_file_path": "/Users/corytheboyd/code/core-power-outage-map/bin/shim/node",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_interpreter_path": "node",
     "nodejs_package_manager_path": "npm",
-    "npm.npm dev.executor": "Run",
-    "settings.editor.selected.configurable": "reference.settings.ide.settings.web.browsers",
+    "npm.npm dev.executor": "Debug",
+    "rearrange.code.on.save": "true",
+    "settings.editor.selected.configurable": "actions.on.save",
     "ts.external.directory.path": "/Users/corytheboyd/code/core-power-outage-map/app/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="JavaScript Debug.localhost:5173">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Compound.run">
     <configuration name="npm dev" type="js.build_tools.npm">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -65,6 +114,7 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Compound.run" />
       <item itemvalue="JavaScript Debug.localhost:5173" />
       <item itemvalue="npm.npm dev" />
     </list>
@@ -90,7 +140,7 @@
       <updated>1766434171417</updated>
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
-      <workItem from="1766769924065" duration="2637000" />
+      <workItem from="1766769924065" duration="4069000" />
     </task>
     <servers />
   </component>
