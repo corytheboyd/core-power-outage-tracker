@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -11,21 +12,6 @@ import parse from "autosuggest-highlight/parse";
 // But prefer to use throttle in practice
 // import throttle from 'lodash/throttle';
 import { debounce } from "@mui/material/utils";
-
-// This key was created specifically for the demo in mui.com.
-// You need to create a new one for your application.
-const GOOGLE_MAPS_API_KEY = "AIzaSyC3aviU6KHXAjoSnxcw6qbOhjnFctbxPkE";
-
-const useEnhancedEffect =
-  typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
-
-function loadScript(src: string, position: HTMLElement) {
-  const script = document.createElement("script");
-  script.setAttribute("async", "");
-  script.src = src;
-  position.appendChild(script);
-  return script;
-}
 
 interface MainTextMatchedSubstrings {
   offset: number;
@@ -43,7 +29,7 @@ interface PlaceType {
 
 const fetch = debounce(
   async (
-    request: { input: string; sessionToken: any },
+    request: { input: string },
     callback: (results?: readonly PlaceType[]) => void,
   ) => {
     callback(request.input.length === 1 ? fakeAnswer.p : fakeAnswer.paris);
@@ -51,87 +37,51 @@ const fetch = debounce(
   400,
 );
 
-const emptyOptions = [] as any;
-let sessionToken: any;
+const emptyOptions: readonly PlaceType[] = [];
 
 export default function AddressSearch() {
   const [value, setValue] = React.useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = React.useState("");
   const [options, setOptions] =
     React.useState<readonly PlaceType[]>(emptyOptions);
-  const callbackId = React.useId().replace(/[^\w]/g, "");
-  const [loaded, setLoaded] = React.useState(false);
 
-  if (typeof window !== "undefined") {
-    if (!document.querySelector("#google-maps")) {
-      const GOOGLE_NAMESPACE = "_google_callback";
-      const globalContext =
-        // @ts-ignore
-        window[GOOGLE_NAMESPACE] || (window[GOOGLE_NAMESPACE] = {});
-      globalContext[callbackId] = () => {
-        setLoaded(true);
-      };
-
-      const script = loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&loading=async&callback=${GOOGLE_NAMESPACE}.${callbackId}`,
-        document.querySelector("head")!,
-      );
-      script.id = "google-maps";
-    } else if ((window as any).google && !loaded) {
-      setLoaded(true);
-    }
-  }
-
-  useEnhancedEffect(() => {
-    if (!loaded) {
-      return undefined;
-    }
-
+  useEffect(() => {
     if (inputValue === "") {
       setOptions(value ? [value] : emptyOptions);
       return undefined;
     }
 
-    // Allow to resolve the out of order request resolution.
+    // Allow to resolve the out-of-order request resolution.
     let active = true;
 
-    if (!sessionToken) {
-      sessionToken = new (
-        window as any
-      ).google.maps.places.AutocompleteSessionToken();
-    }
+    fetch({ input: inputValue }, (results?: readonly PlaceType[]) => {
+      if (!active) {
+        return;
+      }
 
-    fetch(
-      { input: inputValue, sessionToken },
-      (results?: readonly PlaceType[]) => {
-        if (!active) {
-          return;
+      let newOptions: readonly PlaceType[] = [];
+
+      if (results) {
+        newOptions = results;
+
+        if (value) {
+          newOptions = [
+            value,
+            ...results.filter(
+              (result) => result.description !== value.description,
+            ),
+          ];
         }
-
-        let newOptions: readonly PlaceType[] = [];
-
-        if (results) {
-          newOptions = results;
-
-          if (value) {
-            newOptions = [
-              value,
-              ...results.filter(
-                (result) => result.description !== value.description,
-              ),
-            ];
-          }
-        } else if (value) {
-          newOptions = [value];
-        }
-        setOptions(newOptions);
-      },
-    );
+      } else if (value) {
+        newOptions = [value];
+      }
+      setOptions(newOptions);
+    });
 
     return () => {
       active = false;
     };
-  }, [value, inputValue, loaded]);
+  }, [value, inputValue]);
 
   return (
     <Autocomplete
@@ -146,11 +96,11 @@ export default function AddressSearch() {
       filterSelectedOptions
       value={value}
       noOptionsText="No locations"
-      onChange={(event: any, newValue: PlaceType | null) => {
+      onChange={(_, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
       }}
-      onInputChange={(event, newInputValue) => {
+      onInputChange={(_, newInputValue) => {
         setInputValue(newInputValue);
       }}
       renderInput={(params) => (
@@ -163,10 +113,7 @@ export default function AddressSearch() {
 
         const parts = parse(
           option.structured_formatting.main_text,
-          matches.map((match: any) => [
-            match.offset,
-            match.offset + match.length,
-          ]),
+          matches.map((match) => [match.offset, match.offset + match.length]),
         );
         return (
           <li key={key} {...optionProps}>
