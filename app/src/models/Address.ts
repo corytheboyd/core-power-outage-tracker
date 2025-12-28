@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const Address = z.object({
+export const AddressSchema = z.object({
   id: z.number().nullish(),
   location: z.any().nullish(),
   addressNumber: z.string().nullish(),
@@ -8,3 +8,5 @@ export const Address = z.object({
   city: z.string().nullish(),
   zipcode: z.string().nullish(),
 });
+
+export type Address = z.infer<typeof AddressSchema>;

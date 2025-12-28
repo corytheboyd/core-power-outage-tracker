@@ -5,10 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/lib/geojson.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/positionToGeoJsonPoint.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/duckdb/DuckDbManager.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/state/useStore.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/types/app.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/getPosition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/getPosition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/AddressSearch.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressSearch.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/geojson.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/geojson.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/models/Address.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Address.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -74,6 +80,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/types" />
+      <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -115,7 +124,7 @@
       <updated>1766434171417</updated>
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
-      <workItem from="1766769924065" duration="22510000" />
+      <workItem from="1766769924065" duration="27065000" />
     </task>
     <servers />
   </component>
