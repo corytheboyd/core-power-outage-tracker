@@ -1,12 +1,9 @@
-export async function getPosition(): Promise<GeolocationPosition | null> {
-  return new Promise((resolve) => {
+export async function getPosition(): Promise<GeolocationPosition> {
+  return new Promise((resolve, reject) => {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (p) => resolve(p),
-        (e) => {
-          console.error(e);
-          resolve(null);
-        },
+        (e) => reject(e),
         { enableHighAccuracy: true },
       );
     }

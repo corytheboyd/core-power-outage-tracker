@@ -18,11 +18,17 @@ type DuckDb = {
 interface AddressSearch {
   searchTerm: string;
   searchResults: AddressSearchResult[];
+  activeSearchResult: AddressSearchResult | null;
   setSearchTerm: (value: string) => void;
-  search: () => Promise<void>;
+  setSearchResults: (value: AddressSearchResult[]) => void;
+  setActiveSearchResult: (value: AddressSearchResult | null) => void;
 }
 
-type Geolocation = { status: GeolocationStatus } & (
+type Geolocation = {
+  status: GeolocationStatus;
+  setPosition: (value: GeolocationPosition) => void;
+  setError: (value: GeolocationPositionError) => void;
+} & (
   | { status: "pending" }
   | { status: "granted"; position: GeolocationPosition }
   | { status: "rejected"; error: GeolocationPositionError }
@@ -38,6 +44,20 @@ export const useStore = create<AppState>()(
   immer((set) => ({
     geolocation: {
       status: "pending",
+      setPosition: (value) =>
+        set((state) => {
+          state.geolocation.status = "granted";
+          if (state.geolocation.status == "granted") {
+            state.geolocation.position = value;
+          }
+        }),
+      setError: (value) =>
+        set((state) => {
+          state.geolocation.status = "rejected";
+          if (state.geolocation.status == "rejected") {
+            state.geolocation.error = value;
+          }
+        }),
     },
     duckdb: {
       status: "initializing",
@@ -49,11 +69,19 @@ export const useStore = create<AppState>()(
     addressSearch: {
       searchTerm: "",
       searchResults: [],
+      activeSearchResult: null,
       setSearchTerm: (value) =>
         set((state) => {
           state.addressSearch.searchTerm = value;
         }),
-      search: async () => set((state) => {}),
+      setSearchResults: (value) =>
+        set((state) => {
+          state.addressSearch.searchResults = value;
+        }),
+      setActiveSearchResult: (value) =>
+        set((state) => {
+          state.addressSearch.activeSearchResult = value;
+        }),
     },
   })),
 );
