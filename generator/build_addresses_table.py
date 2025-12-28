@@ -27,8 +27,9 @@ def main():
         COPY (
             SELECT
                 OBJECTID AS id,
-                geom AS location,
-                AddrFull AS address,
+                ST_AsGeoJSON(geom) AS location,
+                AddrNum AS addressNumber,
+                AddrFull AS addressFull,
                 PlaceName AS city,
                 Zipcode AS zipcode,
                 MOD_DATE AS lastModifiedAt,
