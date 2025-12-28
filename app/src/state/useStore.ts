@@ -1,36 +1,49 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { type app } from "../types/app";
+import type {
+  AddressSearchResult,
+  DuckDbStatus,
+  GeolocationStatus,
+} from "../types/app";
 
-interface DuckDb {
-  state: app.DuckDbState;
-  setState: (value: app.DuckDbState) => void;
-}
+type DuckDb = {
+  status: DuckDbStatus;
+  setStatus: (value: DuckDbStatus) => void;
+} & (
+  | { status: "initializing" }
+  | { status: "ready" }
+  | { status: "error"; error?: Error }
+);
 
 interface AddressSearch {
   searchTerm: string;
-  searchResults: app.AddressSearchResult[];
+  searchResults: AddressSearchResult[];
   setSearchTerm: (value: string) => void;
   search: () => Promise<void>;
 }
 
-interface Geolocation {
-  position?: GeolocationPosition;
-  error?: GeolocationPositionError;
-}
+type Geolocation = { status: GeolocationStatus } & (
+  | { status: "pending" }
+  | { status: "granted"; position: GeolocationPosition }
+  | { status: "rejected"; error: GeolocationPositionError }
+);
 
 interface AppState {
+  geolocation: Geolocation;
   duckdb: DuckDb;
   addressSearch: AddressSearch;
 }
 
 export const useStore = create<AppState>()(
   immer((set) => ({
+    geolocation: {
+      status: "pending",
+    },
     duckdb: {
-      state: "initializing",
-      setState: (value) =>
+      status: "initializing",
+      setStatus: (value) =>
         set((state) => {
-          state.duckdb.state = value;
+          state.duckdb.status = value;
         }),
     },
     addressSearch: {

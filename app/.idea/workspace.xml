@@ -5,10 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OLD_src/App.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OLD_src/App.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OLD_src/components/Map.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OLD_src/components/Search.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OLD_src/hooks/useShapefileWorker.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OLD_src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OLD_src/lib/cache.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OLD_src/lib/duckdb.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OLD_src/main.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OLD_src/workers/shapefile.worker.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OLD_src/workers/types.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/duckdb/resultToList.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/duckdb/resultToList.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/state/useStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/useStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/app.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/app.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/geojson.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/geojson.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +130,7 @@
       <updated>1766434171417</updated>
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
-      <workItem from="1766769924065" duration="27374000" />
+      <workItem from="1766769924065" duration="29008000" />
     </task>
     <servers />
   </component>

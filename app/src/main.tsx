@@ -12,8 +12,7 @@ import { getPosition } from "./lib/getPosition.ts";
 import { positionToGeoJsonPoint } from "./lib/positionToGeoJsonPoint.ts";
 import { DuckDbManager } from "./lib/duckdb/DuckDbManager.ts";
 import { AddressSchema } from "./models/Address.ts";
-import { app } from "./types/app";
-import AddressSearchResult = app.AddressSearchResult;
+import type { AddressSearchResult } from "./types/app";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -105,11 +104,6 @@ const addressSearchStatement = await duckdb.connection.prepare(
            rr.city,
            rr.zipcode,
            rr.distance_meters,
-           address_number_score,
-           zip_score,
-           city_score,
-           address_full_score,
-           distance_score,
            address_number_score + zip_score + city_score + address_full_score +
            distance_score AS score
     FROM ranked_results AS rr,
@@ -120,11 +114,18 @@ const addressSearchStatement = await duckdb.connection.prepare(
 );
 
 async function addressSearch(term: string): Promise<AddressSearchResult[]> {
-  addressSearchStatement.query(
+  const result = await addressSearchStatement.query(
     position != null ? JSON.stringify(positionToGeoJsonPoint(position)) : null,
     term,
     term,
   );
+  return resultToList<object & { score: number; distance_meters: number }>(
+    result,
+  ).map((o) => ({
+    address: AddressSchema.parse(o),
+    score: o.score,
+    distanceMeters: o.distance_meters,
+  }));
 }
 
 console.log("Get current position...");
@@ -133,11 +134,6 @@ const position = await getPosition();
 {
   console.log("Search query...");
   const searchTerm = "632 aspen bailey";
-  const result = await addressSearchStatement.query(
-    position != null ? JSON.stringify(positionToGeoJsonPoint(position)) : null,
-    searchTerm,
-    searchTerm,
-  );
-  const data = resultToList(result).map((o) => AddressSchema.parse(o));
+  const data = await addressSearch(searchTerm);
   console.log(data);
 }

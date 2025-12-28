@@ -1,10 +1,11 @@
 import type { Address } from "../models/Address";
 
-namespace app {
-  type DuckDbState = "initializing" | "ready" | "error";
+export type DuckDbStatus = "initializing" | "ready" | "error";
 
-  type AddressSearchResult = {
-    address: Address;
-    score: number;
-  };
-}
+export type GeolocationStatus = "pending" | "granted" | "rejected";
+
+export type AddressSearchResult = {
+  address: Address;
+  score: number;
+  distanceMeters: number;
+};
