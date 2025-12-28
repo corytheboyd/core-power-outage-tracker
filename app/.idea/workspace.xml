@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/lib/getPosition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/geojson.d.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lib/positionToGeoJsonPoint.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/addresses.parquet" beforeDir="false" afterPath="$PROJECT_DIR$/public/addresses.parquet" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/models/Address.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/models/Address.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/getPosition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/getPosition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/build_addresses_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/build_addresses_table.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +115,7 @@
       <updated>1766434171417</updated>
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
-      <workItem from="1766769924065" duration="21413000" />
+      <workItem from="1766769924065" duration="22510000" />
     </task>
     <servers />
   </component>
