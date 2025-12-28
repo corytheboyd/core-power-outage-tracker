@@ -14,6 +14,11 @@ interface AddressSearch {
   search: () => Promise<void>;
 }
 
+interface Geolocation {
+  position?: GeolocationPosition;
+  error?: GeolocationPositionError;
+}
+
 interface AppState {
   duckdb: DuckDb;
   addressSearch: AddressSearch;
