@@ -1,7 +1,8 @@
 import { duckdbManager } from "../duckdbManager.ts";
 import type { AddressSearchResult } from "../types/app";
-import { resultToList } from "../lib/duckdb/resultToList.ts";
 import { AddressSchema } from "../models/Address.ts";
+import { resultToList } from "../duckdb/resultToList.ts";
+import { SEARCH_RESULT_LIMIT } from "../constants.ts";
 
 const statement = await duckdbManager.connection.prepare(`
   SELECT
@@ -14,7 +15,7 @@ const statement = await duckdbManager.connection.prepare(`
   FROM addresses
   ORDER BY
     distance ASC
-  LIMIT 10
+  LIMIT ${SEARCH_RESULT_LIMIT}
 `);
 
 export async function closestAddresses(
@@ -27,10 +28,10 @@ export async function closestAddresses(
     position.coords.longitude,
   );
 
-  const results = resultToList<
-    AddressSearchResult,
-    object & { score: number; distance: number }
-  >(result).map((o) => {
+  const results: AddressSearchResult[] = resultToList<{
+    score: number;
+    distance: number;
+  }>(result).map((o) => {
     return {
       address: AddressSchema.parse(o),
       score: o.score,

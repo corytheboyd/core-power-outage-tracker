@@ -8,6 +8,7 @@ import { debounce } from "lodash-es";
 import { selectGeolocationPosition } from "../state/selectGeolocationPosition.ts";
 import { selectAddressSearchResults } from "../state/selectAddressSearchResults.ts";
 import { searchAddresses } from "../queries/searchAddresses.ts";
+import { formatDistance } from "../lib/formatDistance.ts";
 
 const debouncedAddressSearch = debounce(searchAddresses, 100);
 
@@ -23,26 +24,23 @@ export default function AddressSearchInput() {
 
   return (
     <Autocomplete
-      sx={{ width: 300 }}
       filterOptions={(x) => x}
       options={searchResults}
-      autoComplete
-      includeInputInList
       filterSelectedOptions
       value={activeSearchResult}
       noOptionsText="Address not found"
-      onChange={(_, newValue) => {
+      onChange={(event, newValue) => {
+        console.debug("onChange", event, newValue);
         setActiveSearchResult(newValue);
       }}
-      onInputChange={(_, newInputValue) => {
+      onInputChange={(event, newInputValue) => {
+        console.debug("onInputChange", event, newInputValue);
         setSearchTerm(newInputValue);
         debouncedAddressSearch(newInputValue, position)?.then((results) =>
           setSearchResults(results),
         );
       }}
-      renderInput={(params) => (
-        <TextField {...params} label="Add a location" fullWidth />
-      )}
+      renderInput={(params) => <TextField {...params} label="Add a location" />}
       getOptionLabel={(option) => option.address.address_line_1}
       getOptionKey={(option) => option.address.id}
       renderOption={(props, option) => {
@@ -54,12 +52,23 @@ export default function AddressSearchInput() {
                 <LocationOnIcon sx={{ color: "text.secondary" }} />
               </Grid>
               <Grid sx={{ width: "calc(100% - 44px)", wordWrap: "break-word" }}>
-                <Typography>{option.address.address_line_1}</Typography>
-                {option.address.address_line_2 != "" && (
-                  <Typography>{option.address.address_line_2}</Typography>
-                )}
+                <Typography>
+                  {option.address.address_line_1}
+                  {option.address.address_line_2 != "" && (
+                    <>
+                      {" "}
+                      <Typography sx={{ display: "inline" }}>
+                        {option.address.address_line_2}
+                      </Typography>
+                    </>
+                  )}
+                  {", "}
+                  {option.address.city}
+                  {", CO "}
+                  {option.address.zipcode}
+                </Typography>
                 <Typography variant="caption">
-                  {Math.round(option.distance)} meters
+                  {formatDistance(option.distance)}
                 </Typography>
               </Grid>
             </Grid>

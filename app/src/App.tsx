@@ -1,14 +1,15 @@
-import PWABadge from "./PWABadge.tsx";
 import AddressSearchInput from "./components/AddressSearchInput.tsx";
 import { useStore } from "./state/useStore.ts";
 import { type FunctionComponent, useEffect } from "react";
-import { getPosition } from "./lib/getPosition.ts";
+import { getPosition } from "./geolocation/getPosition.ts";
 import { NeedGeolocationPage } from "./components/NeedGeolocationPage.tsx";
 import { closestAddresses } from "./queries/closestAddresses.ts";
 import { useShallow } from "zustand/react/shallow";
+import PWABadge from "./components/PWABadge.tsx";
 
 export const App: FunctionComponent = () => {
   const fullStateForDebugging = useStore();
+
   const setRecommendedResults = useStore(
     (state) => state.addressSearch.setRecommendedResults,
   );

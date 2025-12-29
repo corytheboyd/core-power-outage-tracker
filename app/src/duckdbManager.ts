@@ -1,5 +1,5 @@
-import { DuckDbManager } from "./lib/duckdb/DuckDbManager.ts";
 import { DuckDBDataProtocol } from "@duckdb/duckdb-wasm";
+import { DuckDbManager } from "./duckdb/DuckDbManager.ts";
 
 export const duckdbManager = await DuckDbManager.build({
   setup: async (connection, db) => {
