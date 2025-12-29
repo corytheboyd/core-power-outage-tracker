@@ -32,6 +32,8 @@ export default function AddressSearchInput() {
       onChange={(event, newValue) => {
         console.debug("onChange", event, newValue);
         setActiveSearchResult(newValue);
+        setSearchTerm("");
+        setSearchResults([]);
       }}
       onInputChange={(event, newInputValue) => {
         console.debug("onInputChange", event, newInputValue);

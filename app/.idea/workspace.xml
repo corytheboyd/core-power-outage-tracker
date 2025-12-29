@@ -5,21 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/constants.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/duckdb/resultToList.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/queries/distanceToNearestOutage.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PWABadge.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PWABadge.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/PWABadge.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PWABadge.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/duckdbManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdbManager.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/duckdb/DuckDbManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/DuckDbManager.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/duckdb/resultToList.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/getPosition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/geolocation/getPosition.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/positionToGeoJsonPoint.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/queries/closestAddresses.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/queries/closestAddresses.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/queries/searchAddresses.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/queries/searchAddresses.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +119,7 @@
       <updated>1766434171417</updated>
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
-      <workItem from="1766769924065" duration="47907000" />
+      <workItem from="1766769924065" duration="48089000" />
     </task>
     <servers />
   </component>
