@@ -7,5 +7,8 @@ export type GeolocationStatus = "pending" | "granted" | "rejected";
 export type AddressSearchResult = {
   address: Address;
   score: number;
-  distanceMeters: number;
+  /**
+   * meters
+   * */
+  distance: number;
 };
