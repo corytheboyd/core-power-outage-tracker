@@ -5,19 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/duckdbManager.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/queries/searchAddresses.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/queries/topClosestAddresses.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/state/selectAddressSearchResults.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/state/selectGeolocationPosition.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/NeedGeolocationPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/addresses.parquet" beforeDir="false" afterPath="$PROJECT_DIR$/public/addresses.parquet" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AddressSearch.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressSearch.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/duckdb.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdbManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdbManager.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/Address.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Address.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/useStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/useStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/queries/searchAddresses.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/queries/searchAddresses.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/queries/topClosestAddresses.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/queries/topClosestAddresses.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/state/selectGeolocationPosition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/selectGeolocationPosition.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../generator/build_addresses_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/build_addresses_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/lib/AddressModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/lib/AddressModel.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +27,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
@@ -126,7 +126,7 @@
       <updated>1766434171417</updated>
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
-      <workItem from="1766769924065" duration="37336000" />
+      <workItem from="1766769924065" duration="42077000" />
     </task>
     <servers />
   </component>

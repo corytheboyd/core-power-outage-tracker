@@ -3,7 +3,6 @@
 from pathlib import Path
 
 import duckdb
-import pandas as pd
 from loguru import logger
 
 from lib.AddressModel import AddressModel
@@ -51,14 +50,53 @@ def main():
     logger.info(f"Parsing shapefile rows to models")
     models = [AddressModel(**r) for r in df.to_dict("records")]
 
-    logger.info(f"Converting models to rows")
-    rows = [m.to_row_data() for m in models]
+    logger.info(f"Creating intermediate temp table")
+    con.execute(
+        """
+        CREATE TABLE temp_addresses (
+            id INTEGER,
+            address_line_1 VARCHAR,
+            address_line_2 VARCHAR,
+            city VARCHAR,
+            zipcode VARCHAR,
+            latitude DOUBLE,
+            longitude DOUBLE
+         )
+        """
+    )
+    con.executemany(
+        "INSERT INTO temp_addresses VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [
+            (
+                model.id,
+                model.address_line_1(),
+                model.address_line_2(),
+                model.city,
+                model.zipcode,
+                model.latitude,
+                model.longitude,
+            )
+            for model in models
+        ],
+    )
 
-    logger.info(f"Writing rows to parquet file: {OUTPUT_FILE_PATH}")
-    output_df = pd.DataFrame(rows)
-    output_df.to_parquet(OUTPUT_FILE_PATH, index=False, compression="gzip")
-
-    logger.info(f"Converted {len(rows):,} addresses")
+    logger.info(f"Exporting addresses to parquet file: {OUTPUT_FILE_PATH}")
+    con.execute(
+        f"""
+        COPY (
+            SELECT
+                id,
+                address_line_1,
+                address_line_2,
+                city,
+                zipcode,
+                ST_AsWKB(ST_Point2D(latitude, longitude)) as location
+            FROM temp_addresses
+        )
+        TO '{OUTPUT_FILE_PATH}'
+        (FORMAT PARQUET)
+    """
+    )
 
     con.close()
 

@@ -5,12 +5,12 @@ import { AddressSchema } from "../models/Address.ts";
 
 const topClosestAddressesStatement = await duckdbManager.connection.prepare(`
   SELECT 
-    id, addressFull, city, zipcode,
+    *,
     ST_Distance_Sphere(ST_Point2D(?, ?), location::POINT_2D) AS distance_meters
   FROM addresses
   ORDER BY
     distance_meters ASC
-  LIMIT 25
+  LIMIT 10
 `);
 
 export async function topClosestAddresses(
@@ -19,8 +19,8 @@ export async function topClosestAddresses(
   const startTime = performance.now();
 
   const result = await topClosestAddressesStatement.query(
-    position.coords.longitude,
     position.coords.latitude,
+    position.coords.longitude,
   );
 
   const results = resultToList<

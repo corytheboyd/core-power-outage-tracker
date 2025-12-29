@@ -7,7 +7,8 @@ class AddressModel(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     id: int = Field(alias="OBJECTID")
-    location: bytearray = Field(alias="geom")
+    latitude: float = Field(alias="Latitude")
+    longitude: float = Field(alias="Longitude")
     type: str | None = Field(alias="Place_Type")
     city: str = Field(alias="PlaceName")
     county: str = Field(alias="County")

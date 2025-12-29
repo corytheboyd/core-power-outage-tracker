@@ -2,9 +2,9 @@ import type { AppState } from "./useStore.ts";
 
 export const selectGeolocationPosition = (
   state: AppState,
-): GeolocationPosition | null => {
+): GeolocationPosition => {
   if (state.geolocation.status == "granted") {
     return state.geolocation.position;
   }
-  return null;
+  throw new Error("Geolocation permission not granted");
 };

@@ -4,12 +4,12 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useStore } from "../state/useStore.ts";
-import { addressSearch } from "../duckdbManager.ts";
 import { debounce } from "lodash-es";
 import { useEffect } from "react";
 import { topClosestAddresses } from "../queries/topClosestAddresses.ts";
 import { selectGeolocationPosition } from "../state/selectGeolocationPosition.ts";
 import { selectAddressSearchResults } from "../state/selectAddressSearchResults.ts";
+import { addressSearch } from "../queries/searchAddresses.ts";
 
 const debouncedAddressSearch = debounce(addressSearch, 250, { maxWait: 1000 });
 
@@ -53,6 +53,7 @@ export default function AddressSearch() {
       renderInput={(params) => (
         <TextField {...params} label="Add a location" fullWidth />
       )}
+      getOptionLabel={(option) => option.address.address_line_1}
       getOptionKey={(option) => option.address.id}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
@@ -63,7 +64,10 @@ export default function AddressSearch() {
                 <LocationOnIcon sx={{ color: "text.secondary" }} />
               </Grid>
               <Grid sx={{ width: "calc(100% - 44px)", wordWrap: "break-word" }}>
-                <Typography>{option.address.addressFull}</Typography>
+                <Typography>{option.address.address_line_1}</Typography>
+                {option.address.address_line_2 != "" && (
+                  <Typography>{option.address.address_line_2}</Typography>
+                )}
                 <Typography variant="caption">
                   {Math.round(option.distanceMeters)} meters
                 </Typography>

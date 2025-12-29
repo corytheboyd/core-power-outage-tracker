@@ -1,11 +1,15 @@
 import PWABadge from "./PWABadge.tsx";
 import AddressSearch from "./components/AddressSearch.tsx";
 import { useStore } from "./state/useStore.ts";
-import { useEffect } from "react";
+import { type FunctionComponent, useEffect } from "react";
 import { getPosition } from "./lib/getPosition.ts";
+import { NeedGeolocationPage } from "./components/NeedGeolocationPage.tsx";
 
-export function App() {
+export const App: FunctionComponent = () => {
   const state = useStore();
+  const hasGeolocation = useStore(
+    (state) => state.geolocation.status == "granted",
+  );
 
   useEffect(() => {
     getPosition()
@@ -15,7 +19,8 @@ export function App() {
 
   return (
     <>
-      <AddressSearch />
+      {!hasGeolocation && <NeedGeolocationPage />}
+      {hasGeolocation && <AddressSearch />}
       <PWABadge />
       <hr />
       <pre>
@@ -23,4 +28,4 @@ export function App() {
       </pre>
     </>
   );
-}
+};
