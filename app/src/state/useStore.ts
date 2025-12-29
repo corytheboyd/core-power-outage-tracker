@@ -19,9 +19,11 @@ interface AddressSearch {
   searchTerm: string;
   searchResults: AddressSearchResult[];
   activeSearchResult: AddressSearchResult | null;
+  recommendedResults: AddressSearchResult[];
   setSearchTerm: (value: string) => void;
   setSearchResults: (value: AddressSearchResult[]) => void;
   setActiveSearchResult: (value: AddressSearchResult | null) => void;
+  setRecommendedResults: (value: AddressSearchResult[]) => void;
 }
 
 type Geolocation = {
@@ -34,7 +36,7 @@ type Geolocation = {
   | { status: "rejected"; error: GeolocationPositionError }
 );
 
-interface AppState {
+export interface AppState {
   geolocation: Geolocation;
   duckdb: DuckDb;
   addressSearch: AddressSearch;
@@ -70,6 +72,7 @@ export const useStore = create<AppState>()(
       searchTerm: "",
       searchResults: [],
       activeSearchResult: null,
+      recommendedResults: [],
       setSearchTerm: (value) =>
         set((state) => {
           state.addressSearch.searchTerm = value;
@@ -81,6 +84,10 @@ export const useStore = create<AppState>()(
       setActiveSearchResult: (value) =>
         set((state) => {
           state.addressSearch.activeSearchResult = value;
+        }),
+      setRecommendedResults: (value) =>
+        set((state) => {
+          state.addressSearch.recommendedResults = value;
         }),
     },
   })),

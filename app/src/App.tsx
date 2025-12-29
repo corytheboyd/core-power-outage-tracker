@@ -11,7 +11,7 @@ export function App() {
     getPosition()
       .then((p) => state.geolocation.setPosition(p))
       .catch((e) => state.geolocation.setError(e));
-  }, [state.geolocation, state.geolocation.status]);
+  }, [state.geolocation]);
 
   return (
     <>

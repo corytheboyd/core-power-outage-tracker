@@ -4,24 +4,35 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useStore } from "../state/useStore.ts";
-import { addressSearch } from "../duckdb.ts";
+import { addressSearch } from "../duckdbManager.ts";
 import { debounce } from "lodash-es";
+import { useEffect } from "react";
+import { topClosestAddresses } from "../queries/topClosestAddresses.ts";
+import { selectGeolocationPosition } from "../state/selectGeolocationPosition.ts";
+import { selectAddressSearchResults } from "../state/selectAddressSearchResults.ts";
 
 const debouncedAddressSearch = debounce(addressSearch, 250, { maxWait: 1000 });
 
 export default function AddressSearch() {
   const {
     setSearchTerm,
-    searchResults,
     setSearchResults,
     activeSearchResult,
     setActiveSearchResult,
+    setRecommendedResults,
   } = useStore((state) => state.addressSearch);
+  const searchResults = useStore(selectAddressSearchResults);
+  const position = useStore(selectGeolocationPosition);
+
+  useEffect(() => {
+    if (position != null) {
+      topClosestAddresses(position).then((r) => setRecommendedResults(r));
+    }
+  }, [position, setRecommendedResults]);
 
   return (
     <Autocomplete
       sx={{ width: 300 }}
-      getOptionLabel={(option) => option.address.addressFull}
       filterOptions={(x) => x}
       options={searchResults}
       autoComplete
@@ -35,7 +46,7 @@ export default function AddressSearch() {
       }}
       onInputChange={(_, newInputValue) => {
         setSearchTerm(newInputValue);
-        debouncedAddressSearch(newInputValue)?.then((results) =>
+        debouncedAddressSearch(newInputValue, position)?.then((results) =>
           setSearchResults(results),
         );
       }}
@@ -53,6 +64,9 @@ export default function AddressSearch() {
               </Grid>
               <Grid sx={{ width: "calc(100% - 44px)", wordWrap: "break-word" }}>
                 <Typography>{option.address.addressFull}</Typography>
+                <Typography variant="caption">
+                  {Math.round(option.distanceMeters)} meters
+                </Typography>
               </Grid>
             </Grid>
           </li>
