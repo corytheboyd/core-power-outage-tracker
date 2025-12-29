@@ -4,6 +4,7 @@ import type {
   AddressSearchResult,
   DuckDbStatus,
   GeolocationStatus,
+  WatchedAddress,
 } from "../types/app";
 
 type DuckDb = {
@@ -36,10 +37,17 @@ type Geolocation = {
   | { status: "rejected"; error: GeolocationPositionError }
 );
 
+interface WatchedAddresses {
+  addresses: WatchedAddress[];
+  addAddress: (address: Address) => void;
+  removeAddress: (addressId: number) => void;
+}
+
 export interface AppState {
   geolocation: Geolocation;
   duckdb: DuckDb;
   addressSearch: AddressSearch;
+  watchedAddresses: WatchedAddresses;
 }
 
 export const useStore = create<AppState>()(
@@ -88,6 +96,28 @@ export const useStore = create<AppState>()(
       setRecommendedResults: (value) =>
         set((state) => {
           state.addressSearch.recommendedResults = value;
+        }),
+    },
+    watchedAddresses: {
+      addresses: [],
+      addAddress: (address) =>
+        set((state) => {
+          const exists = state.watchedAddresses.addresses.some(
+            (watched) => watched.address.id === address.id,
+          );
+          if (!exists) {
+            state.watchedAddresses.addresses.push({
+              address,
+              addedAt: new Date(),
+            });
+          }
+        }),
+      removeAddress: (addressId) =>
+        set((state) => {
+          state.watchedAddresses.addresses =
+            state.watchedAddresses.addresses.filter(
+              (watched) => watched.address.id !== addressId,
+            );
         }),
     },
   })),

@@ -12,3 +12,8 @@ export type AddressSearchResult = {
    * */
   distance: number;
 };
+
+export type WatchedAddress = {
+  address: Address;
+  addedAt: Date;
+};
