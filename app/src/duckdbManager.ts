@@ -10,15 +10,25 @@ export const duckdbManager = await DuckDbManager.build({
       false,
     );
 
+    await db.registerFileURL(
+      "outages.parquet",
+      "/outages.parquet",
+      DuckDBDataProtocol.HTTP,
+      false,
+    );
+
     console.log("Load extensions...");
     await connection.query(`
       INSTALL fts; LOAD fts;
       INSTALL spatial; LOAD spatial;
     `);
 
-    console.log("Import addresses...");
+    console.log("Import tables...");
     await connection.query(
-      `CREATE OR REPLACE TABLE addresses AS FROM "addresses.parquet";`,
+      `
+      CREATE OR REPLACE TABLE addresses AS FROM "addresses.parquet";
+      CREATE OR REPLACE TABLE outages AS FROM "outages.parquet";
+      `,
     );
   },
 });
