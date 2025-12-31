@@ -1,16 +1,5 @@
-import { type FunctionComponent, useCallback } from "react";
-import { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Chip,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { type FunctionComponent, useEffect, useState } from "react";
+import { Box, Chip, IconButton, List, ListItem, ListItemText, Paper, Typography } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import WarningIcon from "@mui/icons-material/Warning";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -19,7 +8,6 @@ import { formatDistance } from "../../lib/formatDistance.ts";
 import { useDuckDbQuery } from "../../duckdb/useDuckDbQuery.ts";
 import { closestOutageQueryFunction } from "../../duckdb/queryFunctions/closestOutageQueryFunction.ts";
 import { AddressSearchInput } from "../AddressSearchInput.tsx";
-import type { AddressSearchResult } from "../../types/app";
 
 type OutageStatus = {
   distance: number | null;
@@ -88,9 +76,12 @@ export const ManagePage: FunctionComponent = () => {
     }
   }, [addresses]);
 
-  const handleAddressSearchInputChange = useCallback((result: AddressSearchResult) => {
-    addAddress(result.address)
-  }, [])
+  // const handleAddressSearchInputChange = useCallback(
+  //   (result: AddressSearchResult) => {
+  //     addAddress(result.address);
+  //   },
+  //   [],
+  // );
 
   const getOutageIndicator = (addressId: number) => {
     const status = outageStatuses.get(addressId);
@@ -141,14 +132,14 @@ export const ManagePage: FunctionComponent = () => {
           <Box sx={{ flex: 1 }}>
             <AddressSearchInput />
           </Box>
-          <Button
-            variant="contained"
-            onClick={handleAddressSearchInputChange}
-            disabled={!activeSearchResult}
-            sx={{ mt: 1 }}
-          >
-            Add
-          </Button>
+          {/*<Button*/}
+          {/*  variant="contained"*/}
+          {/*  onClick={handleAddressSearchInputChange}*/}
+          {/*  disabled={!activeSearchResult}*/}
+          {/*  sx={{ mt: 1 }}*/}
+          {/*>*/}
+          {/*  Add*/}
+          {/*</Button>*/}
         </Box>
       </Paper>
 

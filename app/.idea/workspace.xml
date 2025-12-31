@@ -5,34 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/duckdb/DuckDbQuery.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/duckdb/ResultSet.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/duckdb/UseDuckDbQueryFunction.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/duckdb/getDuckDbManager.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestAddressesQueryFunction.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestOutageQueryFunction.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/searchAddressesQueryFunction.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/duckdb/useDuckDb.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/duckdb/useDuckDbQuery.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/localhost_5173.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/run.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/ManagePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/ManagePage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/NeedGeolocationPage.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/duckdb/resultToList.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/duckdbManager.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geolocation/getPosition.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/queries/closestAddresses.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/queries/distanceToNearestOutage.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/queries/searchAddresses.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/selectGeolocationPosition.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/useStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/useStore.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/app.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/app.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/DuckDbQuery.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/DuckDbQuery.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/ResultSet.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/ResultSet.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestAddressesQueryFunction.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestAddressesQueryFunction.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestOutageQueryFunction.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestOutageQueryFunction.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/searchAddressesQueryFunction.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/searchAddressesQueryFunction.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +121,7 @@
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
       <workItem from="1766769924065" duration="48635000" />
-      <workItem from="1767200036586" duration="5512000" />
+      <workItem from="1767200036586" duration="9772000" />
     </task>
     <servers />
   </component>

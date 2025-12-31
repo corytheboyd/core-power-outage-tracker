@@ -11,9 +11,11 @@ import { useCurrentPosition } from "../geolocation/useCurrentPosition.ts";
 import { closestAddressesQueryFunction } from "../duckdb/queryFunctions/closestAddressesQueryFunction.ts";
 import { SEARCH_QUERY_DEBOUNCE_WAIT_MS } from "../constants.ts";
 import type { AddressSearchResult } from "../types/app";
+import type { InputBaseProps } from "@mui/material";
 
 type AddressSearchInputProps = {
-  onChange: (result: AddressSearchResult) => void;
+  onChange?: (result: AddressSearchResult) => void;
+  inputProps?: Pick<InputBaseProps, "name">;
 };
 
 export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
@@ -51,21 +53,24 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
   });
 
   // TODO proper loading states instead
-  if (!searchAddressesQuery) {
+  if (!searchAddressesQuery || !position) {
     return null;
   }
+
+  console.log("searchResults", searchResults);
+  console.log("closestResults", closestResults);
 
   return (
     <Autocomplete
       filterOptions={(x) => x}
-      options={searchResults}
+      options={closestResults}
       autoComplete
       filterSelectedOptions
       value={activeResult}
       noOptionsText="Address not found"
       onChange={(_, newValue) => {
         setActiveResult(newValue);
-        if (newValue) {
+        if (newValue && props.onChange) {
           props.onChange(newValue);
         }
       }}
@@ -74,10 +79,14 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
           return;
         }
         searchAddressesQuery({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
           searchTerm: newInputValue,
         })?.then((rs) => setSearchResults(rs.toArray()));
       }}
-      renderInput={(params) => <TextField {...params} label="Add a location" />}
+      renderInput={(params) => (
+        <TextField {...params} {...props.inputProps} label="Add a location" />
+      )}
       getOptionLabel={(option) => option.address.address_line_1}
       getOptionKey={(option) => option.address.id}
       renderOption={(props, option) => {

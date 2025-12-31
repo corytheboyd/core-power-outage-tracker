@@ -2,25 +2,29 @@ import type { AsyncPreparedStatement } from "@duckdb/duckdb-wasm";
 
 type DuckDbTable = Awaited<ReturnType<AsyncPreparedStatement["query"]>>;
 
-export class ResultSet<T> implements Iterable<T> {
-  private readonly result: DuckDbTable;
+export type TransformItemFunction<Item> = (o: Record<string, unknown>) => Item;
 
-  constructor(result: DuckDbTable) {
+export class ResultSet<Item> implements Iterable<Item> {
+  private readonly result: DuckDbTable;
+  private readonly transformItem: TransformItemFunction<Item>;
+
+  constructor(result: DuckDbTable, transformItem: TransformItemFunction<Item>) {
     this.result = result;
+    this.transformItem = transformItem;
   }
 
-  *[Symbol.iterator](): Iterator<T> {
+  *[Symbol.iterator](): Iterator<Item> {
     const rows = this.result.toArray();
     for (const row of rows) {
-      yield row.toJSON() as T;
+      yield this.transformItem(row.toJSON());
     }
   }
 
-  toArray(): T[] {
+  toArray(): Item[] {
     return [...this];
   }
 
-  first(): T {
+  first(): Item {
     return this.toArray()[0];
   }
 }

@@ -5,10 +5,8 @@ import { DuckDbQuery } from "../DuckDbQuery.ts";
 export const closestOutageQueryFunction: UseDuckDbQueryFunction<
   number,
   { addressId: number }
-> = async (connection: AsyncDuckDBConnection) =>
-  DuckDbQuery.build(
-    connection,
-    `
+> = async (connection: AsyncDuckDBConnection) => {
+  const sql = `
       SELECT a.id,
              min(ST_Distance_Spheroid(
                a.location::POINT_2D,
@@ -19,6 +17,14 @@ export const closestOutageQueryFunction: UseDuckDbQueryFunction<
       WHERE a.id IN (?)
       GROUP BY a.id
       ORDER BY distance ASC
-    `,
-    ["addressId"] as const,
-  );
+    `;
+  const statement = await connection.prepare(sql);
+  return new DuckDbQuery({
+    statement,
+    sql,
+    paramOrder: ["addressId"] as const,
+    transformItem: (o) => {
+      return o.distance as number;
+    },
+  });
+};
