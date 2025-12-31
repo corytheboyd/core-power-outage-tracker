@@ -9,11 +9,11 @@ export const App: FunctionComponent = () => {
   return (
     <>
       <ManagePage />
-      <PWABadge />
       <hr />
       <pre>
         <code>{JSON.stringify(fullStateForDebugging, null, 2)}</code>
       </pre>
+      <PWABadge />
     </>
   );
 };

@@ -1,18 +1,23 @@
 import { type FunctionComponent, useCallback, useState } from "react";
 import { Stack } from "@mui/material";
-import { AddressSearchInput } from "./AddressSearchInput.tsx";
+import {
+  AddressSearchInput,
+  type AddressSearchInputOnSelectFunction,
+} from "./AddressSearchInput.tsx";
 import type { Address } from "../models/Address.ts";
-import type { AddressSearchResult } from "../types/app";
+import { AddressMapPreview } from "./AddressMapPreview.tsx";
 
 export const NewWatchedAddressForm: FunctionComponent = () => {
   const [address, setAddress] = useState<Address | null>();
 
-  const handleAddressSearchInputSelect = useCallback(
-    (result: AddressSearchResult) => {
-      setAddress(result.address);
-    },
-    [],
-  );
+  const handleAddressSearchInputSelect =
+    useCallback<AddressSearchInputOnSelectFunction>((result) => {
+      if (result != null) {
+        setAddress(result.address);
+      } else {
+        setAddress(null);
+      }
+    }, []);
 
   return (
     <form
@@ -23,11 +28,7 @@ export const NewWatchedAddressForm: FunctionComponent = () => {
     >
       <Stack spacing={2}>
         <AddressSearchInput onSelect={handleAddressSearchInputSelect} />
-        {address && (
-          <pre>
-            <code>{JSON.stringify(address, null, 2)}</code>
-          </pre>
-        )}
+        {address && <AddressMapPreview address={address} height={300} />}
       </Stack>
     </form>
   );

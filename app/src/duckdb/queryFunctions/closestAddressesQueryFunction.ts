@@ -18,6 +18,8 @@ export const closestAddressesQueryFunction: UseDuckDbQueryFunction<
     address_line_2,
     city,
     zipcode,
+    ST_X(location) as latitude,
+    ST_Y(location) as longitude,
     ST_Distance_Sphere(ST_Point2D(?, ?), location::POINT_2D) AS distance
   FROM addresses
   ORDER BY

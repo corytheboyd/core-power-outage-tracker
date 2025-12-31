@@ -12,8 +12,12 @@ import { closestAddressesQueryFunction } from "../duckdb/queryFunctions/closestA
 import { SEARCH_QUERY_DEBOUNCE_WAIT_MS } from "../constants.ts";
 import type { AddressSearchResult } from "../types/app";
 
+export type AddressSearchInputOnSelectFunction = (
+  result: AddressSearchResult | null,
+) => void;
+
 type AddressSearchInputProps = {
-  onSelect?: (result: AddressSearchResult) => void;
+  onSelect?: AddressSearchInputOnSelectFunction;
 };
 
 export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
@@ -55,21 +59,18 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
     return null;
   }
 
-  console.log("searchResults", searchResults);
-  console.log("closestResults", closestResults);
-
   return (
     <Autocomplete
       size="small"
       filterOptions={(x) => x}
-      options={closestResults}
+      options={searchResults.length > 0 ? searchResults : closestResults}
       autoComplete
       filterSelectedOptions
       value={activeResult}
       noOptionsText="Address not found"
       onChange={(_, newValue) => {
         setActiveResult(newValue);
-        if (newValue && props.onSelect) {
+        if (props.onSelect) {
           props.onSelect(newValue);
         }
       }}
@@ -102,7 +103,7 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
                   {option.address.address_line_2 != "" && (
                     <>
                       {" "}
-                      <Typography sx={{ display: "inline" }}>
+                      <Typography component="span" sx={{ display: "inline" }}>
                         {option.address.address_line_2}
                       </Typography>
                     </>

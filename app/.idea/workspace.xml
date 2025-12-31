@@ -5,10 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/NewWatchedAddressForm.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/ManagePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/ManagePage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/NewWatchedAddressForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NewWatchedAddressForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestAddressesQueryFunction.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestAddressesQueryFunction.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/searchAddressesQueryFunction.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/searchAddressesQueryFunction.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Address.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Address.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +123,7 @@
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
       <workItem from="1766769924065" duration="48635000" />
-      <workItem from="1767200036586" duration="11849000" />
+      <workItem from="1767200036586" duration="14529000" />
     </task>
     <servers />
   </component>

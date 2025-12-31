@@ -6,6 +6,8 @@ export const AddressSchema = z.object({
   address_line_2: z.string(),
   city: z.string(),
   zipcode: z.string(),
+  latitude: z.number(),
+  longitude: z.number(),
 });
 
 export type Address = z.infer<typeof AddressSchema>;

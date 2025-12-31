@@ -29,6 +29,23 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
         cleanupOutdatedCaches: true,
         clientsClaim: true,
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/([a-c])\.tile\.openstreetmap\.org\/.*/i,
+            // TODO: CacheFirst
+            handler: "NetworkOnly",
+            options: {
+              cacheName: "openstreetmap-tiles",
+              expiration: {
+                maxEntries: 500,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
       },
 
       devOptions: {
