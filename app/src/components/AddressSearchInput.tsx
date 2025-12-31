@@ -11,11 +11,9 @@ import { useCurrentPosition } from "../geolocation/useCurrentPosition.ts";
 import { closestAddressesQueryFunction } from "../duckdb/queryFunctions/closestAddressesQueryFunction.ts";
 import { SEARCH_QUERY_DEBOUNCE_WAIT_MS } from "../constants.ts";
 import type { AddressSearchResult } from "../types/app";
-import type { InputBaseProps } from "@mui/material";
 
 type AddressSearchInputProps = {
-  onChange?: (result: AddressSearchResult) => void;
-  inputProps?: Pick<InputBaseProps, "name">;
+  onSelect?: (result: AddressSearchResult) => void;
 };
 
 export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
@@ -62,6 +60,7 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
 
   return (
     <Autocomplete
+      size="small"
       filterOptions={(x) => x}
       options={closestResults}
       autoComplete
@@ -70,8 +69,8 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
       noOptionsText="Address not found"
       onChange={(_, newValue) => {
         setActiveResult(newValue);
-        if (newValue && props.onChange) {
-          props.onChange(newValue);
+        if (newValue && props.onSelect) {
+          props.onSelect(newValue);
         }
       }}
       onInputChange={(_, newInputValue, reason) => {
@@ -85,7 +84,7 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
         })?.then((rs) => setSearchResults(rs.toArray()));
       }}
       renderInput={(params) => (
-        <TextField {...params} {...props.inputProps} label="Add a location" />
+        <TextField {...params} label="Search for an address" />
       )}
       getOptionLabel={(option) => option.address.address_line_1}
       getOptionKey={(option) => option.address.id}
