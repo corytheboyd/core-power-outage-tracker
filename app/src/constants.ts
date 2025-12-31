@@ -1,1 +1,2 @@
 export const SEARCH_RESULT_LIMIT = 20
+export const SEARCH_QUERY_DEBOUNCE_WAIT_MS = 150

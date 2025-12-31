@@ -5,9 +5,34 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/duckdb/DuckDbQuery.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/ResultSet.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/UseDuckDbQueryFunction.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/getDuckDbManager.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestAddressesQueryFunction.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestOutageQueryFunction.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/searchAddressesQueryFunction.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/useDuckDb.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/useDuckDbQuery.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/localhost_5173.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/run.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/ManagePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/ManagePage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/duckdbManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdbManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/pages/NeedGeolocationPage.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/resultToList.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdbManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/geolocation/getPosition.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/queries/closestAddresses.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/queries/distanceToNearestOutage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/queries/searchAddresses.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/state/selectGeolocationPosition.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/state/useStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/useStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/app.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/app.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +42,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="TypeScript File" />
         <option value="TypeScript JSX File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -66,7 +91,7 @@
     "npm.npm dev.executor": "Debug",
     "prettierjs.PrettierConfiguration.Package": "/Users/corytheboyd/code/core-power-outage-map/app/node_modules/prettier",
     "rearrange.code.on.save": "true",
-    "settings.editor.selected.configurable": "preferences.sourceCode",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.web.browsers",
     "ts.external.directory.path": "/Users/corytheboyd/code/core-power-outage-map/app/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
@@ -76,14 +101,18 @@
       <recent name="$PROJECT_DIR$/src/queries" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/duckdb" />
       <recent name="$PROJECT_DIR$/src/components/pages" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/src/types" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Compound.run">
+  <component name="RunManager">
+    <configuration default="true" type="CaddyfileRunConfiguration" factoryName="CaddyfileRunConfiguration" caddy-exec="caddy" sub-command="run" caddyfile="Caddyfile" working-dir="$PROJECT_DIR$" env-files="">
+      <env-vars />
+      <method v="2" />
+    </configuration>
     <configuration name="npm dev" type="js.build_tools.npm">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -94,16 +123,6 @@
       <envs />
       <method v="2" />
     </configuration>
-    <list>
-      <item itemvalue="Compound.run" />
-      <item itemvalue="JavaScript Debug.localhost:5173" />
-      <item itemvalue="npm.npm dev" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="JavaScript Debug.localhost:5173" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -122,6 +141,7 @@
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
       <workItem from="1766769924065" duration="48635000" />
+      <workItem from="1767200036586" duration="5512000" />
     </task>
     <servers />
   </component>

@@ -3,44 +3,79 @@ import Autocomplete from "@mui/material/Autocomplete";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { useStore } from "../state/useStore.ts";
-import { debounce } from "lodash-es";
-import { selectGeolocationPosition } from "../state/selectGeolocationPosition.ts";
-import { selectAddressSearchResults } from "../state/selectAddressSearchResults.ts";
-import { searchAddresses } from "../queries/searchAddresses.ts";
 import { formatDistance } from "../lib/formatDistance.ts";
+import { useDuckDbQuery } from "../duckdb/useDuckDbQuery.ts";
+import { type FunctionComponent, useEffect, useState } from "react";
+import { searchAddressesQueryFunction } from "../duckdb/queryFunctions/searchAddressesQueryFunction.ts";
+import { useCurrentPosition } from "../geolocation/useCurrentPosition.ts";
+import { closestAddressesQueryFunction } from "../duckdb/queryFunctions/closestAddressesQueryFunction.ts";
+import { SEARCH_QUERY_DEBOUNCE_WAIT_MS } from "../constants.ts";
+import type { AddressSearchResult } from "../types/app";
 
-const debouncedAddressSearch = debounce(searchAddresses, 100);
+type AddressSearchInputProps = {
+  onChange: (result: AddressSearchResult) => void;
+};
 
-export default function AddressSearchInput() {
-  const {
-    setSearchTerm,
-    setSearchResults,
-    activeSearchResult,
-    setActiveSearchResult,
-  } = useStore((state) => state.addressSearch);
-  const searchResults = useStore(selectAddressSearchResults);
-  const position = useStore(selectGeolocationPosition);
+export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
+  props,
+) => {
+  const [searchResults, setSearchResults] = useState<AddressSearchResult[]>([]);
+  const [closestResults, setClosestResults] = useState<AddressSearchResult[]>(
+    [],
+  );
+  const [activeResult, setActiveResult] = useState<AddressSearchResult | null>(
+    null,
+  );
+
+  const position = useCurrentPosition({ enableHighAccuracy: true });
+
+  const closestAddressesQuery = useDuckDbQuery(closestAddressesQueryFunction);
+  useEffect(() => {
+    if (!closestAddressesQuery || !position) {
+      return;
+    }
+    closestAddressesQuery({
+      longitude: position.coords.longitude,
+      latitude: position.coords.latitude,
+    })
+      .then((rs) => setClosestResults(rs.toArray()))
+      .catch((e) => {
+        throw e;
+      });
+  }, [closestAddressesQuery, position]);
+
+  const searchAddressesQuery = useDuckDbQuery(searchAddressesQueryFunction, {
+    debounce: {
+      wait: SEARCH_QUERY_DEBOUNCE_WAIT_MS,
+    },
+  });
+
+  // TODO proper loading states instead
+  if (!searchAddressesQuery) {
+    return null;
+  }
 
   return (
     <Autocomplete
       filterOptions={(x) => x}
       options={searchResults}
+      autoComplete
       filterSelectedOptions
-      value={activeSearchResult}
+      value={activeResult}
       noOptionsText="Address not found"
-      onChange={(event, newValue) => {
-        console.debug("onChange", event, newValue);
-        setActiveSearchResult(newValue);
-        setSearchTerm("");
-        setSearchResults([]);
+      onChange={(_, newValue) => {
+        setActiveResult(newValue);
+        if (newValue) {
+          props.onChange(newValue);
+        }
       }}
-      onInputChange={(event, newInputValue) => {
-        console.debug("onInputChange", event, newInputValue);
-        setSearchTerm(newInputValue);
-        debouncedAddressSearch(newInputValue, position)?.then((results) =>
-          setSearchResults(results),
-        );
+      onInputChange={(_, newInputValue, reason) => {
+        if (reason == "blur") {
+          return;
+        }
+        searchAddressesQuery({
+          searchTerm: newInputValue,
+        })?.then((rs) => setSearchResults(rs.toArray()));
       }}
       renderInput={(params) => <TextField {...params} label="Add a location" />}
       getOptionLabel={(option) => option.address.address_line_1}
@@ -79,4 +114,4 @@ export default function AddressSearchInput() {
       }}
     />
   );
-}
+};

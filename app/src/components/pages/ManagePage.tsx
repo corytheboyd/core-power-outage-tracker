@@ -1,13 +1,25 @@
-import type { FunctionComponent } from "react";
+import { type FunctionComponent, useCallback } from "react";
 import { useEffect, useState } from "react";
-import { Box, Button, List, ListItem, ListItemText, IconButton, Typography, Paper, Chip } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+  Typography,
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import WarningIcon from "@mui/icons-material/Warning";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import AddressSearchInput from "../AddressSearchInput.tsx";
 import { useStore } from "../../state/useStore.ts";
-import { distanceToNearestOutage } from "../../queries/distanceToNearestOutage.ts";
 import { formatDistance } from "../../lib/formatDistance.ts";
+import { useDuckDbQuery } from "../../duckdb/useDuckDbQuery.ts";
+import { closestOutageQueryFunction } from "../../duckdb/queryFunctions/closestOutageQueryFunction.ts";
+import { AddressSearchInput } from "../AddressSearchInput.tsx";
+import type { AddressSearchResult } from "../../types/app";
 
 type OutageStatus = {
   distance: number | null;
@@ -15,36 +27,54 @@ type OutageStatus = {
 };
 
 export const ManagePage: FunctionComponent = () => {
-  const { activeSearchResult, setActiveSearchResult } = useStore(
-    (state) => state.addressSearch
-  );
   const { addresses, addAddress, removeAddress } = useStore(
-    (state) => state.watchedAddresses
+    (state) => state.watchedAddresses,
   );
-  const [outageStatuses, setOutageStatuses] = useState<Map<number, OutageStatus>>(new Map());
+
+  const [outageStatuses, setOutageStatuses] = useState<
+    Map<number, OutageStatus>
+  >(new Map());
+  const nearestOutage = useDuckDbQuery(closestOutageQueryFunction);
 
   useEffect(() => {
+    if (!nearestOutage) {
+      return;
+    }
+
     const fetchOutageStatuses = async () => {
       const newStatuses = new Map<number, OutageStatus>();
 
       for (const watched of addresses) {
-        newStatuses.set(watched.address.id, { distance: null, loading: true });
+        newStatuses.set(watched.address.id, {
+          distance: null,
+          loading: true,
+        });
       }
       setOutageStatuses(newStatuses);
 
       for (const watched of addresses) {
         try {
-          const distance = await distanceToNearestOutage(watched.address.id);
+          const distance = (
+            await nearestOutage({
+              addressId: watched.address.id,
+            })
+          ).first();
           setOutageStatuses((prev) => {
             const updated = new Map(prev);
             updated.set(watched.address.id, { distance, loading: false });
             return updated;
           });
         } catch (error) {
-          console.error(`Failed to fetch outage status for address ${watched.address.id}:`, error);
+          console.error(
+            `Failed to fetch outage status for address ${watched.address.id}:`,
+            error,
+          );
           setOutageStatuses((prev) => {
             const updated = new Map(prev);
-            updated.set(watched.address.id, { distance: null, loading: false });
+            updated.set(watched.address.id, {
+              distance: null,
+              loading: false,
+            });
             return updated;
           });
         }
@@ -58,12 +88,9 @@ export const ManagePage: FunctionComponent = () => {
     }
   }, [addresses]);
 
-  const handleAddAddress = () => {
-    if (activeSearchResult) {
-      addAddress(activeSearchResult.address);
-      setActiveSearchResult(null);
-    }
-  };
+  const handleAddressSearchInputChange = useCallback((result: AddressSearchResult) => {
+    addAddress(result.address)
+  }, [])
 
   const getOutageIndicator = (addressId: number) => {
     const status = outageStatuses.get(addressId);
@@ -116,7 +143,7 @@ export const ManagePage: FunctionComponent = () => {
           </Box>
           <Button
             variant="contained"
-            onClick={handleAddAddress}
+            onClick={handleAddressSearchInputChange}
             disabled={!activeSearchResult}
             sx={{ mt: 1 }}
           >

@@ -17,3 +17,5 @@ export type WatchedAddress = {
   address: Address;
   addedAt: Date;
 };
+
+export type SqlPrimitive = string | number | boolean | null;
