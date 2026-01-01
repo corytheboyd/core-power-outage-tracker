@@ -5,7 +5,7 @@ import {
   type AddressSearchInputOnSelectFunction,
 } from "./AddressSearchInput.tsx";
 import type { Address } from "../models/Address.ts";
-import { WatchedAddressCard } from "./WatchedAddressCard.tsx";
+import { WatchedAddressCard } from "./presentation/WatchedAddressCard.tsx";
 
 export const NewWatchedAddressForm: FunctionComponent = () => {
   const [address, setAddress] = useState<Address | null>();
@@ -28,7 +28,13 @@ export const NewWatchedAddressForm: FunctionComponent = () => {
     >
       <Stack spacing={2}>
         <AddressSearchInput onSelect={handleAddressSearchInputSelect} />
-        {address && <WatchedAddressCard address={address} />}
+        {address && (
+          <WatchedAddressCard
+            address={address}
+            loading={false}
+            powerStatus="off"
+          />
+        )}
       </Stack>
     </form>
   );

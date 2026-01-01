@@ -4,6 +4,8 @@ export type DuckDbStatus = "initializing" | "ready" | "error";
 
 export type GeolocationStatus = "pending" | "granted" | "rejected";
 
+export type PowerStatus = "on" | "off" | "indeterminate";
+
 export type AddressSearchResult = {
   address: Address;
   score: number;
