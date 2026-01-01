@@ -1,106 +1,158 @@
-import { type FunctionComponent, useState } from "react";
+import {
+  type FunctionComponent,
+  type ReactElement,
+  useCallback,
+  useState,
+} from "react";
 import {
   Box,
+  Button,
   Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
   CardHeader,
   CardMedia,
-  IconButton,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
-  MenuList,
 } from "@mui/material";
 import type { PowerStatus } from "../../types/app";
 import { WatchedAddressStatusAvatar } from "./WatchedAddressStatusAvatar.tsx";
 import { AddressFull } from "./AddressFull.tsx";
 import { AddressMapPreview } from "../AddressMapPreview.tsx";
 import type { Address } from "../../models/Address.ts";
-import { MoreVert, PlaylistRemove, Sync } from "@mui/icons-material";
+import { PlaylistRemove, Sync } from "@mui/icons-material";
+import Typography from "@mui/material/Typography";
+import { DateFormatDistanceToNow } from "../util/DateFormatDistanceToNow.tsx";
 
 type WatchedAddressCardProps = {
   address: Address;
   powerStatus: PowerStatus;
-  loading: boolean;
+  synchronizing: boolean;
+  lastSynchronizedAt: Date;
+  onRequestSync?: () => void;
+  onRequestDelete?: () => void;
+};
+
+type ActionName = "sync" | "remove";
+
+const actions: Record<ActionName, { label: string; icon: ReactElement }> = {
+  sync: {
+    label: "Synchronize now",
+    icon: <Sync />,
+  },
+  remove: {
+    label: "Remove from list",
+    icon: <PlaylistRemove />,
+  },
 };
 
 export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = ({
   address,
   powerStatus,
-  loading = false,
+  synchronizing = false,
+  lastSynchronizedAt,
+  onRequestSync,
+  onRequestDelete,
 }) => {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [expanded, setExpanded] = useState(false);
+
+  const handleToggleExpanded = useCallback(
+    () => setExpanded(!expanded),
+    [expanded],
+  );
+
+  const handleRequestDelete = useCallback(() => {
+    if (onRequestDelete) {
+      onRequestDelete();
+    }
+  }, [onRequestDelete]);
+  const handleRequestSync = useCallback(() => {
+    if (onRequestSync) {
+      onRequestSync();
+    }
+  }, [onRequestSync]);
+
+  let content;
+  switch (powerStatus) {
+    case "on":
+      content = <PowerOnContent />;
+      break;
+    case "off":
+      content = <PowerOffContent />;
+      break;
+    case "indeterminate":
+      content = <PowerIndeterminateContent />;
+      break;
+  }
 
   return (
-    <>
-      <Card elevation={2}>
+    <Card elevation={2}>
+      <CardActionArea onClick={handleToggleExpanded}>
         <CardHeader
           title={address.address_line_1}
           subheader={`${address.city}, CO, ${address.zipcode}`}
           avatar={
             <WatchedAddressStatusAvatar
               powerStatus={powerStatus}
-              loading={loading}
+              synchronizing={synchronizing}
             />
-          }
-          action={
-            <IconButton
-              aria-label="settings"
-              id="basic-button"
-              aria-controls={open ? "card-header-action-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-            >
-              <MoreVert />
-            </IconButton>
           }
         >
           <AddressFull address={address} />
         </CardHeader>
-        <CardMedia>
-          <Box sx={{ aspectRatio: "2/1", height: "100%", width: "100%" }}>
-            <AddressMapPreview address={address} height="100%" />
-          </Box>
-        </CardMedia>
-      </Card>
-      {/* CARD HEADER ACTION MENU */}
-      <Menu
-        id="card-header-action-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        <MenuList dense sx={{ width: 200 }}>
-          <MenuItem>
-            <ListItemIcon>
-              <PlaylistRemove fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Remove from list</ListItemText>
-          </MenuItem>
-          <MenuItem disabled={loading}>
-            <ListItemIcon>
-              <Sync fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Sync now</ListItemText>
-          </MenuItem>
-        </MenuList>
-      </Menu>
-    </>
+      </CardActionArea>
+
+      {expanded && (
+        <>
+          <CardMedia>
+            <Box sx={{ aspectRatio: "2/1", height: "100%", width: "100%" }}>
+              <AddressMapPreview address={address} height="100%" />
+            </Box>
+          </CardMedia>
+
+          <CardContent>
+            {content}
+            <Typography variant="caption">
+              Synchronized <DateFormatDistanceToNow from={lastSynchronizedAt} />
+            </Typography>
+          </CardContent>
+
+          <CardActions>
+            <Button
+              size="small"
+              startIcon={actions["remove"].icon}
+              onClick={handleRequestDelete}
+            >
+              {actions["remove"].label}
+            </Button>
+            <Button
+              size="small"
+              startIcon={actions["sync"].icon}
+              disabled={synchronizing}
+              onClick={handleRequestSync}
+            >
+              {actions["sync"].label}
+            </Button>
+          </CardActions>
+        </>
+      )}
+    </Card>
   );
 };
+
+const PowerOnContent: FunctionComponent = () => (
+  <>
+    <Typography variant="body1">Power is on.</Typography>
+  </>
+);
+
+const PowerOffContent: FunctionComponent = () => (
+  <>
+    <Typography variant="body1">Power is off.</Typography>
+  </>
+);
+
+const PowerIndeterminateContent: FunctionComponent = () => (
+  <>
+    <Typography variant="body1">Power status indeterminate.</Typography>
+  </>
+);

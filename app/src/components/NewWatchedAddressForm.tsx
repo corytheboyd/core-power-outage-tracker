@@ -6,6 +6,7 @@ import {
 } from "./AddressSearchInput.tsx";
 import type { Address } from "../models/Address.ts";
 import { WatchedAddressCard } from "./presentation/WatchedAddressCard.tsx";
+import { sub } from "date-fns/sub";
 
 export const NewWatchedAddressForm: FunctionComponent = () => {
   const [address, setAddress] = useState<Address | null>();
@@ -31,8 +32,9 @@ export const NewWatchedAddressForm: FunctionComponent = () => {
         {address && (
           <WatchedAddressCard
             address={address}
-            loading={false}
-            powerStatus="off"
+            synchronizing={false}
+            powerStatus="on"
+            lastSynchronizedAt={sub(new Date(), { seconds: 2 })}
           />
         )}
       </Stack>

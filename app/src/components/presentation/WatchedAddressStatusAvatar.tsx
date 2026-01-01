@@ -6,15 +6,15 @@ import type { PowerStatus } from "../../types/app";
 
 type PowerStatusChipProps = {
   powerStatus: PowerStatus;
-  loading: boolean;
+  synchronizing: boolean;
 };
 
 export const WatchedAddressStatusAvatar: FunctionComponent<
   PowerStatusChipProps
-> = ({ powerStatus, loading = false }) => {
+> = ({ powerStatus, synchronizing = false }) => {
   let icon;
   let avatarBgColor;
-  if (loading) {
+  if (synchronizing) {
     icon = (
       <Box
         sx={{

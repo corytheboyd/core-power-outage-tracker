@@ -23,6 +23,7 @@
     "apache-arrow": "^21.1.0",
     "autosuggest-highlight": "^3.3.4",
     "create-vite": "^8.2.0",
+    "date-fns": "^4.1.0",
     "immer": "^11.1.0",
     "leaflet": "^1.9.4",
     "lodash-es": "^4.17.22",
