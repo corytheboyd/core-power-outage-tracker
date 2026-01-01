@@ -1,8 +1,7 @@
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { FunctionComponent } from "react";
 import type { Address } from "../models/Address.ts";
-import { Typography } from "@mui/material";
 
 interface MapDemoProps {
   address: Address;
@@ -49,11 +48,7 @@ export const AddressMapPreview: FunctionComponent<MapDemoProps> = (props) => {
       {/*  />*/}
       {/*))}*/}
 
-      <Marker position={position}>
-        <Popup>
-          <Typography>{props.address.address_line_1}</Typography>
-        </Popup>
-      </Marker>
+      <Marker position={position} />
     </MapContainer>
   );
 };

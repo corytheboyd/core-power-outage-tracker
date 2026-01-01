@@ -5,18 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/WatchedAddressCard.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/presentation/AddressFull.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/presentation/PowerStatusChip.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/lib/addressOneLineFull.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AddressMapPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressMapPreview.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/NewWatchedAddressForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/NewWatchedAddressForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/pages/ManagePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/ManagePage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/WatchedAddressCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/WatchedAddressCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/presentation/PowerStatusChip.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/presentation/PowerStatusAvatar.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +118,7 @@
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
       <workItem from="1766769924065" duration="48635000" />
-      <workItem from="1767200036586" duration="24017000" />
+      <workItem from="1767200036586" duration="24722000" />
     </task>
     <servers />
   </component>
