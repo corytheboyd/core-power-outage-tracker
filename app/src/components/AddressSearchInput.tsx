@@ -1,9 +1,5 @@
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import { formatDistance } from "../lib/formatDistance.ts";
 import { useDuckDbQuery } from "../duckdb/useDuckDbQuery.ts";
 import { type FunctionComponent, useEffect, useState } from "react";
 import { searchAddressesQueryFunction } from "../duckdb/queryFunctions/searchAddressesQueryFunction.ts";
@@ -11,6 +7,8 @@ import { useCurrentPosition } from "../geolocation/useCurrentPosition.ts";
 import { closestAddressesQueryFunction } from "../duckdb/queryFunctions/closestAddressesQueryFunction.ts";
 import { SEARCH_QUERY_DEBOUNCE_WAIT_MS } from "../constants.ts";
 import type { AddressSearchResult } from "../types/app";
+import { addressOneLineFull } from "../lib/addressOneLineFull.ts";
+import { AddressFull } from "./presentation/AddressFull.tsx";
 
 export type AddressSearchInputOnSelectFunction = (
   result: AddressSearchResult | null,
@@ -87,37 +85,13 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
       renderInput={(params) => (
         <TextField {...params} label="Search for an address" />
       )}
-      getOptionLabel={(option) => option.address.address_line_1}
+      getOptionLabel={(option) => addressOneLineFull(option.address)}
       getOptionKey={(option) => option.address.id}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
         return (
           <li key={key} {...optionProps}>
-            <Grid container sx={{ alignItems: "center" }}>
-              <Grid sx={{ display: "flex", width: 44 }}>
-                <LocationOnIcon sx={{ color: "text.secondary" }} />
-              </Grid>
-              <Grid sx={{ width: "calc(100% - 44px)", wordWrap: "break-word" }}>
-                <Typography>
-                  {option.address.address_line_1}
-                  {option.address.address_line_2 != "" && (
-                    <>
-                      {" "}
-                      <Typography component="span" sx={{ display: "inline" }}>
-                        {option.address.address_line_2}
-                      </Typography>
-                    </>
-                  )}
-                  {", "}
-                  {option.address.city}
-                  {", CO "}
-                  {option.address.zipcode}
-                </Typography>
-                <Typography variant="caption">
-                  {formatDistance(option.distance)}
-                </Typography>
-              </Grid>
-            </Grid>
+            <AddressFull address={option.address} distance={option.distance} />
           </li>
         );
       }}
