@@ -31,9 +31,11 @@ export const NewWatchedAddressForm: FunctionComponent = () => {
         <AddressSearchInput onSelect={handleAddressSearchInputSelect} />
         {address && (
           <WatchedAddressCard
+            variant="create"
             address={address}
             powerStatus="synchronizing"
             lastSynchronizedAt={sub(new Date(), { seconds: 2 })}
+            expandable={false}
           />
         )}
       </Stack>

@@ -5,6 +5,7 @@ import {
   useState,
 } from "react";
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -19,45 +20,65 @@ import { WatchedAddressStatusAvatar } from "./WatchedAddressStatusAvatar.tsx";
 import { AddressFull } from "./AddressFull.tsx";
 import { AddressMapPreview } from "../AddressMapPreview.tsx";
 import type { Address } from "../../models/Address.ts";
-import { PlaylistRemove, Sync } from "@mui/icons-material";
+import {
+  AddLocationAlt,
+  PlaylistAdd,
+  PlaylistRemove,
+  Sync,
+} from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
 import { DateFormatDistanceToNow } from "./DateFormatDistanceToNow.tsx";
+import { blue } from "@mui/material/colors";
 
 type WatchedAddressCardProps = {
   address: Address;
   powerStatus: PowerStatus;
+  variant: "create" | "show";
   lastSynchronizedAt?: Date;
+  expandable?: boolean;
+  onRequestAddToList?: () => void;
   onRequestSync?: () => void;
   onRequestDelete?: () => void;
 };
 
-type ActionName = "sync" | "remove";
+type ActionName = "synchronize" | "removeFromList" | "addToList";
 
 const actions: Record<ActionName, { label: string; icon: ReactElement }> = {
-  sync: {
+  synchronize: {
     label: "Synchronize now",
     icon: <Sync />,
   },
-  remove: {
+  removeFromList: {
     label: "Remove from list",
     icon: <PlaylistRemove />,
+  },
+  addToList: {
+    label: "Save to list",
+    icon: <PlaylistAdd />,
   },
 };
 
 export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = ({
   address,
   powerStatus,
+  variant,
   lastSynchronizedAt,
+  onRequestAddToList,
   onRequestSync,
   onRequestDelete,
 }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(variant == "create");
 
   const handleToggleExpanded = useCallback(
     () => setExpanded(!expanded),
     [expanded],
   );
 
+  const handleRequestAddToList = useCallback(() => {
+    if (onRequestAddToList) {
+      onRequestAddToList();
+    }
+  }, [onRequestAddToList]);
   const handleRequestDelete = useCallback(() => {
     if (onRequestDelete) {
       onRequestDelete();
@@ -69,34 +90,98 @@ export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = ({
     }
   }, [onRequestSync]);
 
-  let content;
+  let cardHeaderAvatar: ReactElement;
+  if (variant == "create") {
+    cardHeaderAvatar = (
+      <Avatar sx={{ bgcolor: blue[100] }}>
+        <AddLocationAlt sx={{ color: blue[800] }} />
+      </Avatar>
+    );
+  } else {
+    cardHeaderAvatar = <WatchedAddressStatusAvatar powerStatus={powerStatus} />;
+  }
+
+  const cardHeader = (
+    <CardHeader
+      title={address.address_line_1}
+      subheader={`${address.city}, CO, ${address.zipcode}`}
+      avatar={cardHeaderAvatar}
+    >
+      <AddressFull address={address} />
+    </CardHeader>
+  );
+
+  let cardContent: ReactElement;
   switch (powerStatus) {
-    case "synchronizing": {
-      content = <PowerStatusSynchronizingContent />;
-      break;
-    }
     case "on":
-      content = <PowerStatusOnContent />;
+      cardContent = <PowerStatusOnContent />;
       break;
     case "off":
-      content = <PowerStatusOffContent />;
+      cardContent = <PowerStatusOffContent />;
       break;
     case "unknown":
-      content = <PowerStatusUnknownContent />;
+      cardContent = <PowerStatusUnknownContent />;
       break;
+    case "synchronizing": {
+      cardContent = <PowerStatusSynchronizingContent />;
+      break;
+    }
   }
+
+  let cardActions: ReactElement;
+  if (variant == "show") {
+    cardActions = (
+      <>
+        <Button
+          size="small"
+          startIcon={actions["removeFromList"].icon}
+          onClick={handleRequestDelete}
+        >
+          {actions["removeFromList"].label}
+        </Button>
+        <Button
+          size="small"
+          startIcon={actions["synchronize"].icon}
+          disabled={powerStatus == "synchronizing"}
+          onClick={handleRequestSync}
+        >
+          {actions["synchronize"].label}
+        </Button>
+      </>
+    );
+  } else {
+    cardActions = (
+      <>
+        <Button
+          size="small"
+          startIcon={actions["addToList"].icon}
+          onClick={handleRequestAddToList}
+        >
+          {actions["addToList"].label}
+        </Button>
+        <Button
+          size="small"
+          startIcon={actions["synchronize"].icon}
+          disabled={powerStatus == "synchronizing"}
+          onClick={handleRequestSync}
+        >
+          {actions["synchronize"].label}
+        </Button>
+      </>
+    );
+  }
+
+  const expandable = variant == "show";
+  const showContent = variant == "show" && expanded;
 
   return (
     <Card elevation={2}>
-      <CardActionArea onClick={handleToggleExpanded}>
-        <CardHeader
-          title={address.address_line_1}
-          subheader={`${address.city}, CO, ${address.zipcode}`}
-          avatar={<WatchedAddressStatusAvatar powerStatus={powerStatus} />}
-        >
-          <AddressFull address={address} />
-        </CardHeader>
-      </CardActionArea>
+      {expandable && (
+        <CardActionArea onClick={handleToggleExpanded}>
+          {cardHeader}
+        </CardActionArea>
+      )}
+      {!expandable && cardHeader}
 
       {expanded && (
         <>
@@ -106,33 +191,19 @@ export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = ({
             </Box>
           </CardMedia>
 
-          <CardContent>
-            {content}
-            {powerStatus != "synchronizing" && lastSynchronizedAt && (
-              <Typography variant="caption">
-                Synchronized{" "}
-                <DateFormatDistanceToNow from={lastSynchronizedAt} />
-              </Typography>
-            )}
-          </CardContent>
+          {showContent && (
+            <CardContent>
+              {cardContent}
+              {powerStatus != "synchronizing" && lastSynchronizedAt && (
+                <Typography variant="caption">
+                  Synchronized{" "}
+                  <DateFormatDistanceToNow from={lastSynchronizedAt} />
+                </Typography>
+              )}
+            </CardContent>
+          )}
 
-          <CardActions>
-            <Button
-              size="small"
-              startIcon={actions["remove"].icon}
-              onClick={handleRequestDelete}
-            >
-              {actions["remove"].label}
-            </Button>
-            <Button
-              size="small"
-              startIcon={actions["sync"].icon}
-              disabled={powerStatus == "synchronizing"}
-              onClick={handleRequestSync}
-            >
-              {actions["sync"].label}
-            </Button>
-          </CardActions>
+          <CardActions>{cardActions}</CardActions>
         </>
       )}
     </Card>
