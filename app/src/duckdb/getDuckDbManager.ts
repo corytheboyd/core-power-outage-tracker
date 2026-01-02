@@ -23,6 +23,13 @@ export async function getDuckDbManager(): Promise<DuckDbManager> {
       );
 
       await db.registerFileURL(
+        "addresses_80421.parquet",
+        "/addresses_80421.parquet",
+        DuckDBDataProtocol.HTTP,
+        false,
+      );
+
+      await db.registerFileURL(
         "outages.parquet",
         "/outages.parquet",
         DuckDBDataProtocol.HTTP,
@@ -39,6 +46,7 @@ export async function getDuckDbManager(): Promise<DuckDbManager> {
       await connection.query(
         `
           CREATE OR REPLACE TABLE addresses AS FROM "addresses.parquet";
+          CREATE OR REPLACE TABLE addresses_80421 AS FROM "addresses_80421.parquet";
           CREATE OR REPLACE TABLE outages AS FROM "outages.parquet";
           `,
       );

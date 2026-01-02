@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export function useCurrentPosition(
-  options: PositionOptions,
+  options: PositionOptions = {},
 ): GeolocationPosition | null {
   const hasRequested = useRef(false);
   const [position, setPosition] = useState<GeolocationPosition | null>(null);

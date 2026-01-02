@@ -1,4 +1,9 @@
-import { type FunctionComponent, type ReactElement, useCallback, useState } from "react";
+import {
+  type FunctionComponent,
+  type ReactElement,
+  useCallback,
+  useState,
+} from "react";
 import {
   Avatar,
   Box,
@@ -8,18 +13,26 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  CardMedia
+  CardMedia,
 } from "@mui/material";
 import type { AddressSearchResult, PowerStatus } from "../../types/app";
 import { WatchedAddressStatusAvatar } from "./WatchedAddressStatusAvatar.tsx";
 import { AddressFull } from "./AddressFull.tsx";
 import { AddressMapPreview } from "../AddressMapPreview.tsx";
 import type { Address } from "../../models/Address.ts";
-import { AddLocationAlt, PlaylistAdd, PlaylistRemove, Sync } from "@mui/icons-material";
+import {
+  AddLocationAlt,
+  PlaylistAdd,
+  PlaylistRemove,
+  Sync,
+} from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
 import { DateFormatDistanceToNow } from "./DateFormatDistanceToNow.tsx";
 import { blue } from "@mui/material/colors";
-import { AddressSearchInput, type AddressSearchInputOnSelectFunction } from "../AddressSearchInput.tsx";
+import {
+  AddressSearchInput,
+  type AddressSearchInputOnSelectFunction,
+} from "../AddressSearchInput.tsx";
 
 type WatchedAddressCardCreateVariantProps = {
   variant: "create";
@@ -73,6 +86,7 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
 
   const handleAddressSearchInputOnSelect: AddressSearchInputOnSelectFunction =
     useCallback((result) => {
+      console.log(result);
       setSelection(result);
     }, []);
 
