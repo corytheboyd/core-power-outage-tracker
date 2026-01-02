@@ -21,13 +21,12 @@ import { AddressMapPreview } from "../AddressMapPreview.tsx";
 import type { Address } from "../../models/Address.ts";
 import { PlaylistRemove, Sync } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
-import { DateFormatDistanceToNow } from "../util/DateFormatDistanceToNow.tsx";
+import { DateFormatDistanceToNow } from "./DateFormatDistanceToNow.tsx";
 
 type WatchedAddressCardProps = {
   address: Address;
   powerStatus: PowerStatus;
-  synchronizing: boolean;
-  lastSynchronizedAt: Date;
+  lastSynchronizedAt?: Date;
   onRequestSync?: () => void;
   onRequestDelete?: () => void;
 };
@@ -48,7 +47,6 @@ const actions: Record<ActionName, { label: string; icon: ReactElement }> = {
 export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = ({
   address,
   powerStatus,
-  synchronizing = false,
   lastSynchronizedAt,
   onRequestSync,
   onRequestDelete,
@@ -73,14 +71,18 @@ export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = ({
 
   let content;
   switch (powerStatus) {
+    case "synchronizing": {
+      content = <PowerStatusSynchronizingContent />;
+      break;
+    }
     case "on":
-      content = <PowerOnContent />;
+      content = <PowerStatusOnContent />;
       break;
     case "off":
-      content = <PowerOffContent />;
+      content = <PowerStatusOffContent />;
       break;
-    case "indeterminate":
-      content = <PowerIndeterminateContent />;
+    case "unknown":
+      content = <PowerStatusUnknownContent />;
       break;
   }
 
@@ -90,12 +92,7 @@ export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = ({
         <CardHeader
           title={address.address_line_1}
           subheader={`${address.city}, CO, ${address.zipcode}`}
-          avatar={
-            <WatchedAddressStatusAvatar
-              powerStatus={powerStatus}
-              synchronizing={synchronizing}
-            />
-          }
+          avatar={<WatchedAddressStatusAvatar powerStatus={powerStatus} />}
         >
           <AddressFull address={address} />
         </CardHeader>
@@ -111,9 +108,12 @@ export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = ({
 
           <CardContent>
             {content}
-            <Typography variant="caption">
-              Synchronized <DateFormatDistanceToNow from={lastSynchronizedAt} />
-            </Typography>
+            {powerStatus != "synchronizing" && lastSynchronizedAt && (
+              <Typography variant="caption">
+                Synchronized{" "}
+                <DateFormatDistanceToNow from={lastSynchronizedAt} />
+              </Typography>
+            )}
           </CardContent>
 
           <CardActions>
@@ -127,7 +127,7 @@ export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = ({
             <Button
               size="small"
               startIcon={actions["sync"].icon}
-              disabled={synchronizing}
+              disabled={powerStatus == "synchronizing"}
               onClick={handleRequestSync}
             >
               {actions["sync"].label}
@@ -139,20 +139,26 @@ export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = ({
   );
 };
 
-const PowerOnContent: FunctionComponent = () => (
+const PowerStatusSynchronizingContent: FunctionComponent = () => (
+  <>
+    <Typography variant="body1">Synchronizing...</Typography>
+  </>
+);
+
+const PowerStatusOnContent: FunctionComponent = () => (
   <>
     <Typography variant="body1">Power is on.</Typography>
   </>
 );
 
-const PowerOffContent: FunctionComponent = () => (
+const PowerStatusOffContent: FunctionComponent = () => (
   <>
     <Typography variant="body1">Power is off.</Typography>
   </>
 );
 
-const PowerIndeterminateContent: FunctionComponent = () => (
+const PowerStatusUnknownContent: FunctionComponent = () => (
   <>
-    <Typography variant="body1">Power status indeterminate.</Typography>
+    <Typography variant="body1">Power status unknown.</Typography>
   </>
 );

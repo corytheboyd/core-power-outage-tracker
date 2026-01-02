@@ -32,8 +32,7 @@ export const NewWatchedAddressForm: FunctionComponent = () => {
         {address && (
           <WatchedAddressCard
             address={address}
-            synchronizing={false}
-            powerStatus="on"
+            powerStatus="synchronizing"
             lastSynchronizedAt={sub(new Date(), { seconds: 2 })}
           />
         )}
