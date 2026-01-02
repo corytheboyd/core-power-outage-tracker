@@ -1,10 +1,10 @@
 import { type FunctionComponent } from "react";
-import { NewWatchedAddressForm } from "../NewWatchedAddressForm.tsx";
+import { WatchedAddressCard } from "../presentation/WatchedAddressCard.tsx";
 
 export const ManagePage: FunctionComponent = () => {
   return (
     <>
-      <NewWatchedAddressForm />
+      <WatchedAddressCard variant="create" />
     </>
   );
 };

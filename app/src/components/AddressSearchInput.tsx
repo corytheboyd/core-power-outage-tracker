@@ -18,9 +18,9 @@ type AddressSearchInputProps = {
   onSelect?: AddressSearchInputOnSelectFunction;
 };
 
-export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
-  props,
-) => {
+export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = ({
+  onSelect,
+}) => {
   const [searchResults, setSearchResults] = useState<AddressSearchResult[]>([]);
   const [closestResults, setClosestResults] = useState<AddressSearchResult[]>(
     [],
@@ -68,8 +68,8 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = (
       noOptionsText="Address not found"
       onChange={(_, newValue) => {
         setActiveResult(newValue);
-        if (props.onSelect) {
-          props.onSelect(newValue);
+        if (onSelect) {
+          onSelect(newValue);
         }
       }}
       onInputChange={(_, newInputValue, reason) => {
