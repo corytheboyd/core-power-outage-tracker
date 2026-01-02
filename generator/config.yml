@@ -1,6 +1,43 @@
 arc_gis:
   max_page_size: 2000
 
+cleanup_rules:
+  replace:
+    - field: "PlaceName"
+      match: "AURORA CO"
+      replacement: "AURORA"
+    - field: "PlaceName"
+      match: "STRASBURG CO"
+      replacement: "STRASBURG"
+    - field: "PlaceName"
+      match: "BYERS, CO"
+      replacement: "BYERS"
+    - field: "PlaceName"
+      match: "Watkins, CO"
+      replacement: "WATKINS"
+    - field: "PlaceName"
+      match: "UNINC ADAM"
+      replacement: "ADAMS COUNTY"
+    - field: "PlaceName"
+      match: "UNINC DOUG"
+      replacement: "DOUGLAS COUNTY"
+    - field: "PlaceName"
+      match: "UNINC ELBE"
+      replacement: "ELBERT COUNTY"
+  exclude:
+    - field: "PlaceName"
+      match: "107"
+    - field: "PlaceName"
+      match: "113"
+    - field: "PlaceName"
+      match: "115"
+    - field: "PlaceName"
+      match: "123"
+    - field: "PlaceName"
+      match: "138"
+    - field: "PlaceName"
+      match: "143"
+
 # To get list of zipcodes:
 # 1. Go to: https://oms.core.coop
 # 2. Open the outages side panel and show Zipcodes

@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/public/addresses_80421.parquet" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../generator/download_addresses_from_arcgis.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../generator/lib/ColoradoArcGisApi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/presentation/WatchedAddressCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/presentation/WatchedAddressCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/duckdb/getDuckDbManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/getDuckDbManager.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geolocation/useCurrentPosition.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/geolocation/useCurrentPosition.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/build_addresses_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/build_addresses_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/download_addresses_from_arcgis.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/download_addresses_from_arcgis.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../generator/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/pyproject.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../generator/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/uv.lock" afterDir="false" />
     </list>
@@ -129,7 +124,7 @@
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
       <workItem from="1766769924065" duration="48635000" />
-      <workItem from="1767200036586" duration="42209000" />
+      <workItem from="1767200036586" duration="42886000" />
     </task>
     <servers />
   </component>
