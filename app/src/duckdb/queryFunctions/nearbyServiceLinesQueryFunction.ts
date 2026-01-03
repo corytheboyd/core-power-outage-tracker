@@ -4,7 +4,7 @@ import type { ServiceLine } from "../../models/ServiceLine.ts";
 import { ServiceLineSchema } from "../../models/ServiceLine.ts";
 import { DuckDbQuery } from "../DuckDbQuery.ts";
 
-export const nearbyPowerLinesQueryFunction: UseDuckDbQueryFunction<
+export const nearbyServiceLinesQueryFunction: UseDuckDbQueryFunction<
   ServiceLine,
   {
     longitude: number;
@@ -15,7 +15,7 @@ export const nearbyPowerLinesQueryFunction: UseDuckDbQueryFunction<
   const sql = `
     SELECT
       id,
-      ST_AsText(geometry) as geometry_wkt,
+      geometry,
       ST_Distance_Sphere(ST_Point2D(?, ?), geometry) AS distance
     FROM power_lines
     WHERE ST_Distance_Sphere(ST_Point2D(?, ?), geometry) < ?
