@@ -1,8 +1,8 @@
-import { getDuckDbManager } from "../getDuckDbManager.ts";
 import { toGeoJSON } from "@mapbox/polyline";
+import type { DuckDbManager } from "../DuckDbManager.ts";
 
-export async function synchronizeServiceLinesTable() {
-  const { db, connection } = await getDuckDbManager();
+export async function synchronizeServiceLinesTable(duckdb: DuckDbManager) {
+  const { db, connection } = duckdb;
 
   const response = await fetch("/base.json");
   const rawData: { lines: { g: string }[] } = await response.json();

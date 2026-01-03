@@ -1,52 +1,38 @@
-import { type FunctionComponent, useEffect } from "react";
+import { type FunctionComponent, type ReactElement } from "react";
 import PWABadge from "./components/PWABadge.tsx";
-import { ManagePage } from "./components/pages/ManagePage.tsx";
-import { Box, CssBaseline } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { useStore } from "./state/useStore.ts";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Protocol } from "pmtiles";
-import { addProtocol, removeProtocol } from "maplibre-gl";
-import { synchronizeAddressesTable } from "./duckdb/operations/synchronizeAddressesTable.ts";
-import { synchronizeServiceLinesTable } from "./duckdb/operations/synchronizeServiceLinesTable.ts";
+import { LoadingPage } from "./components/pages/LoadingPage.tsx";
+import { useAppInitialize } from "./useAppInitialize.ts";
+import { ManagePage } from "./components/pages/ManagePage.tsx";
 
 export const App: FunctionComponent = () => {
-  const page = <ManagePage />;
+  const { loading, status, progress } = useAppInitialize();
 
-  useEffect(() => {
-    const protocol = new Protocol();
-    addProtocol("pmtiles", protocol.tile);
-    return () => {
-      removeProtocol("pmtiles");
-    };
-  }, []);
-
-  useEffect(() => {
-    synchronizeAddressesTable()
-      .then(() => console.debug("addresses table synchronized"))
-      .catch((e) => {
-        throw e;
-      });
-    synchronizeServiceLinesTable()
-      .then(() => console.debug("service_lines table synchronized"))
-      .catch((e) => {
-        throw e;
-      });
-  }, []);
+  let page: ReactElement;
+  if (loading) {
+    page = <LoadingPage status={status} progress={progress} />;
+  } else {
+    page = <ManagePage />;
+  }
 
   return (
     <>
       <CssBaseline />
-
       <Grid
         container
         direction="column"
         alignItems="center"
         sx={{ minHeight: "100vh" }}
       >
-        <Grid component="main" flexGrow={1} sx={{ width: "100%" }}>
-          <Box sx={{ p: 3, maxWidth: 800, mx: "auto" }}>{page}</Box>
+        <Grid
+          component="main"
+          flexGrow={1}
+          sx={{ maxWidth: 800, width: "100%" }}
+        >
+          {page}
         </Grid>
         <Grid
           container
@@ -59,10 +45,6 @@ export const App: FunctionComponent = () => {
         </Grid>
       </Grid>
       <PWABadge />
-      <hr />
-      <pre>
-        <code>{JSON.stringify(useStore.getState(), null, 2)}</code>
-      </pre>
     </>
   );
 };

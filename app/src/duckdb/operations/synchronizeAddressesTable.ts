@@ -1,8 +1,8 @@
-import { getDuckDbManager } from "../getDuckDbManager.ts";
 import { DuckDBDataProtocol } from "@duckdb/duckdb-wasm";
+import type { DuckDbManager } from "../DuckDbManager.ts";
 
-export async function synchronizeAddressesTable() {
-  const { db, connection } = await getDuckDbManager();
+export async function synchronizeAddressesTable(duckdb: DuckDbManager) {
+  const { db, connection } = duckdb;
 
   await db.registerFileURL(
     "addresses.parquet",
