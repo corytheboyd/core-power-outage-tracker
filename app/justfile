@@ -1,0 +1,12 @@
+# See: https://maps.protomaps.com
+pmtiles_source_url := "https://build.protomaps.com/20251229.pmtiles"
+
+# Determine bounding box from address locations
+# See: https://docs.protomaps.com/pmtiles/cli#extract
+bbox := `duckdb -json -c "INSTALL spatial; LOAD spatial; SELECT MIN(ST_X(location)) - 1 || ',' || MIN(ST_Y(location)) - 1 || ',' || MAX(ST_X(location)) + 0.0725 || ',' || MAX(ST_Y(location)) + 0.0725 AS value FROM './public/addresses.parquet'" | jq -r '.[0].value'`
+
+download_pmtiles_data:
+    pmtiles extract {{pmtiles_source_url}} public/colorado.pmtiles \
+        --bbox={{bbox}} \
+        --minzoom=13 \
+        --maxzoom=15

@@ -8,6 +8,7 @@
         mkShell {
           buildInputs = [
             nodejs_24
+            pmtiles
           ];
           shellHook = ''
             rm ./bin/shim/*

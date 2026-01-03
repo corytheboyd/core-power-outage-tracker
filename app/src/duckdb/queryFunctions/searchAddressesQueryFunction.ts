@@ -19,8 +19,8 @@ export const searchAddressesQueryFunction: UseDuckDbQueryFunction<
            city,
            county,
            zipcode,
-           ST_X(location::POINT_2D) as latitude,
-           ST_Y(location::POINT_2D) as longitude,
+           ST_Y(location::POINT_2D) as latitude,
+           ST_X(location::POINT_2D) as longitude,
            jaro_winkler_similarity(address, UPPER(?), 0.7) AS score,
            ST_Distance_Spheroid(
              ST_FlipCoordinates(location::POINT_2D),

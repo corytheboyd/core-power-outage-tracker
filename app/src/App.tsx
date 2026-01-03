@@ -7,12 +7,14 @@ import Typography from "@mui/material/Typography";
 import { useStore } from "./state/useStore.ts";
 import { useDuckDb } from "./duckdb/useDuckDb.ts";
 import { useCurrentPosition } from "./geolocation/useCurrentPosition.ts";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { Protocol } from "pmtiles";
+import { addProtocol, removeProtocol } from "maplibre-gl";
 
 export const App: FunctionComponent = () => {
   const page = <ManagePage />;
 
   const duckdb = useDuckDb();
-
   const position = useCurrentPosition();
 
   // Convenient arbitrary SQL runner
@@ -36,9 +38,18 @@ export const App: FunctionComponent = () => {
       .then((r) => console.log(r.toArray().map((o) => o.toJSON())));
   }, [duckdb, position]);
 
+  useEffect(() => {
+    const protocol = new Protocol();
+    addProtocol("pmtiles", protocol.tile);
+    return () => {
+      removeProtocol("pmtiles");
+    };
+  }, []);
+
   return (
     <>
       <CssBaseline />
+
       <Grid
         container
         direction="column"

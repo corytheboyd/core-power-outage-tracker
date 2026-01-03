@@ -1,7 +1,8 @@
-import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { FunctionComponent } from "react";
 import type { Address } from "../models/Address.ts";
+import { layers, namedFlavor } from "@protomaps/basemaps";
+import Map from "react-map-gl/maplibre";
 
 interface MapDemoProps {
   address: Address;
@@ -12,38 +13,28 @@ export const AddressMapPreview: FunctionComponent<MapDemoProps> = ({
   address,
   zoom = 15,
 }) => {
-  const position: [number, number] = [address.latitude, address.longitude];
-
   return (
-    <MapContainer
-      key={address.id}
-      center={position}
+    <Map
+      longitude={address.longitude}
+      latitude={address.latitude}
       zoom={zoom}
-      zoomControl={true}
-      scrollWheelZoom={false}
-      dragging={true}
-      doubleClickZoom={false}
-      touchZoom={false}
-      style={{ height: "100%", width: "100%" }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-
-      {/*{powerLines.map((line) => (*/}
-      {/*  <Polyline*/}
-      {/*    key={line.id}*/}
-      {/*    positions={line.geometry}*/}
-      {/*    pathOptions={{*/}
-      {/*      color: "blue",*/}
-      {/*      weight: 3,*/}
-      {/*      opacity: 0.7,*/}
-      {/*    }}*/}
-      {/*  />*/}
-      {/*))}*/}
-
-      <Marker position={position} />
-    </MapContainer>
+      minZoom={13}
+      maxZoom={15}
+      style={{ width: "100%", height: 400 }}
+      mapStyle={{
+        version: 8,
+        glyphs: `${window.location}basemaps-assets-main/fonts/{fontstack}/{range}.pbf`,
+        sprite: `${window.location}basemaps-assets-main/sprites/v4/light`,
+        sources: {
+          protomaps: {
+            type: "vector",
+            url: "pmtiles:///colorado.pmtiles",
+            attribution:
+              '<a href="https://protomaps.com">Protomaps</a> © <a href="https://openstreetmap.org">OpenStreetMap</a>',
+          },
+        },
+        layers: layers("protomaps", namedFlavor("light"), { lang: "en" }),
+      }}
+    />
   );
 };
