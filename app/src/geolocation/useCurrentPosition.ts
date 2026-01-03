@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export function useCurrentPosition(
-  options: PositionOptions = {},
-): GeolocationPosition | null {
+export function useCurrentPosition(): GeolocationPosition | null {
   const hasRequested = useRef(false);
   const [position, setPosition] = useState<GeolocationPosition | null>(null);
 
@@ -15,7 +13,7 @@ export function useCurrentPosition(
       return;
     }
     hasRequested.current = true;
-    console.log("navigator.geolocation.getCurrentPosition", options);
+    console.log("navigator.geolocation.getCurrentPosition");
     navigator.geolocation.getCurrentPosition(
       (p) => {
         setPosition(p);
@@ -23,9 +21,11 @@ export function useCurrentPosition(
       (e) => {
         throw e;
       },
-      options,
+      {
+        enableHighAccuracy: true,
+      },
     );
-  }, [options]);
+  }, []);
 
   return position;
 }

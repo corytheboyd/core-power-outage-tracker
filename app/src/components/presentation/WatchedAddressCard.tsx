@@ -83,6 +83,7 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
   WatchedAddressCardCreateVariantProps
 > = ({ onRequestAddToList }) => {
   const [selection, setSelection] = useState<AddressSearchResult | null>(null);
+  const [powerStatus, setPowerStatus] = useState<PowerStatus>("synchronizing");
 
   const handleAddressSearchInputOnSelect: AddressSearchInputOnSelectFunction =
     useCallback((result) => {
@@ -96,17 +97,28 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
     }
   }, [onRequestAddToList]);
 
+  let title = "Add a new address";
+  if (selection) {
+    title = selection.address.address;
+  }
+
+  let subheader = "Search for an address to add to your watch list";
+  if (selection) {
+    subheader = `${selection.address.city}, CO, ${selection.address.zipcode}`;
+  }
+
+  let avatar = (
+    <Avatar sx={{ bgcolor: blue[100] }}>
+      <AddLocationAlt sx={{ color: blue[800] }} />
+    </Avatar>
+  );
+  if (selection) {
+    avatar = <WatchedAddressStatusAvatar powerStatus={powerStatus} />;
+  }
+
   return (
     <Card elevation={2}>
-      <CardHeader
-        title="Add a new address"
-        subheader="Search for an address to add to your watch list"
-        avatar={
-          <Avatar sx={{ bgcolor: blue[100] }}>
-            <AddLocationAlt sx={{ color: blue[800] }} />
-          </Avatar>
-        }
-      />
+      <CardHeader title={title} subheader={subheader} avatar={avatar} />
 
       {selection && (
         <CardMedia>
@@ -159,15 +171,11 @@ const WatchedAddressCardShowVariant: FunctionComponent<
     }
   }, [onRequestSync]);
 
-  const cardHeaderAvatar = (
-    <WatchedAddressStatusAvatar powerStatus={powerStatus} />
-  );
-
   const cardHeader = (
     <CardHeader
       title={address.address}
       subheader={`${address.city}, CO, ${address.zipcode}`}
-      avatar={cardHeaderAvatar}
+      avatar={<WatchedAddressStatusAvatar powerStatus={powerStatus} />}
     >
       <AddressFull address={address} />
     </CardHeader>

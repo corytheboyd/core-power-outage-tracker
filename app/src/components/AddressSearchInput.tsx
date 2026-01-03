@@ -29,7 +29,7 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = ({
     null,
   );
 
-  const position = useCurrentPosition({ enableHighAccuracy: true });
+  const position = useCurrentPosition();
 
   const closestAddressesQuery = useDuckDbQuery(closestAddressesQueryFunction);
   useEffect(() => {
@@ -52,10 +52,7 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = ({
     },
   });
 
-  // TODO proper loading states instead
-  if (!searchAddressesQuery || !position) {
-    return null;
-  }
+  const isLoading = !position || !searchAddressesQuery;
 
   return (
     <Autocomplete
@@ -66,6 +63,7 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = ({
       filterSelectedOptions
       value={activeResult}
       noOptionsText="Address not found"
+      loading={isLoading}
       onChange={(_, newValue) => {
         setActiveResult(newValue);
         if (onSelect) {
@@ -76,11 +74,13 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = ({
         if (reason == "blur") {
           return;
         }
-        searchAddressesQuery({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          searchTerm: newInputValue,
-        })?.then((rs) => setSearchResults(rs.toArray()));
+        if (searchAddressesQuery && position) {
+          searchAddressesQuery({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            searchTerm: newInputValue,
+          })?.then((rs) => setSearchResults(rs.toArray()));
+        }
       }}
       renderInput={(params) => (
         <TextField {...params} label="Search for an address" />
