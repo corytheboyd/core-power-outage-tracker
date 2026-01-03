@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const AddressSchema = z.object({
-  id: z.bigint(),
+  id: z.coerce.number(),
   address: z.string(),
   city: z.string(),
   county: z.string(),
