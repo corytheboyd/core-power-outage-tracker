@@ -6,30 +6,25 @@ import type { Address } from "../models/Address.ts";
 interface MapDemoProps {
   address: Address;
   zoom?: number;
-  height?: string | number;
 }
 
-export const AddressMapPreview: FunctionComponent<MapDemoProps> = (props) => {
-  const position: [number, number] = [
-    props.address.latitude,
-    props.address.longitude,
-  ];
-  const height =
-    typeof props.height === "number"
-      ? `${props.height}px`
-      : props.height || "400px";
+export const AddressMapPreview: FunctionComponent<MapDemoProps> = ({
+  address,
+  zoom = 15,
+}) => {
+  const position: [number, number] = [address.latitude, address.longitude];
 
   return (
     <MapContainer
-      key={props.address.id}
+      key={address.id}
       center={position}
-      zoom={props.zoom ?? 15}
-      zoomControl={false}
+      zoom={zoom}
+      zoomControl={true}
       scrollWheelZoom={false}
-      dragging={false}
+      dragging={true}
       doubleClickZoom={false}
       touchZoom={false}
-      style={{ height, width: "100%" }}
+      style={{ height: "100%", width: "100%" }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

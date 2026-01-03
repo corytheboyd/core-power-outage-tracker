@@ -14,16 +14,13 @@ export const setupDuckDb: DuckDbManagerSetupFunction = async (
 
   console.log("Load extensions...");
   await connection.query(`
-          INSTALL fts; LOAD fts;
-          INSTALL spatial; LOAD spatial;
-        `);
+    INSTALL spatial; LOAD spatial;
+  `);
 
   console.log("Import tables...");
-  await connection.query(
-    `
-          CREATE OR REPLACE TABLE addresses AS FROM "addresses.parquet";
-          `,
-  );
+  await connection.query(`
+    CREATE OR REPLACE TABLE addresses AS FROM "addresses.parquet";
+  `);
 
-  console.log("Done")
+  console.log("Done");
 };

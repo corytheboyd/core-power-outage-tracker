@@ -242,8 +242,8 @@ const WatchedAddressCardShowVariant: FunctionComponent<
 const CardMediaContent: FunctionComponent<{ address: Address }> = ({
   address,
 }) => (
-  <Box sx={{ aspectRatio: "2/1", height: "100%", width: "100%" }}>
-    <AddressMapPreview address={address} height="100%" />
+  <Box sx={{ aspectRatio: "2/1", width: "100%" }}>
+    <AddressMapPreview address={address} />
   </Box>
 );
 
