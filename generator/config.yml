@@ -37,6 +37,10 @@ cleanup_rules:
       match: "138"
     - field: "PlaceName"
       match: "143"
+  substitute:
+    - field: "PlaceName"
+      match: "CIR"
+      substitution: "CIRCLE"
 
 # To get list of zipcodes:
 # 1. Go to: https://oms.core.coop

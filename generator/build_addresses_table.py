@@ -1,62 +1,43 @@
-import pandas as pd
-import usaddress
+import pandas
 from loguru import logger
+from probableparsing import RepeatedLabelError
 
+from lib.AddressModel import AddressModel
 from lib.Config import Config
 
 
-def normalize_address(address: str) -> str:
-    """Normalize address using usaddress parser and title case."""
-    if not address or pd.isna(address):
-        return address
+def main():
+    config = Config.from_file("config.yml")
+    zipcodes = config.zipcodes
 
-    try:
-        parsed, _ = usaddress.tag(address)
-        # Reconstruct address in normalized order with title case
-        parts = []
-        if "AddressNumber" in parsed:
-            parts.append(parsed["AddressNumber"])
-        if "StreetNamePreDirectional" in parsed:
-            parts.append(parsed["StreetNamePreDirectional"].title())
-        if "StreetName" in parsed:
-            parts.append(parsed["StreetName"].title())
-        if "StreetNamePostType" in parsed:
-            parts.append(parsed["StreetNamePostType"].title())
-        if "StreetNamePostDirectional" in parsed:
-            parts.append(parsed["StreetNamePostDirectional"].title())
-        if "OccupancyType" in parsed:
-            parts.append(parsed["OccupancyType"].title())
-        if "OccupancyIdentifier" in parsed:
-            parts.append(parsed["OccupancyIdentifier"])
-        return " ".join(parts).strip() if parts else address.title().strip()
-    except Exception:
-        # Fall back to title case if parsing fails
-        return address.title().strip()
+    dfs = []
+    for zipcode in zipcodes:
+        file = f"data/addresses_{zipcode}.parquet"
+        try:
+            df = pandas.read_parquet(file)
+            dfs.append(df)
+            logger.info(f"Loaded {len(df)} rows from {file}")
+        except FileNotFoundError:
+            logger.warning(f"File not found: {file}")
 
+    if len(dfs) == 0:
+        return
 
-config = Config.from_file("config.yml")
-zipcodes = config.zipcodes
-
-dfs = []
-for zipcode in zipcodes:
-    file = f"data/addresses_{zipcode}.parquet"
-    try:
-        df = pd.read_parquet(file)
-        dfs.append(df)
-        logger.info(f"Loaded {len(df)} rows from {file}")
-    except FileNotFoundError:
-        logger.warning(f"File not found: {file}")
-
-if dfs:
-    combined = pd.concat(dfs, ignore_index=True)
+    combined = pandas.concat(dfs, ignore_index=True)
     logger.info(f"Combined {len(combined)} total rows from {len(dfs)} files")
 
-    # Filter out rows with null addresses or place names
+    # Filter out rows with null required fields
     before_count = len(combined)
-    combined = combined[combined["AddrFull"].notna() & combined["PlaceName"].notna()]
+    combined = combined[
+        combined["StreetName"].notna()
+        & combined["PlaceName"].notna()
+        & combined["AddrNum"].notna()
+    ]
     after_count = len(combined)
     if before_count != after_count:
-        logger.info(f"Filtered out {before_count - after_count} rows with null addresses or place names")
+        logger.info(
+            f"Filtered out {before_count - after_count} rows with null required fields"
+        )
 
     # Apply replacement rules
     for rule in config.cleanup_rules.replace:
@@ -79,16 +60,38 @@ if dfs:
                 f"Excluded {before_count - after_count} rows where {rule.field} = '{rule.match}'"
             )
 
-    # Normalize addresses and place names
-    logger.info("Normalizing addresses...")
-    combined["AddrFull"] = combined["AddrFull"].apply(normalize_address)
-    logger.info("Normalizing place names...")
-    combined["PlaceName"] = combined["PlaceName"].apply(
-        lambda x: x.title().strip() if x and not pd.isna(x) else x
-    )
-    logger.info("Normalization complete")
+    rows = combined.iterrows()
+    logger.info(f"Normalize rows...")
+    normalized_rows = []
+    i = 0
+    for _, row in rows:
+        address_model = AddressModel(**row.to_dict())
+        try:
+            normalized_address = address_model.normalized_address()
+        except RepeatedLabelError as e:
+            logger.error(f"Failed to parse row: {row.to_dict()}")
+            raise e
+        normalized_rows.append(
+            {
+                "id": address_model.id,
+                "address": normalized_address,
+                "city": address_model.city.strip().title(),
+                "county": address_model.county.strip().title(),
+                "zipcode": address_model.zipcode.strip(),
+                "location": row["geometry"],
+            }
+        )
+        i += 1
+        if i % 10_000 == 0:
+            logger.info(f"Normalized {i} rows...")
 
-    combined.to_parquet("data/addresses.parquet")
+    logger.info(f"Successfully converted {len(normalized_rows)} rows")
+
+    # Create new DataFrame with normalized data
+    normalized_df = pandas.DataFrame(normalized_rows)
+    normalized_df.to_parquet("data/addresses.parquet")
     logger.info("Saved to data/addresses.parquet")
-else:
-    logger.error("No parquet files found to combine")
+
+
+if __name__ == "__main__":
+    main()

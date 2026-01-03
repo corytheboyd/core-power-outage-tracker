@@ -5,9 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../generator/lib/TestAddressModel.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/.idea/generator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/.idea/generator.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../generator/build_addresses_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/build_addresses_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/config.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../generator/download_addresses_from_arcgis.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/download_addresses_from_arcgis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/lib/AddressModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/lib/AddressModel.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/lib/ColoradoArcGisApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/lib/ColoradoArcGisApi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../generator/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/pyproject.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../generator/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/uv.lock" afterDir="false" />
     </list>
@@ -124,7 +131,7 @@
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
       <workItem from="1766769924065" duration="48635000" />
-      <workItem from="1767200036586" duration="42886000" />
+      <workItem from="1767200036586" duration="43859000" />
     </task>
     <servers />
   </component>

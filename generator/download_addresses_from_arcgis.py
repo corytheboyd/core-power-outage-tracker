@@ -9,7 +9,7 @@ from lib.Config import Config
 api = ColoradoArcGisApi()
 config = Config.from_file("config.yml")
 zipcodes = config.zipcodes
-page_size = config.arc_gis.page_size
+page_size = config.arc_gis.max_page_size
 
 for zipcode in zipcodes:
     count = api.count(where=f"Zipcode = '{zipcode}'")
@@ -21,7 +21,7 @@ for zipcode in zipcodes:
     for page in range(total_pages):
         logger.info(f"zipcode={zipcode} page={page + 1}/{total_pages}")
         df = api.query(
-            fields="OBJECTID, AddrFull, PlaceName, Zipcode",
+            fields="*",
             where=f"Zipcode = '{zipcode}'",
             limit=page_size,
             offset=page_size * page,

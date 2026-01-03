@@ -1,9 +1,9 @@
 from io import BytesIO
 
 import geopandas
-import requests
 from geopandas import GeoDataFrame
 from requests import Request
+from requests_cache import CachedSession, SQLiteCache
 
 ARC_GIS_BASE_URL = "https://gis.colorado.gov/public/rest/services/Address_and_Parcel/Colorado_Public_Addresses/FeatureServer/0/"
 
@@ -11,7 +11,12 @@ ARC_GIS_BASE_URL = "https://gis.colorado.gov/public/rest/services/Address_and_Pa
 class ColoradoArcGisApi:
     def __init__(self):
         self.base_url = ARC_GIS_BASE_URL.rstrip("/")
-        self.session = requests.Session()
+        self.session = CachedSession(
+            use_cache_dir="./data/http_cache.sqlite",
+            backend=SQLiteCache(db_path="./data/http_cache.sqlite"),
+            cache_control=True,
+            stale_if_error=False,
+        )
         self.session.headers.update(
             {
                 "Accept": "application/json",
