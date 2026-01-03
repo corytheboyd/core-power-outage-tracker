@@ -20,10 +20,7 @@ export const AddressFull: FunctionComponent<AddressLinesProps> = ({
         <LocationOnIcon sx={{ color: "text.secondary" }} />
       </Grid>
       <Grid>
-        <Typography variant="body1">{address.address_line_1}</Typography>
-        {address.address_line_2.length > 0 && (
-          <Typography>{address.address_line_2}</Typography>
-        )}
+        <Typography variant="body1">{address.address}</Typography>
         <Typography variant="body2">
           {address.city}, CO, {address.zipcode}
         </Typography>

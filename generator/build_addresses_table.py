@@ -1,3 +1,4 @@
+import geopandas
 import pandas
 from loguru import logger
 from probableparsing import RepeatedLabelError
@@ -14,7 +15,7 @@ def main():
     for zipcode in zipcodes:
         file = f"data/addresses_{zipcode}.parquet"
         try:
-            df = pandas.read_parquet(file)
+            df = geopandas.read_parquet(file)
             dfs.append(df)
             logger.info(f"Loaded {len(df)} rows from {file}")
         except FileNotFoundError:
@@ -23,7 +24,7 @@ def main():
     if len(dfs) == 0:
         return
 
-    combined = pandas.concat(dfs, ignore_index=True)
+    combined = geopandas.GeoDataFrame(pandas.concat(dfs, ignore_index=True))
     logger.info(f"Combined {len(combined)} total rows from {len(dfs)} files")
 
     # Filter out rows with null required fields
@@ -87,8 +88,7 @@ def main():
 
     logger.info(f"Successfully converted {len(normalized_rows)} rows")
 
-    # Create new DataFrame with normalized data
-    normalized_df = pandas.DataFrame(normalized_rows)
+    normalized_df = geopandas.GeoDataFrame(normalized_rows, geometry="location")
     normalized_df.to_parquet("data/addresses.parquet")
     logger.info("Saved to data/addresses.parquet")
 

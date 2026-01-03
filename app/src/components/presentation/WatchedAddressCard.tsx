@@ -165,7 +165,7 @@ const WatchedAddressCardShowVariant: FunctionComponent<
 
   const cardHeader = (
     <CardHeader
-      title={address.address_line_1}
+      title={address.address}
       subheader={`${address.city}, CO, ${address.zipcode}`}
       avatar={cardHeaderAvatar}
     >

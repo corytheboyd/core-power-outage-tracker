@@ -5,18 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../generator/lib/TestAddressModel.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/setupDuckDb.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../generator/justfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/.idea/generator.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/.idea/generator.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/addresses.parquet" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/addresses_80421.parquet" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/outages.parquet" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/presentation/AddressFull.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/presentation/AddressFull.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/presentation/WatchedAddressCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/presentation/WatchedAddressCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/DuckDbManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/DuckDbManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/getDuckDbManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/getDuckDbManager.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestAddressesQueryFunction.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestAddressesQueryFunction.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestOutageQueryFunction.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestOutageQueryFunction.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/searchAddressesQueryFunction.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/searchAddressesQueryFunction.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/addressOneLineFull.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/addressOneLineFull.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/Address.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/Address.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../generator/build_addresses_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/build_addresses_table.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/config.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/download_addresses_from_arcgis.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/download_addresses_from_arcgis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/lib/AddressModel.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/lib/AddressModel.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/lib/ColoradoArcGisApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/lib/ColoradoArcGisApi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../generator/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/uv.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +137,7 @@
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
       <workItem from="1766769924065" duration="48635000" />
-      <workItem from="1767200036586" duration="43859000" />
+      <workItem from="1767200036586" duration="46316000" />
     </task>
     <servers />
   </component>

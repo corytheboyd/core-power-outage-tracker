@@ -10,6 +10,10 @@ import {
   selectBundle,
 } from "@duckdb/duckdb-wasm";
 
+export interface DuckDbManagerSetupFunction {
+  (connection: AsyncDuckDBConnection, db: AsyncDuckDB): Promise<void>;
+}
+
 export class DuckDbManager {
   public readonly db: AsyncDuckDB;
   public readonly connection: AsyncDuckDBConnection;
@@ -21,15 +25,8 @@ export class DuckDbManager {
 
   public static async build(
     options: {
-      setup:
-        | ((
-            connection: AsyncDuckDBConnection,
-            db: AsyncDuckDB,
-          ) => Promise<void>)
-        | null;
-    } = {
-      setup: null,
-    },
+      setup?: DuckDbManagerSetupFunction;
+    } = {},
   ): Promise<DuckDbManager> {
     const MANUAL_BUNDLES = {
       mvp: {
@@ -51,7 +48,7 @@ export class DuckDbManager {
     await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
     const connection = await db.connect();
 
-    if (options.setup != null) {
+    if (options.setup) {
       await options.setup(connection, db);
     }
 

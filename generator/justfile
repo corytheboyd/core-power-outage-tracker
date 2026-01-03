@@ -1,0 +1,5 @@
+download_addresses:
+    uv run download_addresses_from_arcgis.py
+
+build_addresses:
+    uv run build_addresses_table.py

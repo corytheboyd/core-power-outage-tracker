@@ -15,26 +15,26 @@ export const App: FunctionComponent = () => {
 
   const position = useCurrentPosition();
 
+  // Convenient arbitrary SQL runner
   useEffect(() => {
     if (!duckdb) return;
     if (!position) return;
-
     duckdb.connection
       .query(
         `
         SELECT 
           *,
           ST_Distance_Spheroid(
-            ST_FlipCoordinates(geometry::POINT_2D), 
+            ST_FlipCoordinates(location::POINT_2D), 
             ST_Point2D(${position.coords.latitude}, ${position.coords.longitude})
           ) AS distance
-        FROM addresses_80421 
+        FROM addresses 
         ORDER BY distance ASC
         LIMIT 10
         `,
       )
       .then((r) => console.log(r.toArray().map((o) => o.toJSON())));
-  }, [duckdb]);
+  }, [duckdb, position]);
 
   return (
     <>

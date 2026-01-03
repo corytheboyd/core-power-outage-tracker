@@ -15,13 +15,13 @@ export const searchAddressesQueryFunction: UseDuckDbQueryFunction<
 > = async (connection: AsyncDuckDBConnection) => {
   const sql = `
     SELECT id,
-           address_line_1,
-           address_line_2,
+           address,
            city,
+           county,
            zipcode,
-           ST_X(location) as latitude,
-           ST_Y(location) as longitude,
-           jaro_winkler_similarity(concat_ws(' ', address_line_1, address_line_2), UPPER(?), 0.7) AS score,
+           ST_X(location::POINT_2D) as latitude,
+           ST_Y(location::POINT_2D) as longitude,
+           jaro_winkler_similarity(address, UPPER(?), 0.7) AS score,
            ST_Distance_Sphere(ST_Point2D(?, ?), location::POINT_2D) AS distance
     FROM addresses
     WHERE score > 0

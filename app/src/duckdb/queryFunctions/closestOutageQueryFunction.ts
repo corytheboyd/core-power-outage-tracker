@@ -7,17 +7,17 @@ export const closestOutageQueryFunction: UseDuckDbQueryFunction<
   { addressId: number }
 > = async (connection: AsyncDuckDBConnection) => {
   const sql = `
-      SELECT a.id,
-             min(ST_Distance_Spheroid(
-               a.location::POINT_2D,
-               ST_EndPoint(ST_ShortestLine(a.location::POINT_2D, ST_LineString2DFromWKB(o.linestring))))
-             ) as distance
-      FROM outages o,
-           addresses a
-      WHERE a.id IN (?)
-      GROUP BY a.id
-      ORDER BY distance ASC
-    `;
+    SELECT a.id,
+           min(ST_Distance_Spheroid(
+             a.location::POINT_2D,
+             ST_EndPoint(ST_ShortestLine(a.location::POINT_2D, ST_LineString2DFromWKB(o.linestring))))
+           ) as distance
+    FROM outages o,
+         addresses a
+    WHERE a.id IN (?)
+    GROUP BY a.id
+    ORDER BY distance ASC
+  `;
   const statement = await connection.prepare(sql);
   return new DuckDbQuery({
     statement,
