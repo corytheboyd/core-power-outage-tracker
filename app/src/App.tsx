@@ -5,38 +5,14 @@ import { Box, CssBaseline } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { useStore } from "./state/useStore.ts";
-import { useDuckDb } from "./duckdb/useDuckDb.ts";
-import { useCurrentPosition } from "./geolocation/useCurrentPosition.ts";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { Protocol } from "pmtiles";
 import { addProtocol, removeProtocol } from "maplibre-gl";
+import { synchronizeAddressesTable } from "./duckdb/operations/synchronizeAddressesTable.ts";
+import { synchronizeServiceLinesTable } from "./duckdb/operations/synchronizeServiceLinesTable.ts";
 
 export const App: FunctionComponent = () => {
   const page = <ManagePage />;
-
-  const duckdb = useDuckDb();
-  const position = useCurrentPosition();
-
-  // Convenient arbitrary SQL runner
-  useEffect(() => {
-    if (!duckdb) return;
-    if (!position) return;
-    duckdb.connection
-      .query(
-        `
-        SELECT 
-          *,
-          ST_Distance_Spheroid(
-            ST_FlipCoordinates(location::POINT_2D), 
-            ST_Point2D(${position.coords.latitude}, ${position.coords.longitude})
-          ) AS distance
-        FROM addresses 
-        ORDER BY distance ASC
-        LIMIT 10
-        `,
-      )
-      .then((r) => console.log(r.toArray().map((o) => o.toJSON())));
-  }, [duckdb, position]);
 
   useEffect(() => {
     const protocol = new Protocol();
@@ -44,6 +20,19 @@ export const App: FunctionComponent = () => {
     return () => {
       removeProtocol("pmtiles");
     };
+  }, []);
+
+  useEffect(() => {
+    synchronizeAddressesTable()
+      .then(() => console.debug("addresses table synchronized"))
+      .catch((e) => {
+        throw e;
+      });
+    synchronizeServiceLinesTable()
+      .then(() => console.debug("service_lines table synchronized"))
+      .catch((e) => {
+        throw e;
+      });
   }, []);
 
   return (
