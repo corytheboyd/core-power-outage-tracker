@@ -33,6 +33,10 @@ import {
   AddressSearchInput,
   type AddressSearchInputOnSelectFunction,
 } from "../AddressSearchInput.tsx";
+import { useDuckDbQuery } from "../../duckdb/useDuckDbQuery.ts";
+import { nearbyServiceLinesQueryFunction } from "../../duckdb/queryFunctions/nearbyServiceLinesQueryFunction.ts";
+import type { ServiceLine } from "../../models/ServiceLine.ts";
+import { useCurrentPosition } from "../../geolocation/useCurrentPosition.ts";
 
 type WatchedAddressCardCreateVariantProps = {
   variant: "create";
@@ -84,12 +88,33 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
 > = ({ onRequestAddToList }) => {
   const [selection, setSelection] = useState<AddressSearchResult | null>(null);
   const [powerStatus, setPowerStatus] = useState<PowerStatus>("synchronizing");
+  const [serviceLines, setServiceLines] = useState<ServiceLine[]>([]);
+
+  const nearbyServiceLinesQuery = useDuckDbQuery(
+    nearbyServiceLinesQueryFunction,
+  );
+
+  const position = useCurrentPosition();
 
   const handleAddressSearchInputOnSelect: AddressSearchInputOnSelectFunction =
-    useCallback((result) => {
-      console.log(result);
-      setSelection(result);
-    }, []);
+    useCallback(
+      (result) => {
+        setSelection(result);
+
+        if (!position) return;
+        if (!nearbyServiceLinesQuery) return;
+
+        nearbyServiceLinesQuery({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        })
+          .then((rs) => setServiceLines(rs.toArray()))
+          .catch((e) => {
+            throw e;
+          });
+      },
+      [nearbyServiceLinesQuery, position],
+    );
 
   const handleRequestAddToList = useCallback(() => {
     if (onRequestAddToList) {
@@ -122,7 +147,10 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
 
       {selection && (
         <CardMedia>
-          <CardMediaContent address={selection.address} />
+          <CardMediaContent
+            address={selection.address}
+            serviceLines={serviceLines}
+          />
         </CardMedia>
       )}
 
@@ -247,11 +275,12 @@ const WatchedAddressCardShowVariant: FunctionComponent<
   );
 };
 
-const CardMediaContent: FunctionComponent<{ address: Address }> = ({
-  address,
-}) => (
+const CardMediaContent: FunctionComponent<{
+  address: Address;
+  serviceLines: ServiceLine[];
+}> = ({ address, serviceLines }) => (
   <Box sx={{ aspectRatio: "3/1", width: "100%" }}>
-    <AddressMapPreview address={address} />
+    <AddressMapPreview address={address} serviceLines={serviceLines} />
   </Box>
 );
 

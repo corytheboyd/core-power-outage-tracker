@@ -5,12 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/pages/LoadingPage.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/useAppInitialize.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/duckdb/operations/synchronizeAddressesTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/operations/synchronizeAddressesTable.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddressMapPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressMapPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/presentation/WatchedAddressCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/presentation/WatchedAddressCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/duckdb/operations/synchronizeServiceLinesTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/operations/synchronizeServiceLinesTable.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/nearbyServiceLinesQueryFunction.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/nearbyServiceLinesQueryFunction.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/ServiceLine.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ServiceLine.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +125,7 @@
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
       <workItem from="1766769924065" duration="48635000" />
-      <workItem from="1767200036586" duration="62063000" />
+      <workItem from="1767200036586" duration="65435000" />
     </task>
     <servers />
   </component>

@@ -17,7 +17,7 @@ export async function synchronizeServiceLinesTable(duckdb: DuckDbManager) {
   await connection.query(`
     CREATE OR REPLACE TABLE service_lines AS
     SELECT 
-      ST_GeomFromGeoJSON(geometry)
+      ST_GeomFromGeoJSON(geometry) AS geometry
     FROM 'service_lines.json'
   `);
 }

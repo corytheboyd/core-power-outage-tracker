@@ -9,46 +9,30 @@ export const nearbyServiceLinesQueryFunction: UseDuckDbQueryFunction<
   {
     longitude: number;
     latitude: number;
-    radiusMeters: number;
   }
 > = async (connection: AsyncDuckDBConnection) => {
   const sql = `
     SELECT
-      id,
-      geometry,
-      ST_Distance_Sphere(ST_Point2D(?, ?), geometry) AS distance
-    FROM power_lines
-    WHERE ST_Distance_Sphere(ST_Point2D(?, ?), geometry) < ?
+      ST_AsGeoJson(geometry) AS geojson_linestring,
+      ST_Distance(
+        geometry::LINESTRING_2D,
+        ST_Point2D(?, ?)
+      ) AS distance
+    FROM service_lines
+    WHERE 
+      distance < 0.005
     ORDER BY distance ASC
   `;
 
   const statement = await connection.prepare(sql);
 
-  return new DuckDbQuery<
-    { longitude: number; latitude: number; radiusMeters: number },
-    ServiceLine
-  >({
+  return new DuckDbQuery<{ longitude: number; latitude: number }, ServiceLine>({
     statement,
     sql,
-    paramOrder: [
-      "latitude",
-      "longitude",
-      "latitude",
-      "longitude",
-      "radiusMeters",
-    ] as const,
+    paramOrder: ["longitude", "latitude"] as const,
     transformItem: (o) => {
-      // Parse WKT LINESTRING to array of [lat, lng] coordinates
-      const wkt = o.geometry_wkt as string;
-      const coordsStr = wkt.replace("LINESTRING(", "").replace(")", "");
-      const geometry = coordsStr.split(", ").map((coord) => {
-        const [lng, lat] = coord.trim().split(" ").map(Number);
-        return [lat, lng] as [number, number];
-      });
-
       return ServiceLineSchema.parse({
-        id: o.id as number,
-        geometry,
+        geometry: JSON.parse(o.geojson_linestring as string),
       });
     },
   });
