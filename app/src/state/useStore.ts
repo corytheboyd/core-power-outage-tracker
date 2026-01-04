@@ -1,40 +1,55 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import type { WatchedAddress } from "../types/app";
+import type { Position, PowerStatus } from "../types/app";
 import type { Address } from "../models/Address.ts";
 
+export type WatchedAddress = {
+  address: Address;
+  powerStatus: PowerStatus;
+  lastSynchronizedAt: Date;
+  label?: string;
+  mapPosition: Position;
+  mapZoom: number;
+};
+
+export type NewWatchedAddress = Omit<
+  PartialBy<WatchedAddress, "address" | "powerStatus">,
+  "lastSynchronizedAt"
+>;
+
 interface WatchedAddresses {
-  addresses: WatchedAddress[];
-  addAddress: (address: Address) => void;
-  removeAddress: (addressId: number) => void;
+  new: NewWatchedAddress;
+  entries: Record<Address["id"], WatchedAddress>;
+  add: (value: WatchedAddress) => void;
+  remove: (addressId: Address["id"]) => void;
 }
 
 export interface AppState {
   watchedAddresses: WatchedAddresses;
 }
 
+const defaultPosition: Position = {
+  latitude: 39.520577,
+  longitude: -105.3064,
+};
+
+const defaultNewWatchedAddress: NewWatchedAddress = {
+  mapPosition: defaultPosition,
+  mapZoom: 13,
+};
+
 export const useStore = create<AppState>()(
   immer((set) => ({
     watchedAddresses: {
-      addresses: [],
-      addAddress: (address) =>
+      new: defaultNewWatchedAddress,
+      entries: {},
+      add: (newValue) =>
         set((state) => {
-          const exists = state.watchedAddresses.addresses.some(
-            (watched) => watched.address.id === address.id,
-          );
-          if (!exists) {
-            state.watchedAddresses.addresses.push({
-              address,
-              addedAt: new Date(),
-            });
-          }
+          state.watchedAddresses.entries[newValue.address.id] = newValue;
         }),
-      removeAddress: (addressId) =>
+      remove: (addressId) =>
         set((state) => {
-          state.watchedAddresses.addresses =
-            state.watchedAddresses.addresses.filter(
-              (watched) => watched.address.id !== addressId,
-            );
+          delete state.watchedAddresses.entries[addressId];
         }),
     },
   })),

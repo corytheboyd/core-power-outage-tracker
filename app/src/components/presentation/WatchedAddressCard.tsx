@@ -1,5 +1,6 @@
 import {
   type FunctionComponent,
+  type PropsWithChildren,
   type ReactElement,
   useCallback,
   useState,
@@ -18,8 +19,7 @@ import {
 import type { AddressSearchResult, PowerStatus } from "../../types/app";
 import { WatchedAddressStatusAvatar } from "./WatchedAddressStatusAvatar.tsx";
 import { AddressFull } from "./AddressFull.tsx";
-import { AddressMapPreview } from "../AddressMapPreview.tsx";
-import type { Address } from "../../models/Address.ts";
+import { ServiceMap } from "../ServiceMap.tsx";
 import {
   AddLocationAlt,
   PlaylistAdd,
@@ -33,23 +33,22 @@ import {
   AddressSearchInput,
   type AddressSearchInputOnSelectFunction,
 } from "../AddressSearchInput.tsx";
-import type { LineString } from "../../models/LineString.ts";
-import { useCurrentPosition } from "../../geolocation/useCurrentPosition.ts";
-import { getNearbyServiceLines } from "../../duckdb/queries/getNearbyServiceLines.ts";
-import { getNearbyOutageLines } from "../../duckdb/queries/getNearbyOutageLines.ts";
+import type {
+  NewWatchedAddress,
+  WatchedAddress,
+} from "../../state/useStore.ts";
 
 type WatchedAddressCardCreateVariantProps = {
   variant: "create";
+  watchedAddress: NewWatchedAddress;
   onRequestAddToList?: () => void;
 };
 
 type WatchedAddressCardShowVariantProps = {
   variant: "show";
-  address: Address;
-  powerStatus: PowerStatus;
-  lastSynchronizedAt: Date;
+  watchedAddress: WatchedAddress;
   onRequestSync?: () => void;
-  onRequestDelete?: () => void;
+  onRequestRemoveFromList?: () => void;
 };
 
 type WatchedAddressCardProps =
@@ -85,44 +84,14 @@ export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = (
 
 const WatchedAddressCardCreateVariant: FunctionComponent<
   WatchedAddressCardCreateVariantProps
-> = ({ onRequestAddToList }) => {
+> = ({ watchedAddress, onRequestAddToList }) => {
   const [selection, setSelection] = useState<AddressSearchResult | null>(null);
   const [powerStatus, setPowerStatus] = useState<PowerStatus>("synchronizing");
-  const [serviceLines, setServiceLines] = useState<LineString[]>([]);
-  const [outageLines, setOutageLines] = useState<LineString[]>([]);
-
-  const position = useCurrentPosition();
 
   const handleAddressSearchInputOnSelect: AddressSearchInputOnSelectFunction =
-    useCallback(
-      (result) => {
-        setSelection(result);
-
-        if (!position) return;
-
-        getNearbyServiceLines({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        })
-          .then((serviceLines) => setServiceLines(serviceLines))
-          .catch((e) => {
-            throw e;
-          });
-
-        getNearbyOutageLines({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        })
-          .then((outageLines) => setOutageLines(outageLines))
-          .catch((e) => {
-            throw e;
-          });
-      },
-      [position],
-    );
-
-  console.log("outageLines", outageLines);
-  console.log("serviceLines", serviceLines);
+    useCallback((result) => {
+      setSelection(result);
+    }, []);
 
   const handleRequestAddToList = useCallback(() => {
     if (onRequestAddToList) {
@@ -153,15 +122,15 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
     <Card elevation={2}>
       <CardHeader title={title} subheader={subheader} avatar={avatar} />
 
-      {selection && (
-        <CardMedia>
-          <CardMediaContent
-            address={selection.address}
-            serviceLines={serviceLines}
-            outageLines={outageLines}
+      <CardMedia>
+        <CardMediaContent>
+          <ServiceMap
+            address={watchedAddress?.address}
+            position={watchedAddress.mapPosition}
+            zoom={watchedAddress.mapZoom}
           />
-        </CardMedia>
-      )}
+        </CardMediaContent>
+      </CardMedia>
 
       <CardContent>
         <AddressSearchInput onSelect={handleAddressSearchInputOnSelect} />
@@ -183,13 +152,7 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
 
 const WatchedAddressCardShowVariant: FunctionComponent<
   WatchedAddressCardShowVariantProps
-> = ({
-  address,
-  powerStatus,
-  lastSynchronizedAt,
-  onRequestSync,
-  onRequestDelete,
-}) => {
+> = ({ watchedAddress, onRequestSync, onRequestRemoveFromList }) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleToggleExpanded = useCallback(
@@ -198,15 +161,19 @@ const WatchedAddressCardShowVariant: FunctionComponent<
   );
 
   const handleRequestDelete = useCallback(() => {
-    if (onRequestDelete) {
-      onRequestDelete();
+    if (onRequestRemoveFromList) {
+      onRequestRemoveFromList();
     }
-  }, [onRequestDelete]);
+  }, [onRequestRemoveFromList]);
   const handleRequestSync = useCallback(() => {
     if (onRequestSync) {
       onRequestSync();
     }
   }, [onRequestSync]);
+
+  const address = watchedAddress.address;
+  const powerStatus = watchedAddress.powerStatus;
+  const lastSynchronizedAt = watchedAddress.lastSynchronizedAt;
 
   const cardHeader = (
     <CardHeader
@@ -264,7 +231,13 @@ const WatchedAddressCardShowVariant: FunctionComponent<
       {expanded && (
         <>
           <CardMedia>
-            <CardMediaContent address={address} />
+            <CardMediaContent>
+              <ServiceMap
+                address={address}
+                position={watchedAddress.mapPosition}
+                zoom={watchedAddress.mapZoom}
+              />
+            </CardMediaContent>
           </CardMedia>
 
           <CardContent>
@@ -284,19 +257,9 @@ const WatchedAddressCardShowVariant: FunctionComponent<
   );
 };
 
-const CardMediaContent: FunctionComponent<{
-  address: Address;
-  serviceLines?: LineString[];
-  outageLines?: LineString[];
-}> = ({ address, serviceLines, outageLines }) => (
-  <Box sx={{ aspectRatio: "3/1", width: "100%" }}>
-    <AddressMapPreview
-      address={address}
-      serviceLines={serviceLines}
-      outageLines={outageLines}
-    />
-  </Box>
-);
+const CardMediaContent: FunctionComponent<PropsWithChildren> = ({
+  children,
+}) => <Box sx={{ aspectRatio: "3/1", width: "100%" }}>{children}</Box>;
 
 const PowerStatusSynchronizingContent: FunctionComponent = () => (
   <>

@@ -17,8 +17,8 @@ export const getNearbyAddresses = async (args: {
              city,
              county,
              zipcode,
-             ST_Y(location::POINT_2D) as latitude,
-             ST_X(location::POINT_2D) as longitude,
+             ST_Y(location::POINT_2D) AS latitude,
+             ST_X(location::POINT_2D) AS longitude,
              ST_Distance_Spheroid(
                ST_FlipCoordinates(location::POINT_2D),
                ST_Point2D(${args.latitude}, ${args.longitude})

@@ -1,9 +1,5 @@
 import type { Address } from "../models/Address";
 
-export type DuckDbStatus = "initializing" | "ready" | "error";
-
-export type GeolocationStatus = "pending" | "granted" | "rejected";
-
 export type PowerStatus = "synchronizing" | "on" | "off" | "unknown";
 
 export type AddressSearchResult = {
@@ -15,9 +11,6 @@ export type AddressSearchResult = {
   distance: number;
 };
 
-export type WatchedAddress = {
-  address: Address;
-  addedAt: Date;
-};
-
 export type SqlPrimitive = string | number | boolean | null;
+
+type Position = { longitude: number; latitude: number };

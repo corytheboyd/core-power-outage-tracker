@@ -1,89 +1,75 @@
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { type FunctionComponent, useEffect, useState } from "react";
-import { useCurrentPosition } from "../geolocation/useCurrentPosition.ts";
-import { SEARCH_QUERY_DEBOUNCE_WAIT_MS } from "../constants.ts";
+import { type FunctionComponent, useCallback, useMemo, useState } from "react";
+import { ADDRESS_SEARCH_INPUT_DEBOUNCE_WAIT_MS } from "../constants.ts";
 import type { AddressSearchResult } from "../types/app";
 import { addressOneLineFull } from "../lib/addressOneLineFull.ts";
 import { AddressFull } from "./presentation/AddressFull.tsx";
 import { debounce } from "lodash-es";
-import { searchAddresses } from "../duckdb/queries/searchAddresses.ts";
-import { getNearbyAddresses } from "../duckdb/queries/getNearbyAddresses.ts";
 
 export type AddressSearchInputOnSelectFunction = (
   result: AddressSearchResult | null,
 ) => void;
 
+export type AddressSearchInputOnRequestSearchFunction = (query: string) => void;
+
 type AddressSearchInputProps = {
+  value?: AddressSearchResult;
+  nearbyResults?: AddressSearchResult[];
+  searchResults?: AddressSearchResult[];
+  onRequestSearch?: AddressSearchInputOnRequestSearchFunction;
   onSelect?: AddressSearchInputOnSelectFunction;
 };
 
-const debouncedSearchAddresses = debounce(
-  searchAddresses,
-  SEARCH_QUERY_DEBOUNCE_WAIT_MS,
-);
-
 export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = ({
+  value,
+  nearbyResults = [],
+  searchResults = [],
+  onRequestSearch,
   onSelect,
 }) => {
   const [inputValue, setInputValue] = useState("");
-  const [searchResults, setSearchResults] = useState<AddressSearchResult[]>([]);
-  const [nearbyResults, setNearbyResults] = useState<AddressSearchResult[]>(
-    [],
-  );
-  const [activeResult, setActiveResult] = useState<AddressSearchResult | null>(
-    null,
-  );
-  const position = useCurrentPosition();
 
-  useEffect(() => {
-    if (!position) {
-      return;
-    }
-    getNearbyAddresses({
-      longitude: position.coords.longitude,
-      latitude: position.coords.latitude,
-    })
-      .then((results) => setNearbyResults(results))
-      .catch((e) => {
-        throw e;
-      });
-  }, [position]);
+  let options = nearbyResults;
+  if (inputValue.length > 0) {
+    options = searchResults;
+  }
+
+  const debouncedOnRequestSearch = useMemo(() => {
+    if (!onRequestSearch) return;
+    return debounce(onRequestSearch, ADDRESS_SEARCH_INPUT_DEBOUNCE_WAIT_MS);
+  }, [onRequestSearch]);
+
+  const handleInputChange = useCallback(
+    (newValue: string) => {
+      if (!debouncedOnRequestSearch) return;
+      debouncedOnRequestSearch(newValue);
+    },
+    [debouncedOnRequestSearch],
+  );
+
+  const handleSelect = useCallback(
+    (value: AddressSearchResult | null) => {
+      if (!onSelect) return;
+      onSelect(value);
+    },
+    [onSelect],
+  );
 
   return (
     <Autocomplete
       size="small"
       filterOptions={(x) => x}
-      options={inputValue.length > 0 ? searchResults : nearbyResults}
+      options={options}
       autoComplete
       filterSelectedOptions
-      value={activeResult}
+      value={value}
       noOptionsText="Address not found"
-      onChange={(_, newValue) => {
-        setActiveResult(newValue);
-        if (onSelect) {
-          onSelect(newValue);
-        }
-      }}
+      onChange={(_, newValue) => handleSelect(newValue)}
       onInputChange={(_, newValue, reason) => {
         setInputValue(newValue);
-        if (reason == "blur") {
-          return;
-        }
-        if (!position) {
-          return;
-        }
-        if (newValue.length > 0) {
-          debouncedSearchAddresses({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            searchTerm: newValue,
-          })
-            ?.then((results) => setSearchResults(results))
-            .catch((e) => {
-              throw e;
-            });
-        }
+        if (reason == "blur") return;
+        handleInputChange(newValue);
       }}
       renderInput={(params) => (
         <TextField {...params} label="Search for an address" />
