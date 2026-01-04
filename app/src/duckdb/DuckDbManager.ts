@@ -16,11 +16,9 @@ export interface DuckDbManagerSetupFunction {
 
 export class DuckDbManager {
   public readonly db: AsyncDuckDB;
-  public readonly connection: AsyncDuckDBConnection;
 
-  private constructor(db: AsyncDuckDB, connection: AsyncDuckDBConnection) {
+  private constructor(db: AsyncDuckDB) {
     this.db = db;
-    this.connection = connection;
   }
 
   public static async build(
@@ -52,9 +50,19 @@ export class DuckDbManager {
       await options.setup(connection, db);
     }
 
-    return new DuckDbManager(db, connection);
+    return new DuckDbManager(db);
   }
-  public async teardown() {
-    await this.connection.close();
+
+  public async withConnection<T>(
+    fn: (connection: AsyncDuckDBConnection) => Promise<T>,
+  ): Promise<T> {
+    const connection = await this.db.connect();
+    try {
+      return await fn(connection);
+    } finally {
+      await connection.close();
+    }
   }
+
+  public async teardown() {}
 }

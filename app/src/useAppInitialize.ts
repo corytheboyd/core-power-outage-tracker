@@ -4,6 +4,7 @@ import { synchronizeAddressesTable } from "./duckdb/operations/synchronizeAddres
 import { synchronizeServiceLinesTable } from "./duckdb/operations/synchronizeServiceLinesTable.ts";
 import { getDuckDbManager } from "./duckdb/getDuckDbManager.ts";
 import { useEffect, useRef, useState } from "react";
+import { synchronizeOutageLinesTable } from "./duckdb/operations/synchronizeOutageLinesTable.ts";
 
 export function useAppInitialize(): {
   status: string;
@@ -39,6 +40,10 @@ export function useAppInitialize(): {
 
       setStatus("Setting up service area geometry...");
       await synchronizeServiceLinesTable(duckdb);
+      setProgress(60);
+
+      setStatus("Fetching outage geometry...");
+      await synchronizeOutageLinesTable(duckdb);
       setProgress(80);
 
       console.log("App initialization done!");

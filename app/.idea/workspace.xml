@@ -5,12 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/duckdb/operations/synchronizeOutageLinesTable.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/queries/getNearbyAddresses.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/queries/getNearbyOutageLines.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/queries/getNearbyServiceLines.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/queries/searchAddresses.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/AddressMapPreview.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressMapPreview.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/presentation/WatchedAddressCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/presentation/WatchedAddressCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/DuckDbManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/UseDuckDbQueryFunction.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/operations/synchronizeAddressesTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/operations/synchronizeAddressesTable.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/duckdb/operations/synchronizeServiceLinesTable.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/operations/synchronizeServiceLinesTable.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/nearbyServiceLinesQueryFunction.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queryFunctions/nearbyServiceLinesQueryFunction.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/ServiceLine.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/ServiceLine.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestAddressesQueryFunction.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/closestOutageQueryFunction.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/nearbyServiceLinesQueryFunction.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queryFunctions/searchAddressesQueryFunction.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/useDuckDbQuery.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/ServiceLine.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/LineString.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/useAppInitialize.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/useAppInitialize.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +72,7 @@
     "code.cleanup.on.save": "true",
     "git-widget-placeholder": "main",
     "javascript.preferred.runtime.type.id": "node",
-    "last_opened_file_path": "/Users/corytheboyd/code/core-power-outage-map/app/public",
+    "last_opened_file_path": "/Users/corytheboyd/code/core-power-outage-map/app/src/duckdb/queries",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
@@ -81,6 +96,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/duckdb/queries" />
+      <recent name="$PROJECT_DIR$/src/duckdb/operations" />
       <recent name="$PROJECT_DIR$/public" />
       <recent name="$PROJECT_DIR$/src/queries" />
     </key>
@@ -125,7 +142,7 @@
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
       <workItem from="1766769924065" duration="48635000" />
-      <workItem from="1767200036586" duration="65435000" />
+      <workItem from="1767200036586" duration="69729000" />
     </task>
     <servers />
   </component>

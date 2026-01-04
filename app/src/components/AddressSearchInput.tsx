@@ -1,14 +1,14 @@
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useDuckDbQuery } from "../duckdb/useDuckDbQuery.ts";
 import { type FunctionComponent, useEffect, useState } from "react";
-import { searchAddressesQueryFunction } from "../duckdb/queryFunctions/searchAddressesQueryFunction.ts";
 import { useCurrentPosition } from "../geolocation/useCurrentPosition.ts";
-import { closestAddressesQueryFunction } from "../duckdb/queryFunctions/closestAddressesQueryFunction.ts";
 import { SEARCH_QUERY_DEBOUNCE_WAIT_MS } from "../constants.ts";
 import type { AddressSearchResult } from "../types/app";
 import { addressOneLineFull } from "../lib/addressOneLineFull.ts";
 import { AddressFull } from "./presentation/AddressFull.tsx";
+import { debounce } from "lodash-es";
+import { searchAddresses } from "../duckdb/queries/searchAddresses.ts";
+import { getNearbyAddresses } from "../duckdb/queries/getNearbyAddresses.ts";
 
 export type AddressSearchInputOnSelectFunction = (
   result: AddressSearchResult | null,
@@ -18,68 +18,71 @@ type AddressSearchInputProps = {
   onSelect?: AddressSearchInputOnSelectFunction;
 };
 
+const debouncedSearchAddresses = debounce(
+  searchAddresses,
+  SEARCH_QUERY_DEBOUNCE_WAIT_MS,
+);
+
 export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = ({
   onSelect,
 }) => {
+  const [inputValue, setInputValue] = useState("");
   const [searchResults, setSearchResults] = useState<AddressSearchResult[]>([]);
-  const [closestResults, setClosestResults] = useState<AddressSearchResult[]>(
+  const [nearbyResults, setNearbyResults] = useState<AddressSearchResult[]>(
     [],
   );
   const [activeResult, setActiveResult] = useState<AddressSearchResult | null>(
     null,
   );
-
   const position = useCurrentPosition();
 
-  const closestAddressesQuery = useDuckDbQuery(closestAddressesQueryFunction);
   useEffect(() => {
-    if (!closestAddressesQuery || !position) {
+    if (!position) {
       return;
     }
-    closestAddressesQuery({
+    getNearbyAddresses({
       longitude: position.coords.longitude,
       latitude: position.coords.latitude,
     })
-      .then((rs) => setClosestResults(rs.toArray()))
+      .then((results) => setNearbyResults(results))
       .catch((e) => {
         throw e;
       });
-  }, [closestAddressesQuery, position]);
-
-  const searchAddressesQuery = useDuckDbQuery(searchAddressesQueryFunction, {
-    debounce: {
-      wait: SEARCH_QUERY_DEBOUNCE_WAIT_MS,
-    },
-  });
-
-  const isLoading = !position || !searchAddressesQuery;
+  }, [position]);
 
   return (
     <Autocomplete
       size="small"
       filterOptions={(x) => x}
-      options={searchResults.length > 0 ? searchResults : closestResults}
+      options={inputValue.length > 0 ? searchResults : nearbyResults}
       autoComplete
       filterSelectedOptions
       value={activeResult}
       noOptionsText="Address not found"
-      loading={isLoading}
       onChange={(_, newValue) => {
         setActiveResult(newValue);
         if (onSelect) {
           onSelect(newValue);
         }
       }}
-      onInputChange={(_, newInputValue, reason) => {
+      onInputChange={(_, newValue, reason) => {
+        setInputValue(newValue);
         if (reason == "blur") {
           return;
         }
-        if (searchAddressesQuery && position) {
-          searchAddressesQuery({
+        if (!position) {
+          return;
+        }
+        if (newValue.length > 0) {
+          debouncedSearchAddresses({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            searchTerm: newInputValue,
-          })?.then((rs) => setSearchResults(rs.toArray()));
+            searchTerm: newValue,
+          })
+            ?.then((results) => setSearchResults(results))
+            .catch((e) => {
+              throw e;
+            });
         }
       }}
       renderInput={(params) => (

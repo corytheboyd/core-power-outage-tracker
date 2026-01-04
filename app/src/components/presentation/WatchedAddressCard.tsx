@@ -33,10 +33,10 @@ import {
   AddressSearchInput,
   type AddressSearchInputOnSelectFunction,
 } from "../AddressSearchInput.tsx";
-import { useDuckDbQuery } from "../../duckdb/useDuckDbQuery.ts";
-import { nearbyServiceLinesQueryFunction } from "../../duckdb/queryFunctions/nearbyServiceLinesQueryFunction.ts";
-import type { ServiceLine } from "../../models/ServiceLine.ts";
+import type { LineString } from "../../models/LineString.ts";
 import { useCurrentPosition } from "../../geolocation/useCurrentPosition.ts";
+import { getNearbyServiceLines } from "../../duckdb/queries/getNearbyServiceLines.ts";
+import { getNearbyOutageLines } from "../../duckdb/queries/getNearbyOutageLines.ts";
 
 type WatchedAddressCardCreateVariantProps = {
   variant: "create";
@@ -88,11 +88,8 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
 > = ({ onRequestAddToList }) => {
   const [selection, setSelection] = useState<AddressSearchResult | null>(null);
   const [powerStatus, setPowerStatus] = useState<PowerStatus>("synchronizing");
-  const [serviceLines, setServiceLines] = useState<ServiceLine[]>([]);
-
-  const nearbyServiceLinesQuery = useDuckDbQuery(
-    nearbyServiceLinesQueryFunction,
-  );
+  const [serviceLines, setServiceLines] = useState<LineString[]>([]);
+  const [outageLines, setOutageLines] = useState<LineString[]>([]);
 
   const position = useCurrentPosition();
 
@@ -102,19 +99,30 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
         setSelection(result);
 
         if (!position) return;
-        if (!nearbyServiceLinesQuery) return;
 
-        nearbyServiceLinesQuery({
+        getNearbyServiceLines({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
         })
-          .then((rs) => setServiceLines(rs.toArray()))
+          .then((serviceLines) => setServiceLines(serviceLines))
+          .catch((e) => {
+            throw e;
+          });
+
+        getNearbyOutageLines({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        })
+          .then((outageLines) => setOutageLines(outageLines))
           .catch((e) => {
             throw e;
           });
       },
-      [nearbyServiceLinesQuery, position],
+      [position],
     );
+
+  console.log("outageLines", outageLines);
+  console.log("serviceLines", serviceLines);
 
   const handleRequestAddToList = useCallback(() => {
     if (onRequestAddToList) {
@@ -150,6 +158,7 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
           <CardMediaContent
             address={selection.address}
             serviceLines={serviceLines}
+            outageLines={outageLines}
           />
         </CardMedia>
       )}
@@ -277,10 +286,15 @@ const WatchedAddressCardShowVariant: FunctionComponent<
 
 const CardMediaContent: FunctionComponent<{
   address: Address;
-  serviceLines: ServiceLine[];
-}> = ({ address, serviceLines }) => (
+  serviceLines?: LineString[];
+  outageLines?: LineString[];
+}> = ({ address, serviceLines, outageLines }) => (
   <Box sx={{ aspectRatio: "3/1", width: "100%" }}>
-    <AddressMapPreview address={address} serviceLines={serviceLines} />
+    <AddressMapPreview
+      address={address}
+      serviceLines={serviceLines}
+      outageLines={outageLines}
+    />
   </Box>
 );
 

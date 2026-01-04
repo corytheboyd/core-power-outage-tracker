@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const ServiceLineSchema = z.object({
+export const LineStringSchema = z.object({
   /**
    * GeoJSON
    * */
@@ -10,4 +10,4 @@ export const ServiceLineSchema = z.object({
   }),
 });
 
-export type ServiceLine = z.infer<typeof ServiceLineSchema>;
+export type LineString = z.infer<typeof LineStringSchema>;
