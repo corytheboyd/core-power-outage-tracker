@@ -1,4 +1,11 @@
-import { type FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type FunctionComponent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { Address } from "../models/Address.ts";
 import type { LineString } from "../models/LineString.ts";
 import type {
@@ -6,7 +13,6 @@ import type {
   LineLayerSpecification,
   MapRef,
   StyleSpecification,
-  SymbolLayerSpecification
 } from "react-map-gl/maplibre";
 import {
   AttributionControl,
@@ -16,14 +22,13 @@ import {
   Map,
   Marker,
   NavigationControl,
-  Source
+  Source,
 } from "react-map-gl/maplibre";
 import { layers, namedFlavor } from "@protomaps/basemaps";
 import { Circle, LocationPin } from "@mui/icons-material";
 import { blue, red } from "@mui/material/colors";
 import type { Position } from "../types/app";
 import type { ViewStateChangeEvent } from "react-map-gl/mapbox-legacy";
-import type { AddressCluster } from "../models/AddressCluster.ts";
 import { getAllAddressesInBounds } from "../duckdb/queries/getAllAddressesInBounds.ts";
 import type { GeoJSON } from "geojson";
 
@@ -67,56 +72,16 @@ const outageLineLayerStyle: LineLayerSpecification = {
   },
 };
 
-const clusterLayer: CircleLayerSpecification = {
-  id: "address-clusters",
-  type: "circle",
-  source: "addresses",
-  filter: ["has", "point_count"],
-  paint: {
-    "circle-color": [
-      "step",
-      ["get", "point_count"],
-      "#51bbd6", // color for small clusters
-      100,
-      "#f1f075", // color for medium clusters
-      750,
-      "#f28cb1", // color for large clusters
-    ],
-    "circle-radius": [
-      "step",
-      ["get", "point_count"],
-      20, // radius for small clusters
-      100,
-      30, // radius for medium clusters
-      750,
-      40, // radius for large clusters
-    ],
-  },
-};
-
-const unclusteredPointLayer: CircleLayerSpecification = {
-  id: "unclustered-point",
+const pointLayer: CircleLayerSpecification = {
+  id: "point",
   type: "circle",
   source: "addresses",
   filter: ["!", ["has", "point_count"]],
   paint: {
-    "circle-color": "#11b4da",
+    "circle-color": blue[300],
     "circle-radius": 4,
     "circle-stroke-width": 1,
-    "circle-stroke-color": "#fff",
-  },
-};
-
-const clusterCountLayer: SymbolLayerSpecification = {
-  id: "cluster-count",
-  type: "symbol",
-  source: "address-clusters",
-  layout: {
-    "text-field": ["get", "count"],
-    "text-size": 12,
-  },
-  paint: {
-    "text-color": "#ffffff",
+    "circle-stroke-color": blue[50],
   },
 };
 
@@ -128,7 +93,6 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
   const mapRef = useRef<MapRef>(null);
   const [mapReady, setMapReady] = useState(false);
 
-  const [addressClusters, setAddressClusters] = useState<AddressCluster[]>([]);
   const [addressesInBounds, setAddressesInBounds] = useState<Address[]>([]);
   const [serviceLines, setServiceLines] = useState<LineString[]>([]);
   const [outageLines, setOutageLines] = useState<LineString[]>([]);
@@ -287,17 +251,8 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       <NavigationControl />
 
       {addressesInBounds.length > 0 && (
-        <Source
-          id="addresses"
-          type="geojson"
-          data={addressesGeoJsonData}
-          cluster={true}
-          clusterMaxZoom={14}
-          clusterRadius={50}
-        >
-          <Layer {...clusterLayer} />
-          <Layer {...clusterCountLayer} />
-          <Layer {...unclusteredPointLayer} />
+        <Source id="addresses" type="geojson" data={addressesGeoJsonData}>
+          <Layer {...pointLayer} />
         </Source>
       )}
 
