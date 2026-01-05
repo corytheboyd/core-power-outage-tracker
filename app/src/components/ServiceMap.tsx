@@ -1,11 +1,19 @@
-import { type FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type FunctionComponent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { Address } from "../models/Address.ts";
 import type { LineString } from "../models/LineString.ts";
 import type {
   CircleLayerSpecification,
+  GeolocateResultEvent,
   LineLayerSpecification,
   MapRef,
-  StyleSpecification
+  StyleSpecification,
 } from "react-map-gl/maplibre";
 import {
   AttributionControl,
@@ -15,7 +23,7 @@ import {
   Map,
   Marker,
   NavigationControl,
-  Source
+  Source,
 } from "react-map-gl/maplibre";
 import { layers, namedFlavor } from "@protomaps/basemaps";
 import { LocationPin } from "@mui/icons-material";
@@ -38,6 +46,19 @@ interface ServiceMapProps {
   onSelectAddress?: ServiceMapOnSelectAddressFunction;
 }
 
+const mapStyle: StyleSpecification = {
+  version: 8,
+  glyphs: `${window.location}basemaps-assets-main/fonts/{fontstack}/{range}.pbf`,
+  sprite: `${window.location}basemaps-assets-main/sprites/v4/light`,
+  sources: {
+    protomaps: {
+      type: "vector",
+      url: "pmtiles:///colorado.pmtiles",
+    },
+  },
+  layers: layers("protomaps", namedFlavor("light"), { lang: "en" }),
+};
+
 const serviceLineLayerStyle: LineLayerSpecification = {
   id: "service-lines",
   source: "service-lines",
@@ -59,7 +80,7 @@ const outageLineLayerStyle: LineLayerSpecification = {
   type: "line",
   paint: {
     "line-color": red[500],
-    "line-width": 6,
+    "line-width": 4,
   },
   layout: {
     "line-cap": "round",
@@ -102,7 +123,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     if (!address) return;
     if (!mapRef.current) return;
 
-    mapRef.current.flyTo({
+    mapRef.current.jumpTo({
       zoom: 15,
       center: {
         lat: address.latitude,
@@ -179,21 +200,15 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     [position],
   );
 
-  const mapStyle = useMemo<StyleSpecification>(
-    () => ({
-      version: 8,
-      glyphs: `${window.location}basemaps-assets-main/fonts/{fontstack}/{range}.pbf`,
-      sprite: `${window.location}basemaps-assets-main/sprites/v4/light`,
-      sources: {
-        protomaps: {
-          type: "vector",
-          url: "pmtiles:///colorado.pmtiles",
-        },
+  const handleGeolocate = useCallback((e: GeolocateResultEvent) => {
+    mapRef.current?.jumpTo({
+      zoom: 15,
+      center: {
+        lat: e.coords.latitude,
+        lng: e.coords.longitude,
       },
-      layers: layers("protomaps", namedFlavor("light"), { lang: "en" }),
-    }),
-    [],
-  );
+    });
+  }, []);
 
   const addressesGeoJsonData = useMemo<GeoJSON>(
     () => ({
@@ -250,7 +265,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     >
       <AttributionControl />
       <FullscreenControl />
-      <GeolocateControl />
+      <GeolocateControl onGeolocate={handleGeolocate} />
       <NavigationControl />
 
       {addresses.length > 0 && (
