@@ -34,9 +34,9 @@ import {
   type AddressSearchInputOnSelectFunction,
 } from "../AddressSearchInput.tsx";
 import {
-  type NewWatchedAddress,
   useStore,
   type WatchedAddress,
+  type WatchedAddressWorkingCopy,
 } from "../../state/useStore.ts";
 
 export interface WatchedAddressCardOnRequestAddToListFunction {
@@ -53,7 +53,7 @@ export interface WatchedAddressCardOnRequestSyncFunction {
 
 type WatchedAddressCardCreateVariantProps = {
   variant: "create";
-  watchedAddress: NewWatchedAddress;
+  watchedAddress: WatchedAddressWorkingCopy;
   onRequestAddToList?: WatchedAddressCardOnRequestAddToListFunction;
 };
 
@@ -100,7 +100,7 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
 > = ({ watchedAddress, onRequestAddToList }) => {
   const [powerStatus, setPowerStatus] = useState<PowerStatus>("synchronizing");
   const updateNewWatchedAddress = useStore(
-    (state) => state.watchedAddresses.updateNew,
+    (state) => state.watchedAddresses.updateWorkingCopy,
   );
 
   const handleRequestAddToList: WatchedAddressCardOnRequestAddToListFunction =
@@ -251,7 +251,10 @@ const WatchedAddressCardShowVariant: FunctionComponent<
             <CardMediaContent>
               <ServiceMap
                 address={address}
-                initialPosition={watchedAddress.mapPosition}
+                initialPosition={{
+                  latitude: address.latitude,
+                  longitude: address.longitude,
+                }}
                 initialZoom={watchedAddress.mapZoom}
               />
             </CardMediaContent>

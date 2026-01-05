@@ -255,6 +255,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     <Map
       {...viewState}
       ref={mapRef}
+      id={address?.id.toString() ?? "default"}
       onLoad={handleMapLoad}
       onMove={handleMapOnMove}
       onMoveEnd={handleMapOnMoveEnd}

@@ -12,15 +12,16 @@ export type WatchedAddress = {
   mapZoom: number;
 };
 
-export type NewWatchedAddress = Omit<
+export type WatchedAddressWorkingCopy = Omit<
   PartialBy<WatchedAddress, "address" | "powerStatus">,
   "lastSynchronizedAt"
 >;
 
 interface WatchedAddresses {
-  new: NewWatchedAddress;
+  workingCopy: WatchedAddressWorkingCopy;
   entries: Record<Address["id"], WatchedAddress>;
-  updateNew: (updates: Partial<NewWatchedAddress>) => void;
+  updateWorkingCopy: (updates: Partial<WatchedAddressWorkingCopy>) => void;
+  commitWorkingCopy: () => void;
   add: (value: WatchedAddress) => void;
   remove: (addressId: Address["id"]) => void;
 }
@@ -34,7 +35,7 @@ const defaultPosition: Position = {
   longitude: -105.3064,
 };
 
-const defaultNewWatchedAddress: NewWatchedAddress = {
+const defaultWatchedAddressWorkingCopy: WatchedAddressWorkingCopy = {
   mapPosition: defaultPosition,
   mapZoom: 13,
 };
@@ -42,14 +43,24 @@ const defaultNewWatchedAddress: NewWatchedAddress = {
 export const useStore = create<AppState>()(
   immer((set) => ({
     watchedAddresses: {
-      new: defaultNewWatchedAddress,
+      workingCopy: defaultWatchedAddressWorkingCopy,
       entries: {},
-      updateNew: (updates) =>
+      updateWorkingCopy: (updates) =>
         set((state) => {
-          state.watchedAddresses.new = {
-            ...state.watchedAddresses.new,
+          state.watchedAddresses.workingCopy = {
+            ...state.watchedAddresses.workingCopy,
             ...updates,
           };
+        }),
+      commitWorkingCopy: () =>
+        set((state) => {
+          const workingCopy = state.watchedAddresses.workingCopy;
+          if (!workingCopy.address) {
+            throw new Error("Invalid WatchedAddress");
+          }
+          state.watchedAddresses.entries[workingCopy.address.id] =
+            workingCopy as WatchedAddress;
+          state.watchedAddresses.workingCopy = defaultWatchedAddressWorkingCopy;
         }),
       add: (newValue) =>
         set((state) => {

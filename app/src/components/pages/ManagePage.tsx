@@ -1,25 +1,37 @@
-import { type FunctionComponent } from "react";
+import { type FunctionComponent, useCallback } from "react";
 import { WatchedAddressCard } from "../presentation/WatchedAddressCard.tsx";
 import { useStore } from "../../state/useStore.ts";
 import { MapProvider } from "react-map-gl/maplibre";
+import { Box, Stack } from "@mui/material";
 
 export const ManagePage: FunctionComponent = () => {
-  const newWatchedAddress = useStore((state) => state.watchedAddresses.new);
-  const watchedAddressEntries = useStore(
-    (state) => state.watchedAddresses.entries,
-  );
+  const workingCopy = useStore((state) => state.watchedAddresses.workingCopy);
+  const entries = useStore((state) => state.watchedAddresses.entries);
+  const commit = useStore((state) => state.watchedAddresses.commitWorkingCopy);
+
+  const handleAddToList = useCallback(() => {
+    commit();
+  }, []);
 
   return (
-    <>
+    <Box sx={{ mt: 2 }}>
       <MapProvider>
-        <WatchedAddressCard
-          variant="create"
-          watchedAddress={newWatchedAddress}
-        />
-        {Object.values(watchedAddressEntries).map((watchedAddress) => (
-          <WatchedAddressCard variant="show" watchedAddress={watchedAddress} />
-        ))}
+        <Stack spacing={2}>
+          {Object.values(entries).map((watchedAddress) => (
+            <WatchedAddressCard
+              key={watchedAddress.address.id}
+              variant="show"
+              watchedAddress={watchedAddress}
+            />
+          ))}
+
+          <WatchedAddressCard
+            variant="create"
+            watchedAddress={workingCopy}
+            onRequestAddToList={handleAddToList}
+          />
+        </Stack>
       </MapProvider>
-    </>
+    </Box>
   );
 };
