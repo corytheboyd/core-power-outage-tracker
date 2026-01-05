@@ -16,10 +16,13 @@ import {
   CardHeader,
   CardMedia,
 } from "@mui/material";
-import type { AddressSearchResult, PowerStatus } from "../../types/app";
+import type { PowerStatus } from "../../types/app";
 import { WatchedAddressStatusAvatar } from "./WatchedAddressStatusAvatar.tsx";
 import { AddressFull } from "./AddressFull.tsx";
-import { ServiceMap } from "../ServiceMap.tsx";
+import {
+  ServiceMap,
+  type ServiceMapOnSelectAddressFunction,
+} from "../ServiceMap.tsx";
 import {
   AddLocationAlt,
   PlaylistAdd,
@@ -38,17 +41,29 @@ import type {
   WatchedAddress,
 } from "../../state/useStore.ts";
 
+export interface WatchedAddressCardOnRequestAddToListFunction {
+  (): void;
+}
+
+export interface WatchedAddressCardOnRequestRemoveFromListFunction {
+  (): void;
+}
+
+export interface WatchedAddressCardOnRequestSyncFunction {
+  (): void;
+}
+
 type WatchedAddressCardCreateVariantProps = {
   variant: "create";
   watchedAddress: NewWatchedAddress;
-  onRequestAddToList?: () => void;
+  onRequestAddToList?: WatchedAddressCardOnRequestAddToListFunction;
 };
 
 type WatchedAddressCardShowVariantProps = {
   variant: "show";
   watchedAddress: WatchedAddress;
-  onRequestSync?: () => void;
-  onRequestRemoveFromList?: () => void;
+  onRequestSync?: WatchedAddressCardOnRequestSyncFunction;
+  onRequestRemoveFromList?: WatchedAddressCardOnRequestRemoveFromListFunction;
 };
 
 type WatchedAddressCardProps =
@@ -85,28 +100,31 @@ export const WatchedAddressCard: FunctionComponent<WatchedAddressCardProps> = (
 const WatchedAddressCardCreateVariant: FunctionComponent<
   WatchedAddressCardCreateVariantProps
 > = ({ watchedAddress, onRequestAddToList }) => {
-  const [selection, setSelection] = useState<AddressSearchResult | null>(null);
   const [powerStatus, setPowerStatus] = useState<PowerStatus>("synchronizing");
+
+  const handleRequestAddToList: WatchedAddressCardOnRequestAddToListFunction =
+    useCallback(() => {
+      if (onRequestAddToList) onRequestAddToList();
+    }, [onRequestAddToList]);
 
   const handleAddressSearchInputOnSelect: AddressSearchInputOnSelectFunction =
     useCallback((result) => {
-      setSelection(result);
+      // TODO
     }, []);
 
-  const handleRequestAddToList = useCallback(() => {
-    if (onRequestAddToList) {
-      onRequestAddToList();
-    }
-  }, [onRequestAddToList]);
+  const handleMapPositionChange: ServiceMapOnSelectAddressFunction =
+    useCallback((position) => {
+      // TODO
+    }, []);
 
   let title = "Add a new address";
-  if (selection) {
-    title = selection.address.address;
+  if (watchedAddress.address) {
+    title = watchedAddress.address.address;
   }
 
   let subheader = "Search for an address to add to your watch list";
-  if (selection) {
-    subheader = `${selection.address.city}, CO, ${selection.address.zipcode}`;
+  if (watchedAddress.address) {
+    subheader = `${watchedAddress.address.city}, CO, ${watchedAddress.address.zipcode}`;
   }
 
   let avatar = (
@@ -114,7 +132,7 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
       <AddLocationAlt sx={{ color: blue[800] }} />
     </Avatar>
   );
-  if (selection) {
+  if (watchedAddress.address) {
     avatar = <WatchedAddressStatusAvatar powerStatus={powerStatus} />;
   }
 
@@ -126,8 +144,9 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
         <CardMediaContent>
           <ServiceMap
             address={watchedAddress?.address}
-            position={watchedAddress.mapPosition}
-            zoom={watchedAddress.mapZoom}
+            initialPosition={watchedAddress.mapPosition}
+            initialZoom={watchedAddress.mapZoom}
+            onSelectPosition={handleMapPositionChange}
           />
         </CardMediaContent>
       </CardMedia>
@@ -141,7 +160,7 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
           size="small"
           startIcon={actions["addToList"].icon}
           onClick={handleRequestAddToList}
-          disabled={selection == null}
+          disabled={watchedAddress.address == null}
         >
           {actions["addToList"].label}
         </Button>
@@ -234,8 +253,8 @@ const WatchedAddressCardShowVariant: FunctionComponent<
             <CardMediaContent>
               <ServiceMap
                 address={address}
-                position={watchedAddress.mapPosition}
-                zoom={watchedAddress.mapZoom}
+                initialPosition={watchedAddress.mapPosition}
+                initialZoom={watchedAddress.mapZoom}
               />
             </CardMediaContent>
           </CardMedia>

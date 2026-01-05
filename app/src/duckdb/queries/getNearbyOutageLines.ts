@@ -1,10 +1,10 @@
 import { getDuckDbManager } from "../getDuckDbManager.ts";
 import { ResultSet } from "../ResultSet.ts";
 import { type LineString, LineStringSchema } from "../../models/LineString.ts";
+import type { Position } from "../../types/app";
 
 export const getNearbyOutageLines = async (args: {
-  longitude: number;
-  latitude: number;
+  position: Position;
 }): Promise<LineString[]> => {
   const duckdb = await getDuckDbManager();
 
@@ -14,7 +14,7 @@ export const getNearbyOutageLines = async (args: {
         ST_AsGeoJson(geometry) AS geojson_linestring,
         ST_Distance(
           geometry::LINESTRING_2D,
-          ST_Point2D(${args.longitude}, ${args.latitude})
+          ST_Point2D(${args.position.longitude}, ${args.position.latitude})
         ) AS distance
       FROM outage_lines
       WHERE

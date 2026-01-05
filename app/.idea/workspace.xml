@@ -5,19 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/ServiceMap.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/types/util.d.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/queries/getAddressClustersInBounds.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/duckdb/queries/getAllAddressesInBounds.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/models/AddressCluster.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddressMapPreview.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddressSearchInput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ServiceMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ServiceMap.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/pages/ManagePage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/pages/ManagePage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/presentation/WatchedAddressCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/presentation/WatchedAddressCard.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/duckdb/queries/getNearbyAddresses.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queries/getNearbyAddresses.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geolocation/useCurrentPosition.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/selectAddressSearchResults.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/useStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/state/useStore.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/app.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types/app.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queries/getNearbyOutageLines.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queries/getNearbyOutageLines.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queries/getNearbyServiceLines.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queries/getNearbyServiceLines.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queries/searchAddresses.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queries/searchAddresses.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,6 +83,7 @@
   },
   "keyToStringList": {
     "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "GenericSQL",
       "TEXT"
     ]
   }
@@ -134,7 +136,7 @@
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
       <workItem from="1766769924065" duration="48635000" />
-      <workItem from="1767200036586" duration="79007000" />
+      <workItem from="1767200036586" duration="91068000" />
     </task>
     <servers />
   </component>
