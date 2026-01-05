@@ -7,7 +7,9 @@
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ServiceMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ServiceMap.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/duckdb/queries/getAddressClustersInBounds.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queries/getNearbyAddresses.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queries/getNearbyOutageLines.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queries/getAllOutageLinesInBounds.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queries/getNearbyServiceLines.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queries/getAllServiceLinesInBounds.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +127,7 @@
       <workItem from="1766434172418" duration="694000" />
       <workItem from="1766445388194" duration="1921000" />
       <workItem from="1766769924065" duration="48635000" />
-      <workItem from="1767200036586" duration="91666000" />
+      <workItem from="1767200036586" duration="92402000" />
     </task>
     <servers />
   </component>

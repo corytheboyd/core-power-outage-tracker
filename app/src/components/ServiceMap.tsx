@@ -31,6 +31,8 @@ import type { Position } from "../types/app";
 import type { ViewStateChangeEvent } from "react-map-gl/mapbox-legacy";
 import { getAllAddressesInBounds } from "../duckdb/queries/getAllAddressesInBounds.ts";
 import type { GeoJSON } from "geojson";
+import { getAllServiceLinesInBounds } from "../duckdb/queries/getAllServiceLinesInBounds.ts";
+import { getAllOutageLinesInBounds } from "../duckdb/queries/getAllOutageLinesInBounds.ts";
 
 export interface ServiceMapOnSelectAddressFunction {
   (address: Address): void;
@@ -72,7 +74,7 @@ const outageLineLayerStyle: LineLayerSpecification = {
   },
 };
 
-const pointLayer: CircleLayerSpecification = {
+const addressesLayer: CircleLayerSpecification = {
   id: "point",
   type: "circle",
   source: "addresses",
@@ -93,7 +95,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
   const mapRef = useRef<MapRef>(null);
   const [mapReady, setMapReady] = useState(false);
 
-  const [addressesInBounds, setAddressesInBounds] = useState<Address[]>([]);
+  const [addresses, setAddresses] = useState<Address[]>([]);
   const [serviceLines, setServiceLines] = useState<LineString[]>([]);
   const [outageLines, setOutageLines] = useState<LineString[]>([]);
   const [position, setPosition] = useState(initialPosition);
@@ -123,40 +125,28 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       northEastPosition,
       southWestPosition,
     })
-      .then((addressesInBounds) => {
-        console.log("addressesInBounds", addressesInBounds);
-        setAddressesInBounds(addressesInBounds);
-      })
+      .then((addresses) => setAddresses(addresses))
       .catch((e) => {
         throw e;
       });
 
-    // getNearbyAddresses({ position })
-    //   .then((nearbyAddressResults) => {
-    //     console.log("nearbyAddresses", nearbyAddressResults);
-    //     setAddresses(nearbyAddressResults);
-    //   })
-    //   .catch((e) => {
-    //     throw e;
-    //   });
+    getAllServiceLinesInBounds({
+      northEastPosition,
+      southWestPosition,
+    })
+      .then((serviceLines) => setServiceLines(serviceLines))
+      .catch((e) => {
+        throw e;
+      });
 
-    // getNearbyServiceLines({ position: restPosition })
-    //   .then((serviceLines) => {
-    //     console.log("serviceLines", serviceLines);
-    //     setServiceLines(serviceLines);
-    //   })
-    //   .catch((e) => {
-    //     throw e;
-    //   });
-    //
-    // getNearbyOutageLines({ position: restPosition })
-    //   .then((outageLines) => {
-    //     console.log("outageLines", outageLines);
-    //     setOutageLines(outageLines);
-    //   })
-    //   .catch((e) => {
-    //     throw e;
-    //   });
+    getAllOutageLinesInBounds({
+      northEastPosition,
+      southWestPosition,
+    })
+      .then((outageLines) => setOutageLines(outageLines))
+      .catch((e) => {
+        throw e;
+      });
   }, [position, mapRef, mapReady]);
 
   const handleMapLoad = useCallback(() => {
@@ -219,7 +209,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
   const addressesGeoJsonData = useMemo<GeoJSON>(
     () => ({
       type: "FeatureCollection",
-      features: addressesInBounds.map((address) => ({
+      features: addresses.map((address) => ({
         type: "Feature",
         properties: {
           address,
@@ -230,7 +220,31 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
         },
       })),
     }),
-    [addressesInBounds],
+    [addresses],
+  );
+
+  const serviceLinesGeoJsonData = useMemo<GeoJSON>(
+    () => ({
+      type: "FeatureCollection",
+      features: serviceLines.map((line) => ({
+        type: "Feature",
+        properties: {},
+        geometry: line.geometry,
+      })),
+    }),
+    [serviceLines],
+  );
+
+  const outageLinesGeoJsonData = useMemo<GeoJSON>(
+    () => ({
+      type: "FeatureCollection",
+      features: outageLines.map((line) => ({
+        type: "Feature",
+        properties: {},
+        geometry: line.geometry,
+      })),
+    }),
+    [outageLines],
   );
 
   return (
@@ -250,42 +264,23 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       <GeolocateControl />
       <NavigationControl />
 
-      {addressesInBounds.length > 0 && (
+      {addresses.length > 0 && (
         <Source id="addresses" type="geojson" data={addressesGeoJsonData}>
-          <Layer {...pointLayer} />
+          <Layer {...addressesLayer} />
         </Source>
       )}
 
-      {/*{outageLines.length > 0 && (*/}
-      {/*  <Source*/}
-      {/*    type="geojson"*/}
-      {/*    data={{*/}
-      {/*      type: "FeatureCollection",*/}
-      {/*      features: outageLines.map((line) => ({*/}
-      {/*        type: "Feature",*/}
-      {/*        properties: {},*/}
-      {/*        geometry: line.geometry,*/}
-      {/*      })),*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <Layer {...outageLineLayerStyle} />*/}
-      {/*  </Source>*/}
-      {/*)}*/}
-      {/*{serviceLines.length > 0 && (*/}
-      {/*  <Source*/}
-      {/*    type="geojson"*/}
-      {/*    data={{*/}
-      {/*      type: "FeatureCollection",*/}
-      {/*      features: serviceLines.map((line) => ({*/}
-      {/*        type: "Feature",*/}
-      {/*        properties: {},*/}
-      {/*        geometry: line.geometry,*/}
-      {/*      })),*/}
-      {/*    }}*/}
-      {/*  >*/}
-      {/*    <Layer {...serviceLineLayerStyle} />*/}
-      {/*  </Source>*/}
-      {/*)}*/}
+      {serviceLines.length > 0 && (
+        <Source type="geojson" data={serviceLinesGeoJsonData}>
+          <Layer {...serviceLineLayerStyle} />
+        </Source>
+      )}
+
+      {outageLines.length > 0 && (
+        <Source type="geojson" data={outageLinesGeoJsonData}>
+          <Layer {...outageLineLayerStyle} />
+        </Source>
+      )}
 
       {address && (
         <Marker
