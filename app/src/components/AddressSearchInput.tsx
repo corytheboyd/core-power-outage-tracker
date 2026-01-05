@@ -1,55 +1,51 @@
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { type FunctionComponent, useCallback, useMemo, useState } from "react";
+import { type FunctionComponent, useCallback, useState } from "react";
 import { ADDRESS_SEARCH_INPUT_DEBOUNCE_WAIT_MS } from "../constants.ts";
-import type { AddressSearchResult } from "../types/app";
 import { addressOneLineFull } from "../lib/addressOneLineFull.ts";
 import { AddressFull } from "./presentation/AddressFull.tsx";
 import { debounce } from "lodash-es";
+import { searchAddresses } from "../duckdb/queries/searchAddresses.ts";
+import type { Address } from "../models/Address.ts";
 
 export type AddressSearchInputOnSelectFunction = (
-  result: AddressSearchResult | null,
+  address: Address | null,
 ) => void;
 
 export type AddressSearchInputOnRequestSearchFunction = (query: string) => void;
 
 type AddressSearchInputProps = {
-  value?: AddressSearchResult;
-  nearbyResults?: AddressSearchResult[];
-  searchResults?: AddressSearchResult[];
-  onRequestSearch?: AddressSearchInputOnRequestSearchFunction;
   onSelect?: AddressSearchInputOnSelectFunction;
 };
 
+const debouncedSearchAddresses = debounce(
+  searchAddresses,
+  ADDRESS_SEARCH_INPUT_DEBOUNCE_WAIT_MS,
+);
+
 export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = ({
-  value,
-  nearbyResults = [],
-  searchResults = [],
-  onRequestSearch,
   onSelect,
 }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [results, setResults] = useState<Address[]>([]);
+  const [value, setValue] = useState<Address | null>(null);
 
-  let options = nearbyResults;
-  if (inputValue.length > 0) {
-    options = searchResults;
-  }
+  const handleInputChange = useCallback((value: string) => {
+    if (value.length == 0) {
+      setResults([]);
+      return;
+    }
+    debouncedSearchAddresses({
+      searchTerm: value,
+    })
+      ?.then((addresses) => setResults(addresses))
+      .catch((e) => {
+        throw e;
+      });
+  }, []);
 
-  const debouncedOnRequestSearch = useMemo(() => {
-    if (!onRequestSearch) return;
-    return debounce(onRequestSearch, ADDRESS_SEARCH_INPUT_DEBOUNCE_WAIT_MS);
-  }, [onRequestSearch]);
-
-  const handleInputChange = useCallback(
-    (newValue: string) => {
-      if (!debouncedOnRequestSearch) return;
-      debouncedOnRequestSearch(newValue);
-    },
-    [debouncedOnRequestSearch],
-  );
-
-  const handleSelect = useCallback(
-    (value: AddressSearchResult | null) => {
+  const handleChange = useCallback(
+    (value: Address | null) => {
+      setValue(value);
       if (!onSelect) return;
       onSelect(value);
     },
@@ -60,27 +56,26 @@ export const AddressSearchInput: FunctionComponent<AddressSearchInputProps> = ({
     <Autocomplete
       size="small"
       filterOptions={(x) => x}
-      options={options}
+      options={results}
       autoComplete
       filterSelectedOptions
       value={value}
       noOptionsText="Address not found"
-      onChange={(_, newValue) => handleSelect(newValue)}
+      onChange={(_, newValue) => handleChange(newValue)}
       onInputChange={(_, newValue, reason) => {
-        setInputValue(newValue);
         if (reason == "blur") return;
         handleInputChange(newValue);
       }}
       renderInput={(params) => (
         <TextField {...params} label="Search for an address" />
       )}
-      getOptionLabel={(option) => addressOneLineFull(option.address)}
-      getOptionKey={(option) => option.address.id}
+      getOptionLabel={(address) => addressOneLineFull(address)}
+      getOptionKey={(address) => address.id}
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
         return (
           <li key={key} {...optionProps}>
-            <AddressFull address={option.address} distance={option.distance} />
+            <AddressFull address={option} />
           </li>
         );
       }}

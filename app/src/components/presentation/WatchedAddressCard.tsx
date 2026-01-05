@@ -19,10 +19,7 @@ import {
 import type { PowerStatus } from "../../types/app";
 import { WatchedAddressStatusAvatar } from "./WatchedAddressStatusAvatar.tsx";
 import { AddressFull } from "./AddressFull.tsx";
-import {
-  ServiceMap,
-  type ServiceMapOnSelectAddressFunction,
-} from "../ServiceMap.tsx";
+import { ServiceMap } from "../ServiceMap.tsx";
 import {
   AddLocationAlt,
   PlaylistAdd,
@@ -36,9 +33,10 @@ import {
   AddressSearchInput,
   type AddressSearchInputOnSelectFunction,
 } from "../AddressSearchInput.tsx";
-import type {
-  NewWatchedAddress,
-  WatchedAddress,
+import {
+  type NewWatchedAddress,
+  useStore,
+  type WatchedAddress,
 } from "../../state/useStore.ts";
 
 export interface WatchedAddressCardOnRequestAddToListFunction {
@@ -101,6 +99,9 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
   WatchedAddressCardCreateVariantProps
 > = ({ watchedAddress, onRequestAddToList }) => {
   const [powerStatus, setPowerStatus] = useState<PowerStatus>("synchronizing");
+  const updateNewWatchedAddress = useStore(
+    (state) => state.watchedAddresses.updateNew,
+  );
 
   const handleRequestAddToList: WatchedAddressCardOnRequestAddToListFunction =
     useCallback(() => {
@@ -108,14 +109,12 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
     }, [onRequestAddToList]);
 
   const handleAddressSearchInputOnSelect: AddressSearchInputOnSelectFunction =
-    useCallback((result) => {
-      // TODO
-    }, []);
-
-  const handleMapPositionChange: ServiceMapOnSelectAddressFunction =
-    useCallback((position) => {
-      // TODO
-    }, []);
+    useCallback(
+      (address) => {
+        updateNewWatchedAddress({ address: address ?? undefined });
+      },
+      [updateNewWatchedAddress],
+    );
 
   let title = "Add a new address";
   if (watchedAddress.address) {
@@ -146,7 +145,6 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
             address={watchedAddress?.address}
             initialPosition={watchedAddress.mapPosition}
             initialZoom={watchedAddress.mapZoom}
-            onSelectPosition={handleMapPositionChange}
           />
         </CardMediaContent>
       </CardMedia>

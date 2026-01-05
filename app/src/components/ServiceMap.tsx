@@ -1,18 +1,11 @@
-import {
-  type FunctionComponent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { type FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Address } from "../models/Address.ts";
 import type { LineString } from "../models/LineString.ts";
 import type {
   CircleLayerSpecification,
   LineLayerSpecification,
   MapRef,
-  StyleSpecification,
+  StyleSpecification
 } from "react-map-gl/maplibre";
 import {
   AttributionControl,
@@ -22,10 +15,10 @@ import {
   Map,
   Marker,
   NavigationControl,
-  Source,
+  Source
 } from "react-map-gl/maplibre";
 import { layers, namedFlavor } from "@protomaps/basemaps";
-import { Circle, LocationPin } from "@mui/icons-material";
+import { LocationPin } from "@mui/icons-material";
 import { blue, red } from "@mui/material/colors";
 import type { Position } from "../types/app";
 import type { ViewStateChangeEvent } from "react-map-gl/mapbox-legacy";
@@ -106,6 +99,19 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
   });
 
   useEffect(() => {
+    if (!address) return;
+    if (!mapRef.current) return;
+
+    mapRef.current.flyTo({
+      zoom: 15,
+      center: {
+        lat: address.latitude,
+        lng: address.longitude,
+      },
+    });
+  }, [address]);
+
+  useEffect(() => {
     if (!mapReady) return;
     if (!mapRef.current) return;
 
@@ -172,23 +178,6 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     },
     [position],
   );
-
-  // const handleMapLayerClick = useCallback(async (e: MapLayerMouseEvent) => {
-  //   const feature = e.features?.[0];
-  //   if (!feature || !mapRef.current) return;
-  //
-  //   const clusterId = feature.properties.cluster_id;
-  //   const mapboxSource = mapRef.current.getSource("addresses");
-  //
-  //   // @ts-expect-error - getClusterExpansionZoo
-  //   const zoom = await mapboxSource.getClusterExpansionZoom(clusterId);
-  //
-  //   mapRef.current.easeTo({
-  //     center: feature.geometry,
-  //     zoom,
-  //     duration: 500,
-  //   });
-  // }, [mapRef]);
 
   const mapStyle = useMemo<StyleSpecification>(
     () => ({
@@ -300,16 +289,6 @@ const RedPin: FunctionComponent = () => (
     fontSize="large"
     sx={{
       color: red[600],
-    }}
-  />
-);
-
-const BluePin: FunctionComponent<{ mapZoom: number }> = ({ mapZoom }) => (
-  <Circle
-    sx={{
-      fontSize: "10px",
-      color: blue[400],
-      opacity: 0.75,
     }}
   />
 );

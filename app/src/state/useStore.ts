@@ -20,6 +20,7 @@ export type NewWatchedAddress = Omit<
 interface WatchedAddresses {
   new: NewWatchedAddress;
   entries: Record<Address["id"], WatchedAddress>;
+  updateNew: (updates: Partial<NewWatchedAddress>) => void;
   add: (value: WatchedAddress) => void;
   remove: (addressId: Address["id"]) => void;
 }
@@ -43,6 +44,13 @@ export const useStore = create<AppState>()(
     watchedAddresses: {
       new: defaultNewWatchedAddress,
       entries: {},
+      updateNew: (updates) =>
+        set((state) => {
+          state.watchedAddresses.new = {
+            ...state.watchedAddresses.new,
+            ...updates,
+          };
+        }),
       add: (newValue) =>
         set((state) => {
           state.watchedAddresses.entries[newValue.address.id] = newValue;
