@@ -12,6 +12,7 @@ import type {
   CircleLayerSpecification,
   GeolocateResultEvent,
   LineLayerSpecification,
+  MapLayerMouseEvent,
   MapRef,
   StyleSpecification,
 } from "react-map-gl/maplibre";
@@ -64,9 +65,9 @@ const serviceLineLayerStyle: LineLayerSpecification = {
   source: "service-lines",
   type: "line",
   paint: {
-    "line-color": blue[500],
+    "line-color": blue[800],
     "line-width": 3,
-    "line-opacity": 0.5,
+    "line-opacity": 1,
   },
   layout: {
     "line-cap": "round",
@@ -94,11 +95,18 @@ const addressesLayer: CircleLayerSpecification = {
   source: "addresses",
   filter: ["!", ["has", "point_count"]],
   paint: {
-    "circle-color": blue[300],
-    "circle-radius": 4,
+    "circle-color": blue[500],
+    "circle-radius": [
+      "case",
+      ["boolean", ["feature-state", "hover"], false],
+      8,
+      4,
+    ],
     "circle-stroke-width": 1,
+    "circle-stroke-width-transition": {},
     "circle-stroke-color": blue[50],
   },
+  layout: {},
 };
 
 export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
@@ -108,6 +116,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
 }) => {
   const mapRef = useRef<MapRef>(null);
   const [mapReady, setMapReady] = useState(false);
+  const hoveredFeatureIdRef = useRef<number | null>(null);
 
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [serviceLines, setServiceLines] = useState<LineString[]>([]);
@@ -210,11 +219,76 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     });
   }, []);
 
+  const handleMouseMove = useCallback((e: MapLayerMouseEvent) => {
+    if (!mapRef.current) return;
+    const map = mapRef.current.getMap();
+    if (!e.features || e.features.length === 0) return;
+
+    // Find the closest feature to the mouse pointer
+    let closestFeature = null;
+    let minDistance = Infinity;
+
+    for (const feature of e.features) {
+      if (feature.geometry.type !== "Point") continue;
+      const coords = feature.geometry.coordinates as [number, number];
+      const point = map.project(coords);
+      const distance = Math.sqrt(
+        Math.pow(point.x - e.point.x, 2) + Math.pow(point.y - e.point.y, 2),
+      );
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestFeature = feature;
+      }
+    }
+
+    if (!closestFeature || closestFeature.id === undefined) return;
+
+    // Clear previous hover state
+    if (
+      hoveredFeatureIdRef.current !== null &&
+      hoveredFeatureIdRef.current !== closestFeature.id
+    ) {
+      map.setFeatureState(
+        { source: "addresses", id: hoveredFeatureIdRef.current },
+        { hover: false },
+      );
+    }
+
+    // Set new hover state
+    if (hoveredFeatureIdRef.current !== closestFeature.id) {
+      map.setFeatureState(
+        { source: "addresses", id: closestFeature.id },
+        { hover: true },
+      );
+      hoveredFeatureIdRef.current = closestFeature.id as number;
+    }
+
+    map.getCanvas().style.cursor = "pointer";
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!mapRef.current) return;
+    const map = mapRef.current.getMap();
+
+    // Clear hover state
+    if (hoveredFeatureIdRef.current !== null) {
+      map.setFeatureState(
+        { source: "addresses", id: hoveredFeatureIdRef.current },
+        { hover: false },
+      );
+      hoveredFeatureIdRef.current = null;
+    }
+
+    map.getCanvas().style.cursor = "";
+  }, []);
+
   const addressesGeoJsonData = useMemo<GeoJSON>(
     () => ({
       type: "FeatureCollection",
       features: addresses.map((address) => ({
         type: "Feature",
+        id: address.id,
         properties: {
           address,
         },
@@ -259,21 +333,17 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       onLoad={handleMapLoad}
       onMove={handleMapOnMove}
       onMoveEnd={handleMapOnMoveEnd}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       minZoom={13}
       maxZoom={15}
-      interactiveLayerIds={["address-clusters"]}
+      interactiveLayerIds={["address-clusters", "point"]}
       mapStyle={mapStyle}
     >
       <AttributionControl />
       <FullscreenControl />
       <GeolocateControl onGeolocate={handleGeolocate} />
       <NavigationControl />
-
-      {addresses.length > 0 && (
-        <Source id="addresses" type="geojson" data={addressesGeoJsonData}>
-          <Layer {...addressesLayer} />
-        </Source>
-      )}
 
       {serviceLines.length > 0 && (
         <Source type="geojson" data={serviceLinesGeoJsonData}>
@@ -284,6 +354,12 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       {outageLines.length > 0 && (
         <Source type="geojson" data={outageLinesGeoJsonData}>
           <Layer {...outageLineLayerStyle} />
+        </Source>
+      )}
+
+      {addresses.length > 0 && (
+        <Source id="addresses" type="geojson" data={addressesGeoJsonData}>
+          <Layer {...addressesLayer} />
         </Source>
       )}
 

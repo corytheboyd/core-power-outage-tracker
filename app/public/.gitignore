@@ -1,2 +1,5 @@
 basemaps-assets-main
 colorado.pmtiles
+addresses.parquet
+base.json
+temp.json
