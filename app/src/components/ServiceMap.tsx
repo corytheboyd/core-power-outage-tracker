@@ -15,6 +15,7 @@ import type {
   MapLayerMouseEvent,
   MapRef,
   StyleSpecification,
+  ViewStateChangeEvent,
 } from "react-map-gl/maplibre";
 import {
   AttributionControl,
@@ -24,17 +25,20 @@ import {
   Map,
   Marker,
   NavigationControl,
+  Popup,
   Source,
 } from "react-map-gl/maplibre";
 import { layers, namedFlavor } from "@protomaps/basemaps";
 import { LocationPin } from "@mui/icons-material";
 import { blue, red } from "@mui/material/colors";
 import type { Position } from "../types/app";
-import type { ViewStateChangeEvent } from "react-map-gl/mapbox-legacy";
 import { getAllAddressesInBounds } from "../duckdb/queries/getAllAddressesInBounds.ts";
 import type { GeoJSON } from "geojson";
 import { getAllServiceLinesInBounds } from "../duckdb/queries/getAllServiceLinesInBounds.ts";
 import { getAllOutageLinesInBounds } from "../duckdb/queries/getAllOutageLinesInBounds.ts";
+import type { MapGeoJSONFeature } from "maplibre-gl";
+import { keyBy } from "lodash-es";
+import Typography from "@mui/material/Typography";
 
 export interface ServiceMapOnSelectAddressFunction {
   (address: Address): void;
@@ -116,7 +120,9 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
 }) => {
   const mapRef = useRef<MapRef>(null);
   const [mapReady, setMapReady] = useState(false);
-  const hoveredFeatureIdRef = useRef<number | null>(null);
+  const focusedAddressGeoJSONFeatureIdRef = useRef<number | null>(null);
+  const [focusedAddressId, setFocusedAddressId] = useState<number | null>(null);
+  const [focusedAddress, setFocusedAddress] = useState<Address | null>(null);
 
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [serviceLines, setServiceLines] = useState<LineString[]>([]);
@@ -127,6 +133,16 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     latitude: initialPosition.latitude,
     zoom: initialZoom,
   });
+
+  const addressesById = useMemo(() => keyBy(addresses, "id"), [addresses]);
+
+  useEffect(() => {
+    if (focusedAddressId == null) {
+      setFocusedAddress(null);
+    } else {
+      setFocusedAddress(addressesById[focusedAddressId]);
+    }
+  }, [focusedAddressId, addressesById]);
 
   useEffect(() => {
     if (!address) return;
@@ -222,10 +238,13 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
   const handleMouseMove = useCallback((e: MapLayerMouseEvent) => {
     if (!mapRef.current) return;
     const map = mapRef.current.getMap();
-    if (!e.features || e.features.length === 0) return;
+    if (!e.features || e.features.length === 0) {
+      setFocusedAddressId(null);
+      return;
+    }
 
     // Find the closest feature to the mouse pointer
-    let closestFeature = null;
+    let closestFeature: MapGeoJSONFeature | undefined;
     let minDistance = Infinity;
 
     for (const feature of e.features) {
@@ -242,26 +261,30 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       }
     }
 
-    if (!closestFeature || closestFeature.id === undefined) return;
+    if (!closestFeature?.id) {
+      setFocusedAddressId(null);
+      return;
+    }
+    setFocusedAddressId(closestFeature.properties.addressId as number);
 
     // Clear previous hover state
     if (
-      hoveredFeatureIdRef.current !== null &&
-      hoveredFeatureIdRef.current !== closestFeature.id
+      focusedAddressGeoJSONFeatureIdRef.current !== null &&
+      focusedAddressGeoJSONFeatureIdRef.current !== closestFeature.id
     ) {
       map.setFeatureState(
-        { source: "addresses", id: hoveredFeatureIdRef.current },
+        { source: "addresses", id: focusedAddressGeoJSONFeatureIdRef.current },
         { hover: false },
       );
     }
 
     // Set new hover state
-    if (hoveredFeatureIdRef.current !== closestFeature.id) {
+    if (focusedAddressGeoJSONFeatureIdRef.current !== closestFeature.id) {
       map.setFeatureState(
         { source: "addresses", id: closestFeature.id },
         { hover: true },
       );
-      hoveredFeatureIdRef.current = closestFeature.id as number;
+      focusedAddressGeoJSONFeatureIdRef.current = closestFeature.id as number;
     }
 
     map.getCanvas().style.cursor = "pointer";
@@ -272,12 +295,12 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     const map = mapRef.current.getMap();
 
     // Clear hover state
-    if (hoveredFeatureIdRef.current !== null) {
+    if (focusedAddressGeoJSONFeatureIdRef.current !== null) {
       map.setFeatureState(
-        { source: "addresses", id: hoveredFeatureIdRef.current },
+        { source: "addresses", id: focusedAddressGeoJSONFeatureIdRef.current },
         { hover: false },
       );
-      hoveredFeatureIdRef.current = null;
+      focusedAddressGeoJSONFeatureIdRef.current = null;
     }
 
     map.getCanvas().style.cursor = "";
@@ -290,7 +313,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
         type: "Feature",
         id: address.id,
         properties: {
-          address,
+          addressId: address.id,
         },
         geometry: {
           type: "Point",
@@ -371,6 +394,20 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
         >
           <RedPin />
         </Marker>
+      )}
+
+      {focusedAddress && (
+        <Popup
+          longitude={focusedAddress.longitude}
+          latitude={focusedAddress.latitude}
+          anchor="bottom"
+          closeButton={undefined}
+        >
+          <Typography variant="body2">{focusedAddress.address}</Typography>
+          <Typography variant="caption">
+            {focusedAddress.city}, {focusedAddress.zipcode}
+          </Typography>
+        </Popup>
       )}
     </Map>
   );
