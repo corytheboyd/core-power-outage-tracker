@@ -87,6 +87,42 @@ const outageLineLayerStyle: LineLayerSpecification = {
   },
 };
 
+// Cluster layers
+const clusterLayer: CircleLayerSpecification = {
+  id: "address-clusters",
+  type: "circle",
+  source: "addresses",
+  filter: ["has", "point_count"],
+  paint: {
+    "circle-color": [
+      "step",
+      ["get", "point_count"],
+      blue[300],
+      100,
+      blue[500],
+      750,
+      blue[700],
+    ],
+    "circle-radius": ["step", ["get", "point_count"], 20, 100, 30, 750, 40],
+  },
+};
+
+const clusterCountLayer: CircleLayerSpecification = {
+  id: "cluster-count",
+  type: "symbol",
+  source: "addresses",
+  filter: ["has", "point_count"],
+  layout: {
+    "text-field": ["get", "point_count_abbreviated"],
+    "text-font": ["Noto Sans Regular"],
+    "text-size": 12,
+  },
+  paint: {
+    "text-color": "#ffffff",
+  },
+} as CircleLayerSpecification;
+
+// Individual point layer
 const addressesLayer: CircleLayerSpecification = {
   id: "point",
   type: "circle",
@@ -303,6 +339,50 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     map.getCanvas().style.cursor = "";
   }, []);
 
+  const handleMapClick = useCallback((e: MapLayerMouseEvent) => {
+    console.log("Map clicked!", e);
+    if (!mapRef.current) return;
+    const map = mapRef.current.getMap();
+
+    // Check features from the event first
+    const features = e.features || [];
+    console.log("Features from event:", features);
+
+    if (!features.length) {
+      // Fallback to querying
+      const queriedFeatures = map.queryRenderedFeatures(e.point, {
+        layers: ["address-clusters"],
+      });
+      console.log("Queried features:", queriedFeatures);
+      features.push(...queriedFeatures);
+    }
+
+    if (!features.length) return;
+
+    // Check if this is a cluster
+    const feature = features.find((f) => f.properties?.cluster === true);
+    console.log("Cluster feature:", feature);
+    if (!feature) return;
+
+    const clusterId = feature.properties?.cluster_id;
+    console.log("Cluster ID:", clusterId);
+    if (clusterId == null) return;
+
+    const geometry = feature.geometry;
+    if (geometry.type !== "Point") return;
+
+    // Zoom in by 2 levels when clicking a cluster
+    const currentZoom = map.getZoom();
+    const targetZoom = Math.min(currentZoom + 2, 15); // Don't exceed maxZoom
+
+    console.log("Zooming from", currentZoom, "to", targetZoom);
+    map.easeTo({
+      center: geometry.coordinates as [number, number],
+      zoom: targetZoom,
+      duration: 500,
+    });
+  }, []);
+
   const addressesGeoJsonData = useMemo<GeoJSON>(
     () => ({
       type: "FeatureCollection",
@@ -353,9 +433,10 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       onLoad={handleMapLoad}
       onMove={handleMapOnMove}
       onMoveEnd={handleMapOnMoveEnd}
+      onClick={handleMapClick}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      minZoom={13}
+      minZoom={8}
       maxZoom={15}
       interactiveLayerIds={["address-clusters", "point"]}
       mapStyle={mapStyle}
@@ -366,12 +447,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       <NavigationControl />
 
       {serviceLines.length > 0 && (
-        <Source
-          type="geojson"
-          data={serviceLinesGeoJsonData}
-          cluster={true}
-          clusterMaxZoom={10}
-        >
+        <Source type="geojson" data={serviceLinesGeoJsonData}>
           <Layer {...serviceLineLayerStyle} />
         </Source>
       )}
@@ -383,7 +459,16 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       )}
 
       {addresses.length > 0 && (
-        <Source id="addresses" type="geojson" data={addressesGeoJsonData}>
+        <Source
+          id="addresses"
+          type="geojson"
+          data={addressesGeoJsonData}
+          cluster={true}
+          clusterMaxZoom={13}
+          clusterRadius={100}
+        >
+          <Layer {...clusterLayer} />
+          <Layer {...clusterCountLayer} />
           <Layer {...addressesLayer} />
         </Source>
       )}
