@@ -145,6 +145,7 @@ const WatchedAddressCardCreateVariant: FunctionComponent<
             address={watchedAddress?.address}
             initialPosition={watchedAddress.mapPosition}
             initialZoom={watchedAddress.mapZoom}
+            showAddresses={true}
           />
         </CardMediaContent>
       </CardMedia>
@@ -256,6 +257,7 @@ const WatchedAddressCardShowVariant: FunctionComponent<
                   longitude: address.longitude,
                 }}
                 initialZoom={watchedAddress.mapZoom}
+                showAddresses={false}
               />
             </CardMediaContent>
           </CardMedia>

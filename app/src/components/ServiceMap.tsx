@@ -1,11 +1,4 @@
-import {
-  type FunctionComponent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { type FunctionComponent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Address } from "../models/Address.ts";
 import type { LineString } from "../models/LineString.ts";
 import type {
@@ -15,7 +8,7 @@ import type {
   MapLayerMouseEvent,
   MapRef,
   StyleSpecification,
-  ViewStateChangeEvent,
+  ViewStateChangeEvent
 } from "react-map-gl/maplibre";
 import {
   AttributionControl,
@@ -26,7 +19,7 @@ import {
   Marker,
   NavigationControl,
   Popup,
-  Source,
+  Source
 } from "react-map-gl/maplibre";
 import { layers, namedFlavor } from "@protomaps/basemaps";
 import { LocationPin } from "@mui/icons-material";
@@ -48,6 +41,7 @@ interface ServiceMapProps {
   initialPosition: Position;
   initialZoom: number;
   address?: Address;
+  showAddresses: boolean;
   onSelectAddress?: ServiceMapOnSelectAddressFunction;
 }
 
@@ -117,6 +111,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
   initialPosition,
   initialZoom,
   address,
+  showAddresses,
 }) => {
   const mapRef = useRef<MapRef>(null);
   const [mapReady, setMapReady] = useState(false);
@@ -173,14 +168,16 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       longitude: mapBoundsSouthWest.lng,
     };
 
-    getAllAddressesInBounds({
-      northEastPosition,
-      southWestPosition,
-    })
-      .then((addresses) => setAddresses(addresses))
-      .catch((e) => {
-        throw e;
-      });
+    if (showAddresses) {
+      getAllAddressesInBounds({
+        northEastPosition,
+        southWestPosition,
+      })
+        .then((addresses) => setAddresses(addresses))
+        .catch((e) => {
+          throw e;
+        });
+    }
 
     getAllServiceLinesInBounds({
       northEastPosition,
@@ -199,7 +196,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       .catch((e) => {
         throw e;
       });
-  }, [position, mapRef, mapReady]);
+  }, [position, mapRef, mapReady, showAddresses]);
 
   const handleMapLoad = useCallback(() => {
     setMapReady(true);
@@ -369,7 +366,12 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       <NavigationControl />
 
       {serviceLines.length > 0 && (
-        <Source type="geojson" data={serviceLinesGeoJsonData}>
+        <Source
+          type="geojson"
+          data={serviceLinesGeoJsonData}
+          cluster={true}
+          clusterMaxZoom={10}
+        >
           <Layer {...serviceLineLayerStyle} />
         </Source>
       )}
