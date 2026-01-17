@@ -9,6 +9,7 @@ import type { Address } from "../models/Address.ts";
 import type {
   CircleLayerSpecification,
   GeolocateResultEvent,
+  LineLayerSpecification,
   MapLayerMouseEvent,
   MapRef,
   StyleSpecification,
@@ -55,8 +56,29 @@ const mapStyle: StyleSpecification = {
       type: "vector",
       url: "pmtiles:///addresses.pmtiles",
     },
+    service_lines: {
+      type: "vector",
+      url: "pmtiles:///service_lines.pmtiles",
+    },
   },
   layers: layers("protomaps", namedFlavor("light"), { lang: "en" }),
+};
+
+// Service lines layer (from vector tiles)
+const serviceLineLayer: LineLayerSpecification = {
+  id: "service-lines",
+  type: "line",
+  source: "service_lines",
+  "source-layer": "service_lines",
+  paint: {
+    "line-color": blue[800],
+    "line-width": 1,
+    "line-opacity": 1,
+  },
+  layout: {
+    "line-cap": "round",
+    "line-join": "round",
+  },
 };
 
 // Address point layer (from vector tiles)
@@ -228,6 +250,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       <GeolocateControl onGeolocate={handleGeolocate} />
       <NavigationControl />
 
+      <Layer {...serviceLineLayer} />
       {showAddresses && <Layer {...addressPointLayer} />}
 
       {address && (

@@ -1,7 +1,9 @@
 from requests import Request
 from requests_cache import SQLiteCache, CachedSession
 
-BASE_URL = "'https://cache.sienatech.com/apex/siena_ords/webmaps/lines/CORE"
+from lib.LinesResponseModel import LinesResponseModel
+
+BASE_URL = "https://cache.sienatech.com/apex/siena_ords/webmaps/lines/CORE"
 
 
 class CorePowerApi:
@@ -10,8 +12,8 @@ class CorePowerApi:
         self.session = CachedSession(
             use_cache_dir="./data/http_cache.sqlite",
             backend=SQLiteCache(db_path="./data/http_cache.sqlite"),
-            cache_control=True,
-            stale_if_error=False,
+            always_revalidate=True,
+            stale_if_error=True,
         )
         self.session.headers.update(
             {
@@ -21,7 +23,7 @@ class CorePowerApi:
             }
         )
 
-    def service_lines(self):
+    def service_lines(self) -> LinesResponseModel:
         request = Request(
             method="GET",
             url=f"{self.base_url}/base",
@@ -31,3 +33,4 @@ class CorePowerApi:
         )
         response = self.session.send(self.session.prepare_request(request))
         response.raise_for_status()
+        return LinesResponseModel.model_validate(response.json())

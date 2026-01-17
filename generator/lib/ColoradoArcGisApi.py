@@ -14,7 +14,7 @@ class ColoradoArcGisApi:
         self.session = CachedSession(
             use_cache_dir="./data/http_cache.sqlite",
             backend=SQLiteCache(db_path="./data/http_cache.sqlite"),
-            cache_control=True,
+            always_revalidate=True,
             stale_if_error=False,
         )
         self.session.headers.update(
