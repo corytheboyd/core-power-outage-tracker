@@ -7,9 +7,9 @@ pmtiles_source_url := "https://build.protomaps.com/20251229.pmtiles"
 
 download_map_pmtiles:
     pmtiles extract {{ pmtiles_source_url }} data/colorado.pmtiles \
-        --bbox="$(duckdb -json -c "INSTALL spatial; LOAD spatial; SELECT MIN(ST_X(location)) - 1 || ',' || MIN(ST_Y(location)) - 1 || ',' || MAX(ST_X(location)) + 0.0725 || ',' || MAX(ST_Y(location)) + 0.0725 AS value FROM './data/addresses.parquet'" | jq -r '.[0].value')" \
-        --minzoom=8 \
-        --maxzoom=15
+        --bbox="$()" \
+        --minzoom=7 \
+        --maxzoom=17
 
 download_addresses:
     uv run download_addresses.py
@@ -27,6 +27,7 @@ convert_addresses_to_pmtiles:
     tippecanoe \
       --force \
       -zg \
+      --minimum-zoom=12 \
       --drop-densest-as-needed \
       -o data/addresses.pmtiles \
       data/addresses.geojson
@@ -38,3 +39,9 @@ convert_service_lines_to_pmtiles:
       --drop-densest-as-needed \
       -o data/service_lines.pmtiles \
       data/service_lines.geojson
+
+get_map_bbox_for_addresses_table:
+    duckdb \
+      -json \
+      -f lib/get_bbox_from_addresses.sql \
+      | jq -r '.[0].value'

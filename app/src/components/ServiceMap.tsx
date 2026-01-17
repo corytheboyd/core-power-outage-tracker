@@ -1,19 +1,12 @@
-import {
-  type FunctionComponent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type FunctionComponent, useCallback, useEffect, useRef, useState } from "react";
 import type { Address } from "../models/Address.ts";
 import type {
   CircleLayerSpecification,
   GeolocateResultEvent,
   LineLayerSpecification,
-  MapLayerMouseEvent,
   MapRef,
   StyleSpecification,
-  ViewStateChangeEvent,
+  ViewStateChangeEvent
 } from "react-map-gl/maplibre";
 import {
   AttributionControl,
@@ -22,10 +15,8 @@ import {
   Layer,
   Map,
   Marker,
-  NavigationControl,
-  Popup,
+  NavigationControl
 } from "react-map-gl/maplibre";
-import Typography from "@mui/material/Typography";
 import { layers, namedFlavor } from "@protomaps/basemaps";
 import { LocationPin } from "@mui/icons-material";
 import { blue, red } from "@mui/material/colors";
@@ -101,25 +92,15 @@ const addressPointLayer: CircleLayerSpecification = {
 };
 
 export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
-  initialPosition,
-  initialZoom,
   address,
   showAddresses,
 }) => {
   const mapRef = useRef<MapRef>(null);
-  const hoveredFeatureIdRef = useRef<number | string | null>(null);
   const [viewState, setViewState] = useState({
-    longitude: initialPosition.longitude,
-    latitude: initialPosition.latitude,
-    zoom: initialZoom,
+    longitude: -104.93648013699999,
+    latitude: 39.556234023297634,
+    zoom: 7.6,
   });
-  const [hoverInfo, setHoverInfo] = useState<{
-    longitude: number;
-    latitude: number;
-    address: string;
-    city: string;
-    zipcode: string;
-  } | null>(null);
 
   useEffect(() => {
     if (!address) return;
@@ -134,9 +115,16 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     });
   }, [address]);
 
+  const onMapSettled = useCallback(() => {
+    console.log("viewState", viewState);
+  }, [viewState]);
+
   const handleMapOnMove = useCallback(
-    (e: ViewStateChangeEvent) => setViewState(e.viewState),
-    [],
+    (e: ViewStateChangeEvent) => {
+      setViewState(e.viewState);
+      onMapSettled();
+    },
+    [onMapSettled],
   );
 
   const handleGeolocate = useCallback((e: GeolocateResultEvent) => {
@@ -149,99 +137,18 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     });
   }, []);
 
-  const handleMouseMove = useCallback((e: MapLayerMouseEvent) => {
-    if (!mapRef.current) return;
-    const map = mapRef.current.getMap();
-
-    if (!e.features || e.features.length === 0) {
-      // Clear previous hover state
-      if (hoveredFeatureIdRef.current !== null) {
-        map.setFeatureState(
-          {
-            source: "addresses",
-            sourceLayer: "addresses",
-            id: hoveredFeatureIdRef.current,
-          },
-          { hover: false },
-        );
-        hoveredFeatureIdRef.current = null;
-      }
-      map.getCanvas().style.cursor = "";
-      setHoverInfo(null);
-      return;
-    }
-
-    const feature = e.features[0];
-    if (feature.geometry.type !== "Point" || feature.id == null) {
-      setHoverInfo(null);
-      return;
-    }
-
-    // Update hover state
-    if (hoveredFeatureIdRef.current !== feature.id) {
-      // Clear old hover
-      if (hoveredFeatureIdRef.current !== null) {
-        map.setFeatureState(
-          {
-            source: "addresses",
-            sourceLayer: "addresses",
-            id: hoveredFeatureIdRef.current,
-          },
-          { hover: false },
-        );
-      }
-      // Set new hover
-      map.setFeatureState(
-        { source: "addresses", sourceLayer: "addresses", id: feature.id },
-        { hover: true },
-      );
-      hoveredFeatureIdRef.current = feature.id;
-    }
-
-    map.getCanvas().style.cursor = "pointer";
-
-    const [longitude, latitude] = feature.geometry.coordinates as [
-      number,
-      number,
-    ];
-    setHoverInfo({
-      longitude,
-      latitude,
-      address: feature.properties?.address ?? "",
-      city: feature.properties?.city ?? "",
-      zipcode: feature.properties?.zipcode ?? "",
-    });
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    if (!mapRef.current) return;
-    const map = mapRef.current.getMap();
-
-    if (hoveredFeatureIdRef.current !== null) {
-      map.setFeatureState(
-        {
-          source: "addresses",
-          sourceLayer: "addresses",
-          id: hoveredFeatureIdRef.current,
-        },
-        { hover: false },
-      );
-      hoveredFeatureIdRef.current = null;
-    }
-    map.getCanvas().style.cursor = "";
-    setHoverInfo(null);
-  }, []);
-
   return (
     <Map
       {...viewState}
       ref={mapRef}
       id={address?.id.toString() ?? "default"}
       onMove={handleMapOnMove}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      minZoom={8}
+      minZoom={7}
       maxZoom={17}
+      maxBounds={[
+        [-106.37445371899994, 38.45637502400004],
+        [-103.49850655499998, 40.42145575600003],
+      ]}
       interactiveLayerIds={["address-points"]}
       mapStyle={mapStyle}
     >
@@ -261,21 +168,6 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
         >
           <RedPin />
         </Marker>
-      )}
-
-      {hoverInfo && (
-        <Popup
-          longitude={hoverInfo.longitude}
-          latitude={hoverInfo.latitude}
-          anchor="bottom"
-          closeButton={false}
-          closeOnClick={false}
-        >
-          <Typography variant="body2">{hoverInfo.address}</Typography>
-          <Typography variant="caption">
-            {hoverInfo.city}, {hoverInfo.zipcode}
-          </Typography>
-        </Popup>
       )}
     </Map>
   );
