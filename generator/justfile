@@ -27,7 +27,7 @@ convert_addresses_to_pmtiles:
     tippecanoe \
       --force \
       -zg \
-      --minimum-zoom=12 \
+      --minimum-zoom=10 \
       --drop-densest-as-needed \
       -o data/addresses.pmtiles \
       data/addresses.geojson

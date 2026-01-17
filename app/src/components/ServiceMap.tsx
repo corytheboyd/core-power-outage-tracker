@@ -1,4 +1,10 @@
-import { type FunctionComponent, useCallback, useEffect, useRef, useState } from "react";
+import {
+  type FunctionComponent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import type { Address } from "../models/Address.ts";
 import type {
   CircleLayerSpecification,
@@ -6,7 +12,7 @@ import type {
   LineLayerSpecification,
   MapRef,
   StyleSpecification,
-  ViewStateChangeEvent
+  ViewStateChangeEvent,
 } from "react-map-gl/maplibre";
 import {
   AttributionControl,
@@ -15,24 +21,13 @@ import {
   Layer,
   Map,
   Marker,
-  NavigationControl
+  NavigationControl,
 } from "react-map-gl/maplibre";
 import { layers, namedFlavor } from "@protomaps/basemaps";
 import { LocationPin } from "@mui/icons-material";
 import { blue, red } from "@mui/material/colors";
 import type { Position } from "../types/app";
-
-export interface ServiceMapOnSelectAddressFunction {
-  (address: Address): void;
-}
-
-interface ServiceMapProps {
-  initialPosition: Position;
-  initialZoom: number;
-  address?: Address;
-  showAddresses: boolean;
-  onSelectAddress?: ServiceMapOnSelectAddressFunction;
-}
+import type { LngLatBoundsLike } from "maplibre-gl";
 
 const mapStyle: StyleSpecification = {
   version: 8,
@@ -55,7 +50,6 @@ const mapStyle: StyleSpecification = {
   layers: layers("protomaps", namedFlavor("light"), { lang: "en" }),
 };
 
-// Service lines layer (from vector tiles)
 const serviceLineLayer: LineLayerSpecification = {
   id: "service-lines",
   type: "line",
@@ -72,7 +66,6 @@ const serviceLineLayer: LineLayerSpecification = {
   },
 };
 
-// Address point layer (from vector tiles)
 const addressPointLayer: CircleLayerSpecification = {
   id: "address-points",
   type: "circle",
@@ -91,6 +84,28 @@ const addressPointLayer: CircleLayerSpecification = {
   },
 };
 
+/**
+ * Note: regenerate with `just get_map_bbox_for_addresses_table`
+ * */
+const maxBounds: LngLatBoundsLike = [
+  [-106.37445371899994, 38.45637502400004],
+  [-103.49850655499998, 40.42145575600003],
+];
+
+const jumpToLocationZoomLevel = 15;
+
+export interface ServiceMapOnSelectAddressFunction {
+  (address: Address): void;
+}
+
+interface ServiceMapProps {
+  initialPosition: Position;
+  initialZoom: number;
+  address?: Address;
+  showAddresses: boolean;
+  onSelectAddress?: ServiceMapOnSelectAddressFunction;
+}
+
 export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
   address,
   showAddresses,
@@ -107,7 +122,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     if (!mapRef.current) return;
 
     mapRef.current.jumpTo({
-      zoom: 15,
+      zoom: jumpToLocationZoomLevel,
       center: {
         lat: address.latitude,
         lng: address.longitude,
@@ -115,9 +130,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
     });
   }, [address]);
 
-  const onMapSettled = useCallback(() => {
-    console.log("viewState", viewState);
-  }, [viewState]);
+  const onMapSettled = useCallback(() => {}, []);
 
   const handleMapOnMove = useCallback(
     (e: ViewStateChangeEvent) => {
@@ -129,14 +142,13 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
 
   const handleGeolocate = useCallback((e: GeolocateResultEvent) => {
     mapRef.current?.jumpTo({
-      zoom: 15,
+      zoom: jumpToLocationZoomLevel,
       center: {
         lat: e.coords.latitude,
         lng: e.coords.longitude,
       },
     });
   }, []);
-
   return (
     <Map
       {...viewState}
@@ -145,10 +157,7 @@ export const ServiceMap: FunctionComponent<ServiceMapProps> = ({
       onMove={handleMapOnMove}
       minZoom={7}
       maxZoom={17}
-      maxBounds={[
-        [-106.37445371899994, 38.45637502400004],
-        [-103.49850655499998, 40.42145575600003],
-      ]}
+      maxBounds={maxBounds}
       interactiveLayerIds={["address-points"]}
       mapStyle={mapStyle}
     >
