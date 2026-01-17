@@ -1,5 +1,29 @@
-download_addresses:
-    uv run download_addresses_from_arcgis.py
+# See: https://maps.protomaps.com
 
-build_addresses:
-    uv run build_addresses_table.py
+pmtiles_source_url := "https://build.protomaps.com/20251229.pmtiles"
+
+# Determine bounding box from address locations
+# See: https://docs.protomaps.com/pmtiles/cli#extract
+
+download_map_pmtiles:
+    pmtiles extract {{ pmtiles_source_url }} data/colorado.pmtiles \
+        --bbox="$(duckdb -json -c "INSTALL spatial; LOAD spatial; SELECT MIN(ST_X(location)) - 1 || ',' || MIN(ST_Y(location)) - 1 || ',' || MAX(ST_X(location)) + 0.0725 || ',' || MAX(ST_Y(location)) + 0.0725 AS value FROM './data/addresses.parquet'" | jq -r '.[0].value')" \
+        --minzoom=8 \
+        --maxzoom=15
+
+download_addresses:
+    uv run download_addresses.py
+
+build_addresses_parquet_table:
+    uv run build_addresses_parquet_table.py
+
+convert_addresses_to_geojson:
+    uv run convert_addresses_to_geojson.py
+
+convert_addresses_to_pmtiles:
+    tippecanoe \
+      --force \
+      -zg \
+      --drop-densest-as-needed \
+      -o data/addresses.pmtiles \
+      data/addresses.geojson

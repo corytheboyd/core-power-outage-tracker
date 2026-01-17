@@ -9,6 +9,8 @@
           buildInputs = [
             python3
             uv
+            pmtiles
+            tippecanoe
           ];
           shellHook = ''
             rm ./bin/shim/*

@@ -5,8 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="19db21c7-3873-41c4-bfa9-add70000011e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../generator/lib/CorePowerApi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flake.nix" beforeDir="false" afterPath="$PROJECT_DIR$/flake.nix" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ServiceMap.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ServiceMap.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queries/getAllAddressesInBounds.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queries/getAllAddressesInBounds.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queries/getAllOutageLinesInBounds.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queries/getAllOutageLinesInBounds.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queries/getAllServiceLinesInBounds.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queries/getAllServiceLinesInBounds.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/duckdb/queries/searchAddresses.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/duckdb/queries/searchAddresses.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/.idea/runConfigurations/build_addresses_table.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/.idea/runConfigurations/build_addresses_parquet_table.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/build_addresses_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/build_addresses_parquet_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/download_addresses_from_arcgis.py" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/download_addresses.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/flake.nix" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/flake.nix" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../generator/justfile" beforeDir="false" afterPath="$PROJECT_DIR$/../generator/justfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

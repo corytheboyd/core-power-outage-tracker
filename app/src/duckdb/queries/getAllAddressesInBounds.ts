@@ -2,6 +2,7 @@ import type { Position } from "../../types/app";
 import { getDuckDbManager } from "../getDuckDbManager.ts";
 import { type Address, AddressSchema } from "../../models/Address.ts";
 import { ResultSet } from "../ResultSet.ts";
+import { v7 } from "uuid";
 
 /**
  * https://duckdb.org/docs/stable/core_extensions/spatial/functions#st_makeenvelope
@@ -12,6 +13,8 @@ export const getAllAddressesInBounds = async (args: {
   southWestPosition: Position;
 }): Promise<Address[]> => {
   const duckdb = await getDuckDbManager();
+  const timeLabel = `getAllAddressesInBounds:${v7()}`;
+  console.time(timeLabel);
 
   return await duckdb.withConnection(async (c) => {
     const results = await c.query(`
@@ -36,6 +39,8 @@ export const getAllAddressesInBounds = async (args: {
     `);
 
     const resultSet = new ResultSet(results, (o) => AddressSchema.parse(o));
+
+    console.timeEnd(timeLabel);
     return resultSet.toArray();
   });
 };
